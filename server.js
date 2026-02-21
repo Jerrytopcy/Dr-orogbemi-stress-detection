@@ -1,9 +1,12 @@
-// server.js — Production-ready backend for Railway
 const express = require('express');
-const path = require('path');
-const { Pool } = require('pg');
-
 const app = express();
+
 const PORT = process.env.PORT || 3000;
-// Serve static files from 'public' folder
-app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+  res.send('Stress Detection Server is Running 🚀');
+});
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
+});
