@@ -1,8 +1,8 @@
 {
   "name": "stress-detection-project",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
   "scripts": {
-    "build": "echo 'no build script'"
+    "start": "node server.js"
   }
 }
+
