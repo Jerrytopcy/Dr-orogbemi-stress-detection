@@ -8,8 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- jsPDF and AutoTable -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -23,12 +23,9 @@
             <div class="nav-menu" id="nav-menu">
                 <a href="#" class="nav-link" onclick="showPage('home')">Home</a>
                 <a href="#" class="nav-link" onclick="showPage('about')">About</a>
-                <a href="#" class="nav-link auth-required" onclick="showPage('dashboard')" style="display: none;">Dashboard</a>
-                <a href="#" class="nav-link auth-required" onclick="showPage('history')" style="display: none;">History</a>
-                <a href="#" class="nav-link auth-required" onclick="showPage('settings')" style="display: none;">Settings</a>
-                <a href="#" class="nav-link auth-required" onclick="logout()" style="display: none;">Logout</a>
-                <a href="#" class="nav-link guest-only" onclick="showPage('login')">Login</a>
-                <a href="#" class="nav-link guest-only" onclick="showPage('signup')">Sign Up</a>
+                <a href="#" class="nav-link" onclick="showPage('dashboard')">Dashboard</a>
+                <a href="#" class="nav-link" onclick="showPage('history')">History</a>
+                <a href="#" class="nav-link" onclick="showPage('settings')">Settings</a>
             </div>
             <div class="nav-toggle" id="nav-toggle">
                 <span></span>
@@ -44,10 +41,10 @@
             <div class="container">
                 <div class="hero-content">
                     <h1>Job stress management system for Nigerian universities workers using explainable artificial intelligence models</h1>
-                    <p>Take control of your mental well-being with our scientifically-backed stress assessment tool. Get personalized insights and track your progress over time.</p>
+                    <p>Take control of your mental well-being with our scientifically-backed stress assessment tool. Get personalized insights and contribute to organizational wellbeing data.</p>
                     <div class="hero-buttons">
-                        <button class="btn btn-primary" onclick="showPage('signup')">Get Started</button>
-                        <button class="btn btn-secondary" onclick="showPage('login')">Login</button>
+                        <!-- Changed to direct dashboard access -->
+                        <button class="btn btn-primary" onclick="showPage('dashboard')">Get Assessed</button>
                     </div>
                 </div>
                 <div class="hero-image">
@@ -67,247 +64,144 @@
                     </div>
                     <div class="feature-card">
                         <i class="fas fa-chart-bar"></i>
-                        <h3>Track Progress</h3>
-                        <p>Monitor your stress levels over time with detailed history</p>
+                        <h3>Aggregate Insights</h3>
+                        <p>Helps organizations identify common stressors across multiple responses</p>
                     </div>
                     <div class="feature-card">
                         <i class="fas fa-shield-alt"></i>
-                        <h3>Privacy First</h3>
-                        <p>All data stored locally on your device for maximum privacy</p>
+                        <h3>Anonymous & Private</h3>
+                        <p>No account required. Your responses are processed securely.</p>
                     </div>
                     <div class="feature-card">
                         <i class="fas fa-lightbulb"></i>
-                        <h3>Personalized Tips</h3>
-                        <p>Get customized recommendations based on your stress level</p>
+                        <h3>Instant Feedback</h3>
+                        <p>Get immediate analysis and recommendations based on your input</p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Login Page -->
-    <div class="page" id="login-page">
-        <div class="auth-container">
-            <div class="auth-card">
-                <h2>Welcome Back</h2>
-                <p>Sign in to your account</p>
-                <form id="login-form">
-                    <div class="form-group">
-                        <label for="login-email">Email</label>
-                        <input type="email" id="login-email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="login-password">Password</label>
-                        <input type="password" id="login-password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full">Sign In</button>
-                </form>
-                <div class="auth-links">
-                    <a href="#" onclick="showPage('forgot-password')">Forgot Password?</a>
-                    <a href="#" onclick="showPage('signup')">Don't have an account? Sign up</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Sign Up Page -->
-    <div class="page" id="signup-page">
-        <div class="auth-container">
-            <div class="auth-card">
-                <h2>Create Account</h2>
-                <p>Join us to start monitoring your stress levels</p>
-                <form id="signup-form">
-                    <div class="form-group">
-                        <label for="signup-name">Full Name</label>
-                        <input type="text" id="signup-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signup-email">Email</label>
-                        <input type="email" id="signup-email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signup-password">Password</label>
-                        <input type="password" id="signup-password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signup-confirm-password">Confirm Password</label>
-                        <input type="password" id="signup-confirm-password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signup-avatar">Profile Picture (Optional)</label>
-                        <input type="file" id="signup-avatar" accept="image/*">
-                        <div class="avatar-preview" id="avatar-preview"></div>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full">Create Account</button>
-                </form>
-                <div class="auth-links">
-                    <a href="#" onclick="showPage('login')">Already have an account? Sign in</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Forgot Password Page -->
-    <div class="page" id="forgot-password-page">
-        <div class="auth-container">
-            <div class="auth-card">
-                <h2>Reset Password</h2>
-                <p>Enter your email to reset your password</p>
-                <form id="forgot-password-form">
-                    <div class="form-group">
-                        <label for="forgot-email">Email</label>
-                        <input type="email" id="forgot-email" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full">Send Reset Link</button>
-                </form>
-                <div class="auth-links">
-                    <a href="#" onclick="showPage('login')">Back to Login</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Reset Password Page -->
-    <div class="page" id="reset-password-page">
-        <div class="auth-container">
-            <div class="auth-card">
-                <h2>Set New Password</h2>
-                <p>Enter your new password</p>
-                <form id="reset-password-form">
-                    <div class="form-group">
-                        <label for="new-password">New Password</label>
-                        <input type="password" id="new-password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="confirm-new-password">Confirm New Password</label>
-                        <input type="password" id="confirm-new-password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full">Update Password</button>
-                </form>
             </div>
         </div>
     </div>
 
     <!-- Dashboard Page -->
-<div class="page" id="dashboard-page">
-    <div class="container">
-        <div class="dashboard-header">
-            <div class="user-info">
-                <div class="user-avatar" id="user-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="user-details">
-                    <h2 id="user-name">Welcome!</h2>
-                    <p>Ready to assess your academic stress level?</p>
-                </div>
-            </div>
-            <div class="dashboard-stats">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-clipboard-list"></i>
+    <div class="page" id="dashboard-page">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">
+                        <!-- Removed specific user icon, kept generic -->
+                        <i class="fas fa-user-circle"></i>
                     </div>
-                    <div class="stat-info">
-                        <h3 id="total-assessments">0</h3>
-                        <p>Total Assessments</p>
+                    <div class="user-details">
+                        <h2 id="user-name">Welcome</h2>
+                        <p>Ready to assess your academic stress level?</p>
                     </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-chart-line"></i>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="total-assessments">0</h3>
+                            <p>Your Assessments</p>
+                        </div>
                     </div>
-                    <div class="stat-info">
-                        <h3 id="last-stress-level">-</h3>
-                        <p>Last Stress Level</p>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="last-stress-level">-</h3>
+                            <p>Last Stress Level</p>
+                        </div>
                     </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-calendar-alt"></i>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="days-since-last">-</h3>
+                            <p>Days Since Last</p>
+                        </div>
                     </div>
-                    <div class="stat-info">
-                        <h3 id="days-since-last">-</h3>
-                        <p>Days Since Last</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Charts Section -->
-        <div class="charts-section">
-            <div class="chart-container">
-                <div class="chart-card">
-                    <h3>Stress Level Trends</h3>
-                    <canvas id="stressTrendChart"></canvas>
-                </div>
-                <div class="chart-card">
-                    <h3>Stress Distribution</h3>
-                    <canvas id="stressDistributionChart"></canvas>
-                </div>
-            </div>
-            <div class="chart-container">
-                <div class="chart-card full-width">
-                    <h3>Monthly Assessment Overview</h3>
-                    <canvas id="monthlyOverviewChart"></canvas>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-            <h3>Quick Actions</h3>
-            <div class="action-cards">
-                <div class="action-card" onclick="startAssessment()">
-                    <i class="fas fa-play-circle"></i>
-                    <h4>Start Assessment</h4>
-                    <p>Take a new academic stress assessment</p>
-                </div>
-                <div class="action-card" onclick="showPage('history')">
-                    <i class="fas fa-history"></i>
-                    <h4>View History</h4>
-                    <p>Check your previous assessments</p>
-                </div>
-                <div class="action-card" onclick="showPage('settings')">
-                    <i class="fas fa-cog"></i>
-                    <h4>Settings</h4>
-                    <p>Customize your preferences</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Assessment Section -->
-        <div class="assessment-section" id="assessment-section" style="display: none;">
-            <div class="assessment-header">
-                <h3>Academic Stress Assessment</h3>
-                <p>Please answer the following questions based on your academic experience in the Computer Science department.</p>
-                <button class="btn btn-secondary" onclick="hideAssessment()">Cancel Assessment</button>
-            </div>
-            
-            <div class="assessment-progress">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="assessment-progress-fill"></div>
-                </div>
-                <div class="progress-info">
-                    <span id="current-question">1</span> of <span id="total-questions">15</span>
                 </div>
             </div>
             
-            <div class="assessment-card" id="assessment-card">
-                <div class="question-content" id="question-content">
-                    <!-- Question will be populated by JavaScript -->
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-container">
+                    <div class="chart-card">
+                        <h3>Stress Level Trends</h3>
+                        <canvas id="stressTrendChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Stress Distribution</h3>
+                        <canvas id="stressDistributionChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-card full-width">
+                        <h3>Monthly Assessment Overview</h3>
+                        <canvas id="monthlyOverviewChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h3>Quick Actions</h3>
+                <div class="action-cards">
+                    <div class="action-card" onclick="startAssessment()">
+                        <i class="fas fa-play-circle"></i>
+                        <h4>Start Assessment</h4>
+                        <p>Take a new academic stress assessment</p>
+                    </div>
+                    <div class="action-card" onclick="showPage('history')">
+                        <i class="fas fa-history"></i>
+                        <h4>View History</h4>
+                        <p>Check your previous assessments</p>
+                    </div>
+                    <div class="action-card" onclick="showPage('settings')">
+                        <i class="fas fa-cog"></i>
+                        <h4>Settings</h4>
+                        <p>Customize your preferences</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Assessment Section -->
+            <div class="assessment-section" id="assessment-section" style="display: none;">
+                <div class="assessment-header">
+                    <h3>Academic Stress Assessment</h3>
+                    <p>Please answer the following questions based on your academic experience in the Computer Science department.</p>
+                    <button class="btn btn-secondary" onclick="hideAssessment()">Cancel Assessment</button>
                 </div>
                 
-                <div class="assessment-navigation">
-                    <button class="btn btn-secondary" id="prev-btn" onclick="previousQuestion()" disabled>Previous</button>
-                    <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()">Next</button>
-                    <button class="btn btn-primary" id="submit-btn" onclick="submitAssessment()" style="display: none;">Submit Assessment</button>
+                <div class="assessment-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="assessment-progress-fill"></div>
+                    </div>
+                    <div class="progress-info">
+                        <span id="current-question">1</span> of <span id="total-questions">15</span>
+                    </div>
+                </div>
+                
+                <div class="assessment-card" id="assessment-card">
+                    <div class="question-content" id="question-content">
+                        <!-- Question will be populated by JavaScript -->
+                    </div>
+                    
+                    <div class="assessment-navigation">
+                        <button class="btn btn-secondary" id="prev-btn" onclick="previousQuestion()" disabled>Previous</button>
+                        <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()">Next</button>
+                        <button class="btn btn-primary" id="submit-btn" onclick="submitAssessment()" style="display: none;">Submit Assessment</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- Results Page -->
-<!-- Results Page -->
     <div class="page" id="results-page">
         <div class="container">
             <div class="results-container">
@@ -316,7 +210,6 @@
                     <div class="results-score">
                         <div class="score-circle" id="score-circle">
                             <span id="score-value">42</span>
-                            <!-- <small>%</small> -->
                         </div>
                         <div class="stress-level" id="stress-level-result">
                             <h3 id="stress-level-text">Low Stress</h3>
@@ -325,27 +218,27 @@
                     </div>
                 </div>
 
-                <!-- NEW: Section Scores Display -->
+                <!-- Section Scores Display -->
                 <div class="section-breakdown" id="section-scores-display">
                      <h3>Section Breakdown</h3>
                      <div class="typing-container" id="section-scores-typed">Loading section scores...</div>
                 </div>
 
-                <!-- NEW: Recommendations Section with Typing Containers -->
+                <!-- Recommendations Section -->
                 <div class="recommendations-section">
                     <div class="recommendation-block" id="personal-recommendations">
                          <h3>Personal Recommendations</h3>
                          <div class="typing-container" id="personal-recs-typed">Loading recommendations...</div>
                     </div>
 
-                    <!-- NEW: Organizational Recommendations -->
+                    <!-- Organizational Recommendations -->
                     <div class="recommendation-block" id="organizational-recommendations">
                          <h3>Organizational Recommendations</h3>
                          <div class="typing-container" id="org-recs-typed">Loading recommendations...</div>
                     </div>
                 </div>
 
-                <!-- system performance Charts -->
+                <!-- System Performance Charts -->
                 <div class="chart-card">
                   <h3>System Performance Stress Trend</h3>
                   <canvas id="resultTrendChart" height="100"></canvas>
@@ -378,28 +271,6 @@
             <h2>Settings</h2>
             <div class="settings-sections">
                 <div class="settings-section">
-                    <h3>Profile</h3>
-                    <div class="profile-settings">
-                        <div class="current-avatar">
-                            <div class="user-avatar large" id="settings-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <button class="btn btn-secondary" onclick="document.getElementById('change-avatar').click()">Change Avatar</button>
-                            <input type="file" id="change-avatar" accept="image/*" style="display: none;">
-                        </div>
-                        <div class="form-group">
-                            <label for="settings-name">Full Name</label>
-                            <input type="text" id="settings-name">
-                        </div>
-                        <div class="form-group">
-                            <label for="settings-email">Email</label>
-                            <input type="email" id="settings-email" readonly>
-                        </div>
-                        <button class="btn btn-primary" onclick="updateProfile()">Update Profile</button>
-                    </div>
-                </div>
-                
-                <div class="settings-section">
                     <h3>Appearance</h3>
                     <div class="theme-toggle">
                         <label class="toggle-switch">
@@ -411,144 +282,96 @@
                 </div>
                 
                 <div class="settings-section">
-                    <h3>Data</h3>
-                    <button class="btn btn-danger" onclick="deleteAccount()">Delete Account</button>
+                    <h3>Data Management</h3>
+                    <p class="setting-description">Clear your local assessment history. This will not affect the central aggregate data if already submitted.</p>
+                    <button class="btn btn-danger" onclick="clearHistory()">Clear Local History</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- About Page -->
-<div class="page" id="about-page">
-    <div class="about-container">
-        <div class="about-hero">
-            <div class="container">
-                <div class="about-content">
-                    <div class="project-badge">
-                        <i class="fas fa-graduation-cap"></i>
-                        <span>Project Dev</span>
-                    </div>
-                    <h1>Job stress management system for Nigerian universities workers using explainable artificial intelligence models</h1>
-                    <!-- <h2>Department of Computer Science OAUSTECH Using Machine Learning Model</h2> -->
-                    <div class="author-info">
-                        <div class="author-card">
-                            <div class="author-avatar">
-                                <i class="fas fa-user-graduate"></i>
-                            </div>
-                            <div class="author-details">
-                                <h3>OROGBEMI</h3>
-                                <!-- <p>Computer IOT</p> -->
+    <div class="page" id="about-page">
+        <div class="about-container">
+            <div class="about-hero">
+                <div class="container">
+                    <div class="about-content">
+                        <div class="project-badge">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Project Dev</span>
+                        </div>
+                        <h1>Job stress management system for Nigerian universities workers using explainable artificial intelligence models</h1>
+                        <div class="author-info">
+                            <div class="author-card">
+                                <div class="author-avatar">
+                                    <i class="fas fa-user-graduate"></i>
+                                </div>
+                                <div class="author-details">
+                                    <h3>OROGBEMI</h3>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="about-sections">
-            <div class="container">
-                <div class="about-section">
-                    <h3>Project Overview</h3>
-                    <p>This project represents a comprehensive approach to addressing employee wellbeing in academic institutions. The system utilizes advanced machine learning models to detect and analyze job stress patterns among staff members.</p>
-                </div>
-                
-                <!-- <div class="about-section">
-                    <h3>Institution Details</h3>
-                    <div class="institution-info">
-                        <div class="info-card">
-                            <i class="fas fa-university"></i>
-                            <div>
-                                <h4>University</h4>
-                                <p>Olusegun Agagu University of Science and Technology</p>
+            
+            <div class="about-sections">
+                <div class="container">
+                    <div class="about-section">
+                        <h3>Project Overview</h3>
+                        <p>This project represents a comprehensive approach to addressing employee wellbeing in academic institutions. The system utilizes advanced machine learning models to detect and analyze job stress patterns among staff members.</p>
+                    </div>
+                    
+                    <div class="about-section">
+                        <h3>Technical Features</h3>
+                        <div class="features-grid">
+                            <div class="tech-feature">
+                                <i class="fas fa-brain"></i>
+                                <h4>Machine Learning Integration</h4>
+                                <p>Advanced algorithms for stress pattern recognition and prediction</p>
                             </div>
-                        </div>
-                        <div class="info-card">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <div>
-                                <h4>Location</h4>
-                                <p>Okitipupa, Ondo State, Nigeria</p>
+                            <div class="tech-feature">
+                                <i class="fas fa-chart-bar"></i>
+                                <h4>Real-time Analytics</h4>
+                                <p>Interactive dashboards with comprehensive stress level visualization</p>
                             </div>
-                        </div>
-                        <div class="info-card">
-                            <i class="fas fa-building"></i>
-                            <div>
-                                <h4>School</h4>
-                                <p>School of Information Communication Technology</p>
+                            <div class="tech-feature">
+                                <i class="fas fa-shield-alt"></i>
+                                <h4>Privacy Protection</h4>
+                                <p>Client-side data processing ensuring complete user privacy</p>
                             </div>
-                        </div>
-                        <div class="info-card">
-                            <i class="fas fa-laptop-code"></i>
-                            <div>
-                                <h4>Department</h4>
-                                <p>Department of Computer Science</p>
+                            <div class="tech-feature">
+                                <i class="fas fa-mobile-alt"></i>
+                                <h4>Responsive Design</h4>
+                                <p>Optimized for all devices with modern UI/UX principles</p>
                             </div>
                         </div>
                     </div>
-                </div> -->
-                
-                <div class="about-section">
-                    <h3>Technical Features</h3>
-                    <div class="features-grid">
-                        <div class="tech-feature">
-                            <i class="fas fa-brain"></i>
-                            <h4>Machine Learning Integration</h4>
-                            <p>Advanced algorithms for stress pattern recognition and prediction</p>
-                        </div>
-                        <div class="tech-feature">
-                            <i class="fas fa-chart-bar"></i>
-                            <h4>Real-time Analytics</h4>
-                            <p>Interactive dashboards with comprehensive stress level visualization</p>
-                        </div>
-                        <div class="tech-feature">
-                            <i class="fas fa-shield-alt"></i>
-                            <h4>Privacy Protection</h4>
-                            <p>Client-side data processing ensuring complete user privacy</p>
-                        </div>
-                        <div class="tech-feature">
-                            <i class="fas fa-mobile-alt"></i>
-                            <h4>Responsive Design</h4>
-                            <p>Optimized for all devices with modern UI/UX principles</p>
-                        </div>
+                    
+                    <div class="about-section">
+                        <h3>Project Objectives</h3>
+                        <ul class="objectives-list">
+                            <li>Intelligent system for early detection of job-related stress</li>
+                            <li>Personalized recommendations for stress management</li>
+                            <li>Comprehensive dashboard for tracking wellbeing metrics</li>
+                            <li>Machine learning models for predictive stress analysis</li>
+                            <li>Ensure data privacy and security in all system operations</li>
+                            <li>Contribute to the overall wellbeing of academic staff and faculty</li>
+                        </ul>
                     </div>
-                </div>
-                
-                <div class="about-section">
-                    <h3>Project Objectives</h3>
-                    <ul class="objectives-list">
-                        <li>Intelligent system for early detection of job-related stress</li>
-                        <li>Personalized recommendations for stress management</li>
-                        <li>Comprehensive dashboard for tracking wellbeing metrics</li>
-                        <li>Machine learning models for predictive stress analysis</li>
-                        <li>Ensure data privacy and security in all system operations</li>
-                        <li>Contribute to the overall wellbeing of academic staff and faculty</li>
-                    </ul>
-                </div>
-                
-                <div class="about-section">
-                    <h3>Developer Information</h3>
-                    <div class="developer-card">
-                        <div class="developer-info">
-                            <h4>OROGBEMI</h4>
-                            <!-- <p class="matric">Matriculation Number: CSC/20/036</p> -->
-                            <!-- <p class="program">B.Sc. Computer Science</p>
-                            <p class="year">Final Year Project - 2025</p> -->
+                    
+                    <div class="about-section">
+                        <h3>Developer Information</h3>
+                        <div class="developer-card">
+                            <div class="developer-info">
+                                <h4>OROGBEMI</h4>
+                            </div>
                         </div>
-                        <!-- <div class="developer-contact">
-                            <div class="contact-item">
-                                <i class="fas fa-envelope"></i>
-                                <span>Department of Computer Science</span>
-                            </div>
-                            <div class="contact-item">
-                                <i class="fas fa-university"></i>
-                                <span>OAUSTECH, Okitipupa</span>
-                            </div>
-                        </div> -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- Modal -->
     <div class="modal" id="modal">
@@ -571,21 +394,21 @@
     <div class="toast-container" id="toast-container"></div>
 
     <!-- Loading Screen -->
-<div class="loading-screen" id="loading-screen">
-    <div class="loading-content">
-        <div class="loading-logo">
-            <i class="fas fa-brain"></i>
-        </div>
-        <div class="loading-spinner">
-            <div class="spinner"></div>
-        </div>
-        <h3>StressDetect</h3>
-        <p id="loading-text">Initializing system...</p>
-        <div class="loading-progress">
-            <div class="loading-bar" id="loading-bar"></div>
+    <div class="loading-screen" id="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <i class="fas fa-brain"></i>
+            </div>
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+            </div>
+            <h3>StressDetect</h3>
+            <p id="loading-text">Initializing system...</p>
+            <div class="loading-progress">
+                <div class="loading-bar" id="loading-bar"></div>
+            </div>
         </div>
     </div>
-</div>
 
     <script src="script.js"></script>
    
