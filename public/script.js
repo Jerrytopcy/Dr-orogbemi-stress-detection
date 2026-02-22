@@ -101,9 +101,7 @@ function initializeApp() {
 
     currentUser = anonymousUser;
     
-    // Show Dashboard by default or Home? 
-    // Requirement: Click "Get Assessed" -> Dashboard opens.
-    // We will stay on Home initially, but user is "logged in" in the background.
+    // Stay on Home initially
     showPage("home");
 }
 
@@ -156,7 +154,11 @@ function showPageContent(pageId) {
         case "dashboard":
             loadUserData();
             loadDashboardStats();
-            setTimeout(() => { updateCharts(); }, 100);
+            setTimeout(() => { 
+                updateCharts(); 
+                // Show Ethical/Privacy Popup when dashboard is clicked
+                showEthicalModal();
+            }, 100);
             break;
         case "history":
             loadHistory();
@@ -174,6 +176,61 @@ function showPageContent(pageId) {
     if(navMenu) navMenu.classList.remove("active");
 
     window.scrollTo(0, 0);
+}
+
+// Ethical & Privacy Modal
+function showEthicalModal() {
+    const modalHtml = `
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-shield-alt"></i> Privacy & Ethical Notice</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="text-align: left; line-height: 1.6;">
+                <p><strong>Welcome to the Stress Detection System.</strong></p>
+                <p>Before you begin, please note the following ethical guidelines:</p>
+                <ul style="margin-bottom: 15px;">
+                    <li><strong>Anonymity:</strong> No personal identity (name, email, ID) is collected. You are participating anonymously.</li>
+                    <li><strong>Data Usage:</strong> Your responses are aggregated with others to identify organizational stress trends (e.g., workload, infrastructure). Individual data is never shared.</li>
+                    <li><strong>Voluntary Participation:</strong> You may stop the assessment at any time.</li>
+                    <li><strong>Wellbeing First:</strong> If any question causes distress, please take a break. This tool is for assessment, not diagnosis.</li>
+                </ul>
+                <p style="background: #f0fdf4; padding: 10px; border-left: 4px solid #16a34a; border-radius: 4px;">
+                    <i class="fas fa-info-circle"></i> <strong>Instruction:</strong> Please relax and answer honestly. When you click "Start Assessment" below, the page will scroll down to the questions automatically.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="startAssessmentFromModal()">
+                    <i class="fas fa-check-circle"></i> I Understand, Start Assessment
+                </button>
+            </div>
+        </div>
+    `;
+
+    const modal = document.getElementById("modal");
+    const title = document.getElementById("modal-title");
+    const message = document.getElementById("modal-message");
+    const confirmBtn = document.getElementById("modal-confirm");
+
+    // Inject custom HTML directly into modal content
+    modal.querySelector(".modal-content").outerHTML = modalHtml;
+    
+    // Re-attach close logic to the new close button if needed, but the onclick handles it
+    modal.classList.add("active");
+}
+
+function startAssessmentFromModal() {
+    closeModal();
+    // Small delay to allow modal to close animation
+    setTimeout(() => {
+        startAssessment();
+        // Scroll to assessment section
+        const assessmentSection = document.getElementById("assessment-section");
+        if (assessmentSection) {
+            assessmentSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }, 300);
 }
 
 // Loading Screen
@@ -294,9 +351,19 @@ function nextQuestion() {
     
     if (nextIndex < academicStressQuestions.length) {
         const nextCategory = academicStressQuestions[nextIndex].category;
+        
+        // Show toast and scroll if category changes
         if (currentCategory !== nextCategory) {
-            showToast(`Now moving to: ${nextCategory} questions`, "info", 3000);
+            showToast(`Now moving to: ${nextCategory}`, "info", 3000);
+            // Smooth scroll to ensure question is visible
+            setTimeout(() => {
+                const assessmentSection = document.getElementById("assessment-section");
+                if(assessmentSection) {
+                    assessmentSection.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+            }, 100);
         }
+        
         currentQuestionIndex++;
         showQuestion(currentQuestionIndex);
         updateAssessmentProgress();
@@ -518,7 +585,7 @@ function createStressDistributionChart() {
     const distribution = { low: 0, moderate: 0, high: 0, abnormal: 0, "high-risk": 0 };
     userResults.forEach((r) => {
         if(distribution[r.class] !== undefined) distribution[r.class]++;
-        else distribution.high++; // Fallback
+        else distribution.high++; 
     });
 
     if (stressDistributionChart) stressDistributionChart.destroy();
@@ -647,8 +714,6 @@ function simulateTypingWithHtml(container, content, speed = 30) {
     if (!container) return;
     container.innerHTML = '';
     container.style.display = 'block';
-    
-    // Simplified typing for robustness
     container.innerHTML = content; 
     container.classList.add('visible');
 }
@@ -752,7 +817,6 @@ function loadUserData() {
     const nameEl = document.getElementById("user-name");
     if(nameEl) nameEl.textContent = `Welcome, ${currentUser.name}`;
     
-    // Remove avatar logic as per requirements
     const avatars = document.querySelectorAll(".user-avatar");
     avatars.forEach(av => av.innerHTML = '<i class="fas fa-user-circle"></i>');
 }
@@ -797,6 +861,19 @@ function loadTheme() {
 }
 
 function showModal(title, message, onConfirm) {
+    // Only use this for simple confirmations, not the ethical modal
+    const modal = document.getElementById("modal");
+    // Check if we are overriding the ethical modal structure
+    if(!modal.querySelector("#modal-title")) {
+        // Restore standard structure if needed, but for now we assume standard flow for non-ethical modals
+        // For simplicity, we will just alert for non-ethical modals or re-inject standard HTML if strictly needed
+        // But since we only call showModal for Delete/Clear, let's keep it simple:
+        if(confirm(`${title}\n\n${message}`)) {
+            if(onConfirm) onConfirm();
+        }
+        return;
+    }
+    
     document.getElementById("modal-title").textContent = title;
     document.getElementById("modal-message").textContent = message;
     document.getElementById("modal").classList.add("active");
@@ -805,7 +882,9 @@ function showModal(title, message, onConfirm) {
 }
 
 function closeModal() {
-    document.getElementById("modal").classList.remove("active");
+    const modal = document.getElementById("modal");
+    modal.classList.remove("active");
+    // Optional: Reset modal content to default if needed, but CSS handles visibility
 }
 
 function showToast(message, type = "info", duration = 3000) {
@@ -817,7 +896,7 @@ function showToast(message, type = "info", duration = 3000) {
     setTimeout(() => toast.remove(), duration);
 }
 
-// PDF Generation (Simplified for brevity, uses global jsPDF)
+// PDF Generation
 function downloadPDFReport(resultId) {
     const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
     const result = results.find(r => r.id === resultId);
@@ -844,7 +923,6 @@ function downloadPDFReport(resultId) {
 }
 
 function viewReport(id) {
-    // Re-use display logic or open modal
     const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
     const res = results.find(r => r.id === id);
     if(res) {
