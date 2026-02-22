@@ -186,7 +186,7 @@ function showEthicalModal() {
                     <li><strong>Voluntary Participation:</strong> You may stop the assessment at any time.</li>
                     <li><strong>Wellbeing First:</strong> If any question causes distress, please take a break. This tool is for assessment, not diagnosis.</li>
                 </ul>
-                <p style="background: #f0fdf4; padding: 10px; border-left: 4px solid #16a34a; border-radius: 4px;">
+                <p style="background: #f0fdf4; padding: 10px; border-left: 4px solid #16a34a; border-radius: 4px; color: black">
                     <i class="fas fa-info-circle"></i> <strong>Instruction:</strong> Please relax and answer honestly. When you click "Start Assessment" below, the page will scroll down to the questions automatically.
                 </p>
             </div>
