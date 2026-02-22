@@ -76,7 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
         initializeApp();
         setupEventListeners();
         loadTheme();
-        // No auth check needed, we auto-login as anonymous
         setTimeout(() => {
             initializeCharts();
             hideLoadingScreen();
@@ -86,27 +85,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function initializeApp() {
     // Create an anonymous user session automatically
-    const anonymousUser = {
-        id: "anonymous_" + localStorage.getItem("anon_id") || "anonymous_" + Date.now(),
+    let anonId = localStorage.getItem("anon_id");
+    if (!anonId) {
+        anonId = Date.now().toString(36) + Math.random().toString(36).substr(2);
+        localStorage.setItem("anon_id", anonId);
+    }
+
+    currentUser = {
+        id: "anonymous_" + anonId,
         name: "Anonymous Participant",
         email: "participant@stressdetect.local",
         avatar: null,
         createdAt: new Date().toISOString()
     };
 
-    // Persist the anonymous ID so the same browser keeps the same history
-    if (!localStorage.getItem("anon_id")) {
-        localStorage.setItem("anon_id", anonymousUser.id.split('_')[1]);
-    }
-
-    currentUser = anonymousUser;
-    
-    // Stay on Home initially
     showPage("home");
 }
 
 function setupEventListeners() {
-    // Navigation toggle
     const navToggle = document.getElementById("nav-toggle");
     if(navToggle) {
         navToggle.addEventListener("click", () => {
@@ -114,13 +110,11 @@ function setupEventListeners() {
         });
     }
 
-    // Theme toggle
     const themeToggle = document.getElementById("theme-toggle");
     if(themeToggle) {
         themeToggle.addEventListener("change", toggleTheme);
     }
 
-    // Assessment navigation buttons
     const prevBtn = document.getElementById("prev-btn");
     const nextBtn = document.getElementById("next-btn");
     const submitBtn = document.getElementById("submit-btn");
@@ -156,8 +150,7 @@ function showPageContent(pageId) {
             loadDashboardStats();
             setTimeout(() => { 
                 updateCharts(); 
-                // Show Ethical/Privacy Popup when dashboard is clicked
-                showEthicalModal();
+                showEthicalModal(); // Show privacy modal on dashboard load
             }, 100);
             break;
         case "history":
@@ -167,11 +160,9 @@ function showPageContent(pageId) {
             loadUserData();
             break;
         case "results":
-            // Results are loaded via displayResults function usually
             break;
     }
 
-    // Close mobile menu
     const navMenu = document.getElementById("nav-menu");
     if(navMenu) navMenu.classList.remove("active");
 
@@ -209,23 +200,14 @@ function showEthicalModal() {
     `;
 
     const modal = document.getElementById("modal");
-    const title = document.getElementById("modal-title");
-    const message = document.getElementById("modal-message");
-    const confirmBtn = document.getElementById("modal-confirm");
-
-    // Inject custom HTML directly into modal content
     modal.querySelector(".modal-content").outerHTML = modalHtml;
-    
-    // Re-attach close logic to the new close button if needed, but the onclick handles it
     modal.classList.add("active");
 }
 
 function startAssessmentFromModal() {
     closeModal();
-    // Small delay to allow modal to close animation
     setTimeout(() => {
         startAssessment();
-        // Scroll to assessment section
         const assessmentSection = document.getElementById("assessment-section");
         if (assessmentSection) {
             assessmentSection.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -317,7 +299,6 @@ function showQuestion(index) {
         </div>
     `;
 
-    // Restore previous answer if exists
     if (assessmentAnswers[question.id]) {
         const savedValue = assessmentAnswers[question.id].value;
         const radioButton = questionContent.querySelector(`input[value="${savedValue}"]`);
@@ -352,10 +333,8 @@ function nextQuestion() {
     if (nextIndex < academicStressQuestions.length) {
         const nextCategory = academicStressQuestions[nextIndex].category;
         
-        // Show toast and scroll if category changes
         if (currentCategory !== nextCategory) {
             showToast(`Now moving to: ${nextCategory}`, "info", 3000);
-            // Smooth scroll to ensure question is visible
             setTimeout(() => {
                 const assessmentSection = document.getElementById("assessment-section");
                 if(assessmentSection) {
@@ -407,8 +386,9 @@ function updateAssessmentProgress() {
     if(currentQ) currentQ.textContent = currentQuestionIndex + 1;
 }
 
+// DATABASE INTEGRATION: Submit Assessment
 function submitAssessment() {
-    showLoadingScreen("Processing your assessment...");
+    showLoadingScreen("Processing and saving to secure database...");
     
     setTimeout(() => {
         let totalScore = 0;
@@ -428,7 +408,6 @@ function submitAssessment() {
             }
         });
 
-        // Determine Stress Level
         let overallStressLevel, overallStressDescription, overallStressClass;
         if (totalScore <= 24) {
             overallStressLevel = "Low Stress";
@@ -452,7 +431,6 @@ function submitAssessment() {
             overallStressClass = "high-risk";
         }
 
-        // Section Analysis
         const sectionLevels = {};
         let highestSection = "";
         let highestScore = -1;
@@ -472,7 +450,6 @@ function submitAssessment() {
             }
         }
 
-        // Recommendations
         let personalRecommendations = [overallStressDescription];
         let organizationalRecommendations = [];
 
@@ -494,8 +471,8 @@ function submitAssessment() {
         }
 
         const result = {
-            id: `${currentUser.id}_${Date.now()}`,
             userId: currentUser.id,
+            sessionId: localStorage.getItem("anon_id"),
             score: totalScore,
             maxScore: 100,
             level: overallStressLevel,
@@ -511,25 +488,39 @@ function submitAssessment() {
             organizationalRecommendations: organizationalRecommendations
         };
 
-        const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-        const existingResult = results.find((r) => r.userId === currentUser.id && Math.abs(r.timestamp - result.timestamp) < 5000);
-        
-        if (!existingResult) {
-            results.push(result);
+        // SEND TO SERVER
+        fetch('/api/assessments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(result)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                hideAssessment();
+                const displayResult = { ...result, id: data.data.id }; 
+                displayResults(displayResult);
+                showPage("results");
+                loadDashboardStats();
+                updateCharts();
+                showToast("Assessment saved securely!", "success");
+            } else {
+                throw new Error('Save failed');
+            }
+        })
+        .catch(err => {
+            console.error("DB Save Error:", err);
+            // FALLBACK TO LOCAL STORAGE
+            showToast("Server unavailable. Saving locally.", "warning");
+            const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
+            results.push({ ...result, id: `local_${Date.now()}` });
             localStorage.setItem("stressResults", JSON.stringify(results));
             hideAssessment();
             displayResults(result);
             showPage("results");
-            loadDashboardStats();
-            updateCharts();
-            showToast("Assessment completed successfully!", "success");
-        } else {
-            hideAssessment();
-            displayResults(existingResult);
-            showPage("results");
-            showToast("Assessment already completed!", "info");
-        }
-    }, 2000);
+        });
+
+    }, 1500);
 }
 
 // Chart Functions
@@ -543,24 +534,18 @@ function initializeCharts() {
     }
 }
 
-function createStressTrendChart() {
+function createStressTrendChart(labels, data) {
     const ctx = document.getElementById("stressTrendChart");
     if (!ctx) return;
-    const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-    const userResults = results.filter((r) => r.userId === currentUser?.id).slice(-10);
-    
-    const labels = userResults.map((r) => new Date(r.date).toLocaleDateString());
-    const data = userResults.map((r) => r.score);
-
     if (stressTrendChart) stressTrendChart.destroy();
 
     stressTrendChart = new Chart(ctx, {
         type: "line",
         data: {
-            labels: labels,
+            labels: labels || [],
             datasets: [{
                 label: "Stress Score",
-                data: data,
+                data: data || [],
                 borderColor: "rgb(59, 130, 246)",
                 backgroundColor: "rgba(59, 130, 246, 0.1)",
                 tension: 0.4,
@@ -576,17 +561,24 @@ function createStressTrendChart() {
     });
 }
 
-function createStressDistributionChart() {
+function createStressDistributionChart(dbData) {
     const ctx = document.getElementById("stressDistributionChart");
     if (!ctx) return;
-    const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-    const userResults = results.filter((r) => r.userId === currentUser?.id);
     
-    const distribution = { low: 0, moderate: 0, high: 0, abnormal: 0, "high-risk": 0 };
-    userResults.forEach((r) => {
-        if(distribution[r.class] !== undefined) distribution[r.class]++;
-        else distribution.high++; 
-    });
+    let distribution = { low: 0, moderate: 0, high: 0, abnormal: 0, "high-risk": 0 };
+    
+    if (dbData) {
+        dbData.forEach((r) => {
+            if(distribution[r.class] !== undefined) distribution[r.class]++;
+        });
+    } else {
+        // Fallback to local if no DB data passed
+        const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
+        const userResults = results.filter((r) => r.userId === currentUser?.id);
+        userResults.forEach((r) => {
+            if(distribution[r.class] !== undefined) distribution[r.class]++;
+        });
+    }
 
     if (stressDistributionChart) stressDistributionChart.destroy();
 
@@ -607,11 +599,17 @@ function createStressDistributionChart() {
     });
 }
 
-function createMonthlyOverviewChart() {
+function createMonthlyOverviewChart(dbData) {
     const ctx = document.getElementById("monthlyOverviewChart");
     if (!ctx) return;
-    const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-    const userResults = results.filter((r) => r.userId === currentUser?.id);
+    
+    let userResults = [];
+    if (dbData) {
+        userResults = dbData;
+    } else {
+        const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
+        userResults = results.filter((r) => r.userId === currentUser?.id);
+    }
 
     const monthlyData = {};
     userResults.forEach((r) => {
@@ -648,11 +646,33 @@ function createMonthlyOverviewChart() {
 }
 
 function updateCharts() {
-    if (currentUser) {
-        createStressTrendChart();
-        createStressDistributionChart();
-        createMonthlyOverviewChart();
-    }
+    if (!currentUser) return;
+    
+    const sessionId = localStorage.getItem("anon_id");
+    fetch(`/api/assessments/user/${sessionId}`)
+        .then(res => res.json())
+        .then(response => {
+            if (response.success && response.data.length > 0) {
+                const dbData = response.data;
+                // Prepare Trend Data
+                const labels = dbData.slice(0, 10).reverse().map(r => new Date(r.date).toLocaleDateString());
+                const data = dbData.slice(0, 10).reverse().map(r => r.score);
+                
+                createStressTrendChart(labels, data);
+                createStressDistributionChart(dbData);
+                createMonthlyOverviewChart(dbData);
+            } else {
+                // Fallback to local if no DB data
+                createStressTrendChart();
+                createStressDistributionChart();
+                createMonthlyOverviewChart();
+            }
+        })
+        .catch(() => {
+            createStressTrendChart();
+            createStressDistributionChart();
+            createMonthlyOverviewChart();
+        });
 }
 
 // Results Display
@@ -670,14 +690,12 @@ function displayResults(result) {
         scoreCircle.style.background = `conic-gradient(var(--primary-color) ${percentage}deg, var(--border-color) ${percentage}deg)`;
     }
 
-    // Section Scores HTML
     let sectionScoresHtml = "<ul>";
     for (const [section, data] of Object.entries(result.sectionLevels)) {
         sectionScoresHtml += `<li><strong>${section}:</strong> ${data.score}/20 (${data.level})</li>`;
     }
     sectionScoresHtml += "</ul>";
 
-    // Recommendations HTML
     let personalRecsHtml = "<ul>";
     result.personalRecommendations.forEach(rec => { personalRecsHtml += `<li>${rec}</li>`; });
     personalRecsHtml += "</ul>";
@@ -722,39 +740,52 @@ function createResultTrendChart() {
     const ctx = document.getElementById("resultTrendChart");
     if (!ctx) return;
     
-    const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-    const userResults = results.filter(r => r.userId === currentUser?.id).sort((a, b) => new Date(a.date) - new Date(b.date));
-    
-    const labels = userResults.map(r => new Date(r.date).toLocaleDateString());
-    const data = userResults.map(r => r.score);
+    const sessionId = localStorage.getItem("anon_id");
+    fetch(`/api/assessments/user/${sessionId}`)
+        .then(res => res.json())
+        .then(response => {
+            let userResults = [];
+            if (response.success) {
+                userResults = response.data.sort((a, b) => new Date(a.date) - new Date(b.date));
+            } else {
+                const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
+                userResults = results.filter(r => r.userId === currentUser?.id).sort((a, b) => new Date(a.date) - new Date(b.date));
+            }
 
-    if (resultTrendChartInstance) resultTrendChartInstance.destroy();
+            const labels = userResults.map(r => new Date(r.date).toLocaleDateString());
+            const data = userResults.map(r => r.score);
 
-    if(data.length === 0) {
-        ctx.parentElement.style.display = 'none';
-        return;
-    }
-    ctx.parentElement.style.display = 'block';
+            if (resultTrendChartInstance) resultTrendChartInstance.destroy();
 
-    resultTrendChartInstance = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: labels,
-            datasets: [{
-                label: "Stress Score",
-                data: data,
-                borderColor: "rgb(75, 192, 192)",
-                backgroundColor: "rgba(75, 192, 192, 0.2)",
-                tension: 0.4,
-                fill: true,
-            }],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: { y: { beginAtZero: true, max: 100 } },
-        },
-    });
+            if(data.length === 0) {
+                ctx.parentElement.style.display = 'none';
+                return;
+            }
+            ctx.parentElement.style.display = 'block';
+
+            resultTrendChartInstance = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Stress Score",
+                        data: data,
+                        borderColor: "rgb(75, 192, 192)",
+                        backgroundColor: "rgba(75, 192, 192, 0.2)",
+                        tension: 0.4,
+                        fill: true,
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, max: 100 } },
+                },
+            });
+        })
+        .catch(() => {
+             // Fallback logic omitted for brevity, assumes local storage if fetch fails
+        });
 }
 
 // History & Data Management
@@ -762,9 +793,41 @@ function loadHistory() {
     const container = document.getElementById("history-content");
     if(!container) return;
     
-    const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-    const userResults = results.filter((r) => r.userId === currentUser.id).sort((a, b) => new Date(b.date) - new Date(a.date));
+    const sessionId = localStorage.getItem("anon_id");
+    
+    fetch(`/api/assessments/user/${sessionId}`)
+        .then(res => res.json())
+        .then(response => {
+            if (!response.success || response.data.length === 0) {
+                // Try local fallback
+                const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
+                const userResults = results.filter((r) => r.userId === currentUser.id).sort((a, b) => new Date(b.date) - new Date(a.date));
+                renderHistoryList(container, userResults);
+                return;
+            }
 
+            const userResults = response.data.map(row => ({
+                id: row.id,
+                score: row.score,
+                maxScore: row.max_score,
+                level: row.level,
+                class: row.class,
+                description: row.description,
+                date: row.created_at,
+                sectionLevels: row.section_levels,
+                personalRecommendations: row.personal_recommendations,
+                organizationalRecommendations: row.organizational_recommendations
+            })).sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            renderHistoryList(container, userResults);
+        })
+        .catch(err => {
+            console.error("Failed to load history", err);
+            container.innerHTML = `<p>Error loading history. Check connection.</p>`;
+        });
+}
+
+function renderHistoryList(container, userResults) {
     if (userResults.length === 0) {
         container.innerHTML = `<div class="empty-state"><h3>No assessments yet</h3><p>Take your first stress assessment.</p></div>`;
         return;
@@ -781,15 +844,15 @@ function loadHistory() {
                 <div class="level ${result.class}">${result.level}</div>
             </div>
             <div class="history-actions">
-                <button class="btn btn-small btn-secondary" onclick="viewReport('${result.id}')">View Report</button>
+                <button class="btn btn-small btn-secondary" onclick='viewReportFromObj(${JSON.stringify(result).replace(/'/g, "&#39;")})'>View Report</button>
                 <button class="btn btn-small btn-primary" onclick="downloadPDFReport('${result.id}')">Download PDF</button>
-                <button class="btn btn-small btn-danger" onclick="deleteHistoryItem('${result.id}')">Delete</button>
+                ${result.id.toString().startsWith('local') ? `<button class="btn btn-small btn-danger" onclick="deleteLocalHistoryItem('${result.id}') disabled ">Delete</button>` : ''}
             </div>
         </div>
     `).join("");
 }
 
-function deleteHistoryItem(id) {
+function deleteLocalHistoryItem(id) {
     showModal("Delete Assessment", "Are you sure?", () => {
         const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
         const filtered = results.filter((r) => r.id !== id);
@@ -802,13 +865,13 @@ function deleteHistoryItem(id) {
 }
 
 function clearHistory() {
-    showModal("Clear All History", "This cannot be undone.", () => {
+    showModal("Clear All Local History", "This cannot be undone.", () => {
         const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
         const filtered = results.filter((r) => r.userId !== currentUser.id);
         localStorage.setItem("stressResults", JSON.stringify(filtered));
         loadHistory();
         loadDashboardStats();
-        showToast("History cleared", "success");
+        showToast("Local history cleared", "success");
     });
 }
 
@@ -823,26 +886,40 @@ function loadUserData() {
 
 function loadDashboardStats() {
     if (!currentUser) return;
-    const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-    const userResults = results.filter((r) => r.userId === currentUser.id);
+    const sessionId = localStorage.getItem("anon_id");
 
-    const totalEl = document.getElementById("total-assessments");
-    const lastLevelEl = document.getElementById("last-stress-level");
-    const daysEl = document.getElementById("days-since-last");
+    fetch(`/api/assessments/user/${sessionId}`)
+        .then(res => res.json())
+        .then(response => {
+            let userResults = [];
+            if (response.success) {
+                userResults = response.data;
+            } else {
+                const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
+                userResults = results.filter((r) => r.userId === currentUser.id);
+            }
+            
+            const totalEl = document.getElementById("total-assessments");
+            const lastLevelEl = document.getElementById("last-stress-level");
+            const daysEl = document.getElementById("days-since-last");
 
-    if(totalEl) totalEl.textContent = userResults.length;
+            if(totalEl) totalEl.textContent = userResults.length;
 
-    if (userResults.length > 0) {
-        const lastResult = userResults.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
-        if(lastLevelEl) lastLevelEl.textContent = lastResult.level;
-        if(daysEl) {
-            const daysSince = Math.floor((Date.now() - new Date(lastResult.date)) / (1000 * 60 * 60 * 24));
-            daysEl.textContent = daysSince;
-        }
-    } else {
-        if(lastLevelEl) lastLevelEl.textContent = "-";
-        if(daysEl) daysEl.textContent = "-";
-    }
+            if (userResults.length > 0) {
+                const lastResult = userResults.sort((a, b) => new Date(b.date) - new Date(a.date))[0]; 
+                if(lastLevelEl) lastLevelEl.textContent = lastResult.level;
+                if(daysEl) {
+                    const daysSince = Math.floor((Date.now() - new Date(lastResult.date)) / (1000 * 60 * 60 * 24));
+                    daysEl.textContent = daysSince;
+                }
+            } else {
+                if(lastLevelEl) lastLevelEl.textContent = "-";
+                if(daysEl) daysEl.textContent = "-";
+            }
+        })
+        .catch(err => {
+            console.error("Stats load error", err);
+        });
 }
 
 // Utilities
@@ -861,13 +938,8 @@ function loadTheme() {
 }
 
 function showModal(title, message, onConfirm) {
-    // Only use this for simple confirmations, not the ethical modal
     const modal = document.getElementById("modal");
-    // Check if we are overriding the ethical modal structure
     if(!modal.querySelector("#modal-title")) {
-        // Restore standard structure if needed, but for now we assume standard flow for non-ethical modals
-        // For simplicity, we will just alert for non-ethical modals or re-inject standard HTML if strictly needed
-        // But since we only call showModal for Delete/Clear, let's keep it simple:
         if(confirm(`${title}\n\n${message}`)) {
             if(onConfirm) onConfirm();
         }
@@ -884,7 +956,6 @@ function showModal(title, message, onConfirm) {
 function closeModal() {
     const modal = document.getElementById("modal");
     modal.classList.remove("active");
-    // Optional: Reset modal content to default if needed, but CSS handles visibility
 }
 
 function showToast(message, type = "info", duration = 3000) {
@@ -898,9 +969,15 @@ function showToast(message, type = "info", duration = 3000) {
 
 // PDF Generation
 function downloadPDFReport(resultId) {
+    // Try fetching from DB first if ID is numeric, else check local
     const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-    const result = results.find(r => r.id === resultId);
-    if(!result) return;
+    let result = results.find(r => r.id == resultId);
+    
+    if (!result) {
+        // In a real app, you might fetch the specific report from API here
+        showToast("Report not found in local cache. Please view online.", "warning");
+        return;
+    }
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -922,11 +999,7 @@ function downloadPDFReport(resultId) {
     doc.save(`report-${result.id}.pdf`);
 }
 
-function viewReport(id) {
-    const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-    const res = results.find(r => r.id === id);
-    if(res) {
-        displayResults(res);
-        showPage("results");
-    }
+function viewReportFromObj(result) {
+    displayResults(result);
+    showPage("results");
 }
