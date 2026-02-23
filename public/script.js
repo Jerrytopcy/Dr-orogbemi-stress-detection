@@ -369,8 +369,23 @@ function updateAssessmentProgress() {
 
 // DATABASE INTEGRATION: Submit Assessment
 function submitAssessment() {
+  // Prevent multiple submissions by disabling the button
+  const submitBtn = document.getElementById("submit-btn");
+  if (!submitBtn || submitBtn.disabled) return; // Exit if already disabled
+  
+  // Disable the button and show loading state
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+  
   showLoadingScreen("Processing and saving to secure database...");
-  setTimeout(() => {
+  
+  // Clear any existing timeout to prevent multiple timeouts
+  if (window.submitTimeout) {
+    clearTimeout(window.submitTimeout);
+  }
+  
+  // Set a single timeout for the submission process
+  window.submitTimeout = setTimeout(() => {
     let totalScore = 0;
     const sectionScores = {
       "Workforce and Workload": 0,
@@ -381,13 +396,16 @@ function submitAssessment() {
     };
     
     Object.values(assessmentAnswers).forEach((answer) => {
-      const originalQuestion = academicStressQuestions.find(q => q.id === Number(Object.keys(assessmentAnswers).find(key => assessmentAnswers[key] === answer)));
+      const originalQuestion = academicStressQuestions.find(q => 
+        q.id === Number(Object.keys(assessmentAnswers).find(key => 
+          assessmentAnswers[key] === answer)));
       if (originalQuestion) {
         totalScore += answer.value;
         sectionScores[originalQuestion.category] += answer.value;
       }
     });
     
+    // [Rest of your scoring logic remains the same...]
     let overallStressLevel, overallStressDescription, overallStressClass;
     if (totalScore <= 24) {
       overallStressLevel = "Low Stress";
@@ -451,7 +469,7 @@ function submitAssessment() {
     
     const result = {
       userId: currentUser.id,
-      sessionId: currentUser.sessionId,  // Added sessionId
+      sessionId: currentUser.sessionId,
       score: totalScore,
       maxScore: 100,
       level: overallStressLevel,
@@ -497,7 +515,19 @@ function submitAssessment() {
     .catch(err => {
       console.error("DB Save Error:", err);
       showToast("Unable to save to server. Please check your connection.", "error");
-      // No local fallback - DB only
+      
+      // Re-enable the button on error
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Submit Assessment';
+      }
+    })
+    .finally(() => {
+      // Always re-enable the button after request completes
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Submit Assessment';
+      }
     });
   }, 1500);
 }
