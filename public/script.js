@@ -978,3 +978,230 @@ function viewReportFromObj(result) {
   displayResults(result);
   showPage("results");
 }
+
+// Aggregate Analysis Functions
+function computeAggregateAnalysis() {
+    const overlay = document.getElementById('computation-overlay');
+    const results = document.getElementById('aggregate-results');
+    const computeBtn = document.getElementById('compute-aggregate-btn');
+    
+    // Show overlay and hide results
+    overlay.style.display = 'flex';
+    results.style.display = 'none';
+    computeBtn.disabled = true;
+    
+    // Reset progress
+    document.getElementById('computation-progress-fill').style.width = '0%';
+    document.getElementById('computation-percentage').textContent = '0%';
+    
+    // Reset steps
+    document.querySelectorAll('.step').forEach(step => {
+        step.classList.remove('active');
+        step.style.opacity = '0.5';
+    });
+    
+    // Animate computation steps
+    let progress = 0;
+    let currentStep = 1;
+    const steps = document.querySelectorAll('.step');
+    
+    const stepInterval = setInterval(() => {
+        // Update progress bar
+        progress += Math.random() * 8 + 4;
+        if (progress >= 100) progress = 100;
+        
+        document.getElementById('computation-progress-fill').style.width = progress + '%';
+        document.getElementById('computation-percentage').textContent = Math.round(progress) + '%';
+        
+        // Update active step
+        if (progress >= currentStep * 25 && currentStep <= 4) {
+            steps.forEach(s => s.classList.remove('active'));
+            if (steps[currentStep - 1]) {
+                steps[currentStep - 1].classList.add('active');
+                steps[currentStep - 1].style.opacity = '1';
+            }
+            currentStep++;
+        }
+        
+        if (progress >= 100) {
+            clearInterval(stepInterval);
+            // Fetch actual data after animation
+            fetchAggregateData();
+        }
+    }, 200);
+}
+
+function fetchAggregateData() {
+    fetch('/api/assessments/aggregate')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                displayAggregateResults(data);
+            } else {
+                throw new Error('Failed to fetch aggregate data');
+            }
+        })
+        .catch(err => {
+            console.error('Aggregate fetch error:', err);
+            showToast('Unable to load aggregate data. Please try again.', 'error');
+            hideComputationOverlay();
+        });
+}
+
+function displayAggregateResults(data) {
+    const overlay = document.getElementById('computation-overlay');
+    const results = document.getElementById('aggregate-results');
+    const computeBtn = document.getElementById('compute-aggregate-btn');
+    
+    // Hide overlay and show results
+    overlay.style.display = 'none';
+    results.style.display = 'block';
+    computeBtn.disabled = false;
+    
+    // Update summary cards
+    document.getElementById('total-assessments-agg').textContent = data.totalAssessments || 0;
+    document.getElementById('most-stressed-section').textContent = 
+        data.mostChallengingSection || 'N/A';
+    
+    // Calculate and display average stress score
+    const sectionAverages = data.sectionAverages || {};
+    const avgValues = Object.values(sectionAverages).map(v => parseFloat(v));
+    const overallAvg = avgValues.length > 0 
+        ? (avgValues.reduce((a, b) => a + b, 0) / avgValues.length).toFixed(1)
+        : 0;
+    document.getElementById('avg-stress-score').textContent = overallAvg;
+    
+    // Generate section bars
+    generateSectionBars(sectionAverages);
+}
+
+function generateSectionBars(sectionAverages) {
+    const container = document.getElementById('section-bars-container');
+    container.innerHTML = '';
+    
+    const sections = [
+        'Workforce and Workload',
+        'Skills and Task Management',
+        'Facilities and Infrastructure',
+        'Mental and Physical Health',
+        'Organizational Culture and Leadership'
+    ];
+    
+    // Calculate max value for scaling
+    const values = Object.values(sectionAverages);
+    const maxValue = Math.max(...values.map(v => parseFloat(v)), 20);
+    
+    sections.forEach(section => {
+        const value = parseFloat(sectionAverages[section]) || 0;
+        const percentage = (value / maxValue) * 100;
+        const level = getStressLevel(value);
+        
+        const barItem = document.createElement('div');
+        barItem.className = 'section-bar-item';
+        barItem.innerHTML = `
+            <div class="section-label">${getShortSectionName(section)}</div>
+            <div class="section-bar-track">
+                <div class="section-bar-fill ${level}" style="width: 0%" data-width="${percentage}%">
+                    ${value.toFixed(1)}
+                </div>
+            </div>
+            <div class="section-value">${value.toFixed(1)}/20</div>
+        `;
+        
+        container.appendChild(barItem);
+        
+        // Animate bar fill after a slight delay
+        setTimeout(() => {
+            const fill = barItem.querySelector('.section-bar-fill');
+            fill.style.width = fill.dataset.width;
+        }, 200);
+    });
+}
+
+function getShortSectionName(fullName) {
+    const mapping = {
+        'Workforce and Workload': 'Workforce',
+        'Skills and Task Management': 'Skills',
+        'Facilities and Infrastructure': 'Facilities',
+        'Mental and Physical Health': 'Health',
+        'Organizational Culture and Leadership': 'Culture'
+    };
+    return mapping[fullName] || fullName;
+}
+
+function getStressLevel(score) {
+    if (score <= 4) return 'low';
+    if (score <= 9) return 'moderate';
+    if (score <= 12) return 'abnormal';
+    if (score <= 15) return 'high';
+    return 'high-risk';
+}
+
+function hideComputationOverlay() {
+    const overlay = document.getElementById('computation-overlay');
+    const computeBtn = document.getElementById('compute-aggregate-btn');
+    overlay.style.display = 'none';
+    computeBtn.disabled = false;
+}
+
+function hideAggregateResults() {
+    const results = document.getElementById('aggregate-results');
+    results.style.display = 'none';
+}
+
+function exportAggregateReport() {
+    showToast('Report export feature coming soon', 'info');
+    // Future: Implement PDF generation using jsPDF with aggregate data
+}
+
+// Update loadHistory function to show the aggregate section button
+function loadHistory() {
+    const container = document.getElementById('history-content');
+    const aggregateSection = document.getElementById('aggregate-section');
+    
+    if (!container) return;
+    
+    // Show aggregate section on history page load
+    if (aggregateSection) {
+        aggregateSection.style.display = 'block';
+    }
+    
+    // Updated to use session-based endpoint with sessionId
+    fetch(`/api/assessments/user/${currentUser.sessionId}`)
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+        })
+        .then(response => {
+            if (!response.success || response.data.length === 0) {
+                renderHistoryList(container, []);
+                return;
+            }
+            
+            const userResults = response.data.map(row => ({
+                id: row.id,
+                score: row.score,
+                maxScore: row.max_score,
+                level: row.level,
+                class: row.class,
+                description: row.description,
+                date: row.created_at,
+                sectionLevels: row.section_levels,
+                personalRecommendations: row.personal_recommendations,
+                organizationalRecommendations: row.organizational_recommendations
+            })).sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            renderHistoryList(container, userResults);
+        })
+        .catch(err => {
+            console.error('Failed to load history', err);
+            container.innerHTML = `<p>Error loading history. Check connection.</p>`;
+        });
+}

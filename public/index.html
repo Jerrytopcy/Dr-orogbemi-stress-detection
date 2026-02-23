@@ -309,6 +309,96 @@
             <div class="history-content" id="history-content">
                 <!-- History items will be populated by JavaScript -->
             </div>
+                <!-- Aggregate Analysis Section -->
+<div class="aggregate-section" id="aggregate-section" style="display: none;">
+    <div class="aggregate-header">
+        <h2>Organizational Stress Analysis</h2>
+        <p>Aggregate insights from all completed assessments</p>
+        <button class="btn btn-primary" id="compute-aggregate-btn" onclick="computeAggregateAnalysis()">
+            <i class="fas fa-calculator"></i> Compute Aggregate Data
+        </button>
+    </div>
+    
+    <!-- Computation Animation Overlay -->
+    <div class="computation-overlay" id="computation-overlay" style="display: none;">
+        <div class="computation-content">
+            <div class="computation-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h3>Processing Aggregate Data</h3>
+            <div class="computation-steps" id="computation-steps">
+                <div class="step active" data-step="1">Fetching responses</div>
+                <div class="step" data-step="2">Analyzing section scores</div>
+                <div class="step" data-step="3">Calculating stress distributions</div>
+                <div class="step" data-step="4">Generating insights</div>
+            </div>
+            <div class="computation-progress">
+                <div class="progress-track">
+                    <div class="progress-fill" id="computation-progress-fill"></div>
+                </div>
+                <span id="computation-percentage">0%</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Results Display -->
+    <div class="aggregate-results" id="aggregate-results" style="display: none;">
+        <div class="results-summary">
+            <div class="summary-card">
+                <h4>Total Assessments</h4>
+                <div class="summary-value" id="total-assessments-agg">0</div>
+            </div>
+            <div class="summary-card highlight">
+                <h4>Most Stressed Section</h4>
+                <div class="summary-value" id="most-stressed-section">-</div>
+            </div>
+            <div class="summary-card">
+                <h4>Average Stress Score</h4>
+                <div class="summary-value" id="avg-stress-score">0</div>
+            </div>
+        </div>
+        
+        <div class="section-analysis">
+            <h3>Section Stress Levels</h3>
+            <div class="section-bars" id="section-bars-container">
+                <!-- Bars populated by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="computation-details">
+            <h3>Computation Details</h3>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Data Source:</span>
+                    <span class="detail-value">All submitted assessments</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Calculation Method:</span>
+                    <span class="detail-value">Weighted average of section scores</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Update Frequency:</span>
+                    <span class="detail-value">Real-time on compute</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Privacy:</span>
+                    <span class="detail-value">Aggregated only - no individual data</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="aggregate-actions">
+            <button class="btn btn-secondary" onclick="exportAggregateReport()">
+                <i class="fas fa-download"></i> Export Report
+            </button>
+            <button class="btn btn-secondary" onclick="hideAggregateResults()">
+                <i class="fas fa-times"></i> Close
+            </button>
+        </div>
+    </div>
+</div>
+
+
         </div>
     </div>
 
