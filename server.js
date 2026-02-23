@@ -52,7 +52,11 @@ initDB();
 // --- API ROUTES ---
 
 // 1. Submit Assessment
+// 1. Submit Assessment
 app.post('/api/assessments', async (req, res) => {
+  console.log("DEBUG: POST /api/assessments received"); // <-- ADD THIS LINE
+  console.log("DEBUG: Request body (first 100 chars):", JSON.stringify(req.body).substring(0, 100)); // Optional: log part of the body
+
   const {
     userId, sessionId, score, maxScore, level, class: stressClass,
     description, sectionScores, sectionLevels, highestSection,
@@ -60,6 +64,7 @@ app.post('/api/assessments', async (req, res) => {
   } = req.body;
 
   try {
+    console.log("DEBUG: Attempting to insert into DB..."); // <-- Optional: Log before DB call
     const result = await pool.query(
       `INSERT INTO assessments 
       (user_id, session_id, score, max_score, level, class, description, 
@@ -73,6 +78,7 @@ app.post('/api/assessments', async (req, res) => {
         JSON.stringify(personalRecommendations), JSON.stringify(organizationalRecommendations), JSON.stringify(answers)
       ]
     );
+    console.log("DEBUG: Insert successful, sending response."); // <-- Optional: Log after DB call
     res.status(201).json({ success: true, data: result.rows[0] });
   } catch (err) {
     console.error('Error saving assessment:', err);
