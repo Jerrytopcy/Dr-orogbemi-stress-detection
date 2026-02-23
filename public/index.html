@@ -202,11 +202,21 @@
     </div>
 
     <!-- Results Page -->
-<div class="page" id="results-page">
-    <div class="container">
-        <div class="results-container">
-            <!-- [Existing results content remains unchanged] -->
-            
+    <div class="page" id="results-page">
+        <div class="container">
+            <div class="results-container">
+                <div class="results-header">
+                    <h2>Your Stress Assessment Results</h2>
+                    <div class="results-score">
+                        <div class="score-circle" id="score-circle">
+                            <span id="score-value">42</span>
+                        </div>
+                        <div class="stress-level" id="stress-level-result">
+                            <h3 id="stress-level-text">Low Stress</h3>
+                            <p id="stress-level-description">You're managing stress well!</p>
+                        </div>
+                    </div>
+                </div>
             <!-- Thank You Message Section -->
             <div class="thank-you-section" style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfeee 100%); 
                                            border-radius: 16px; 
@@ -253,16 +263,41 @@
                     You may now safely exit the application knowing your contribution to improving workplace wellbeing has been securely recorded. Your insights help create healthier academic environments for everyone.
                 </p>
             </div>
+                <!-- Section Scores Display -->
+                <div class="section-breakdown" id="section-scores-display">
+                     <h3>Section Breakdown</h3>
+                     <div class="typing-container" id="section-scores-typed">Loading section scores...</div>
+                </div>
 
-            <div class="results-actions">
-                <button class="btn btn-primary" onclick="window.close() || window.history.back()">
+                <!-- Recommendations Section -->
+                <div class="recommendations-section">
+                    <div class="recommendation-block" id="personal-recommendations">
+                         <h3>Personal Recommendations</h3>
+                         <div class="typing-container" id="personal-recs-typed">Loading recommendations...</div>
+                    </div>
+
+                    <!-- Organizational Recommendations -->
+                    <div class="recommendation-block" id="organizational-recommendations">
+                         <h3>Organizational Recommendations</h3>
+                         <div class="typing-container" id="org-recs-typed">Loading recommendations...</div>
+                    </div>
+                </div>
+
+                <!-- System Performance Charts -->
+                <div class="chart-card">
+                  <h3>System Performance Stress Trend</h3>
+                  <canvas id="resultTrendChart" height="100"></canvas>
+                </div>
+
+                <div class="results-actions">
+                    <button class="btn btn-primary" onclick="window.close() || window.history.back()">
                  <i class="fas fa-sign-out-alt"></i> Exit Application
-            </button>
-                <button class="btn btn-secondary" onclick="showPage('history')">View History</button>
+                     </button>
+                    <button class="btn btn-secondary" onclick="showPage('history')">View History</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- History Page -->
     <div class="page" id="history-page">
