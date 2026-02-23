@@ -1,5 +1,5 @@
 // Academic Stress Survey Questions
-// Total questions: 50, distributed across 5 sections of 10 questions each.
+// Total questions: 50 - distributed across 5 sections of 10 questions each.
 const academicStressQuestions = [
     // === SECTION 1: Workforce and Workload ===
     { id: 1, question: "I feel that the number of staff in my department is insufficient for the workload.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
@@ -84,44 +84,34 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initializeApp() {
-    // Create an anonymous user session automatically
-    let anonId = localStorage.getItem("anon_id");
-    if (!anonId) {
-        anonId = Date.now().toString(36) + Math.random().toString(36).substr(2);
-        localStorage.setItem("anon_id", anonId);
-    }
-
+    // User identity is now managed via server-side session cookies
     currentUser = {
-        id: "anonymous_" + anonId,
-        name: "Anonymous Participant",
+        id: "session_user",
+        name: "Participant",
         email: "participant@stressdetect.local",
         avatar: null,
         createdAt: new Date().toISOString()
     };
-
     showPage("home");
 }
 
 function setupEventListeners() {
     const navToggle = document.getElementById("nav-toggle");
-    if(navToggle) {
+    if (navToggle) {
         navToggle.addEventListener("click", () => {
             document.getElementById("nav-menu").classList.toggle("active");
         });
     }
-
     const themeToggle = document.getElementById("theme-toggle");
-    if(themeToggle) {
+    if (themeToggle) {
         themeToggle.addEventListener("change", toggleTheme);
     }
-
     const prevBtn = document.getElementById("prev-btn");
     const nextBtn = document.getElementById("next-btn");
     const submitBtn = document.getElementById("submit-btn");
-
-    if(prevBtn) prevBtn.addEventListener("click", previousQuestion);
-    if(nextBtn) nextBtn.addEventListener("click", nextQuestion);
-    if(submitBtn) submitBtn.addEventListener("click", submitAssessment);
+    if (prevBtn) prevBtn.addEventListener("click", previousQuestion);
+    if (nextBtn) nextBtn.addEventListener("click", nextQuestion);
+    if (submitBtn) submitBtn.addEventListener("click", submitAssessment);
 }
 
 // Page Navigation
@@ -141,15 +131,13 @@ function showPageContent(pageId) {
     pages.forEach((page) => {
         page.style.display = page.id === pageId + "-page" ? "block" : "none";
     });
-
     currentPage = pageId;
-
     switch (pageId) {
         case "dashboard":
             loadUserData();
             loadDashboardStats();
-            setTimeout(() => { 
-                updateCharts(); 
+            setTimeout(() => {
+                updateCharts();
                 showEthicalModal(); // Show privacy modal on dashboard load
             }, 100);
             break;
@@ -162,43 +150,40 @@ function showPageContent(pageId) {
         case "results":
             break;
     }
-
     const navMenu = document.getElementById("nav-menu");
-    if(navMenu) navMenu.classList.remove("active");
-
+    if (navMenu) navMenu.classList.remove("active");
     window.scrollTo(0, 0);
 }
 
 // Ethical & Privacy Modal
 function showEthicalModal() {
     const modalHtml = `
-        <div class="modal-content" style="max-width: 600px;">
-            <div class="modal-header">
-                <h3><i class="fas fa-shield-alt"></i> Privacy & Ethical Notice</h3>
-                <button class="modal-close" onclick="closeModal()">&times;</button>
-            </div>
-            <div class="modal-body" style="text-align: left; line-height: 1.6;">
-                <p><strong>Welcome to the Stress Detection System.</strong></p>
-                <p>Before you begin, please note the following ethical guidelines:</p>
-                <ul style="margin-bottom: 15px;">
-                    <li><strong>Anonymity:</strong> No personal identity (name, email, ID) is collected. You are participating anonymously.</li>
-                    <li><strong>Data Usage:</strong> Your responses are aggregated with others to identify organizational stress trends (e.g., workload, infrastructure). Individual data is never shared.</li>
-                    <li><strong>Voluntary Participation:</strong> You may stop the assessment at any time.</li>
-                    <li><strong>Wellbeing First:</strong> If any question causes distress, please take a break. This tool is for assessment, not diagnosis.</li>
-                </ul>
-                <p style="background: #f0fdf4; padding: 10px; border-left: 4px solid #16a34a; border-radius: 4px; color: black">
-                    <i class="fas fa-info-circle"></i> <strong>Instruction:</strong> Please relax and answer honestly. When you click "Start Assessment" below, the page will scroll down to the questions automatically.
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="startAssessmentFromModal()">
-                    <i class="fas fa-check-circle"></i> I Understand, Start Assessment
-                </button>
-            </div>
-        </div>
-    `;
-
+<div class="modal-content" style="max-width: 600px;">
+<div class="modal-header">
+<h3><i class="fas fa-shield-alt"></i> Privacy & Ethical Notice</h3>
+<button class="modal-close" onclick="closeModal()">&times;</button>
+</div>
+<div class="modal-body" style="text-align: left; line-height: 1.6;">
+<p><strong>Welcome to the Stress Detection System.</strong></p>
+<p>Before you begin, please note the following ethical guidelines:</p>
+<ul style="margin-bottom: 15px;">
+<li><strong>Anonymity:</strong> No personal identity (name, email, ID) is collected. You are participating anonymously.</li>
+<li><strong>Data Usage:</strong> Your responses are aggregated with others to identify organizational stress trends (e.g., workload, infrastructure). Individual data is never shared.</li>
+<li><strong>Voluntary Participation:</strong> You may stop the assessment at any time.</li>
+<li><strong>Wellbeing First:</strong> If any question causes distress, please take a break. This tool is for assessment, not diagnosis.</li>
+</ul>
+<p style="background: #f0fdf4; padding: 10px; border-left: 4px solid #16a34a; border-radius: 4px; color: black">
+<i class="fas fa-info-circle"></i> <strong>Instruction:</strong> Please relax and answer honestly. When you click "Start Assessment" below, the page will scroll down to the questions automatically.
+</p>
+</div>
+<div class="modal-footer">
+<button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+<button class="btn btn-primary" onclick="startAssessmentFromModal()">
+<i class="fas fa-check-circle"></i> I Understand, Start Assessment
+</button>
+</div>
+</div>
+`;
     const modal = document.getElementById("modal");
     modal.querySelector(".modal-content").outerHTML = modalHtml;
     modal.classList.add("active");
@@ -221,10 +206,8 @@ function showLoadingScreen(text = "Loading...") {
     const loadingText = document.getElementById("loading-text");
     const loadingBar = document.getElementById("loading-bar");
     if (!loadingScreen) return;
-
     loadingText.textContent = text;
     loadingScreen.classList.remove("hidden");
-
     let progress = 0;
     const interval = setInterval(() => {
         progress += Math.random() * 20 + 10;
@@ -249,9 +232,8 @@ function startAssessment() {
     currentQuestionIndex = 0;
     assessmentAnswers = {};
     assessmentInProgress = true;
-    
     const assessmentSection = document.getElementById("assessment-section");
-    if(assessmentSection) {
+    if (assessmentSection) {
         assessmentSection.style.display = "block";
         document.getElementById("total-questions").textContent = academicStressQuestions.length;
         showQuestion(0);
@@ -261,7 +243,7 @@ function startAssessment() {
 
 function hideAssessment() {
     const assessmentSection = document.getElementById("assessment-section");
-    if(assessmentSection) assessmentSection.style.display = "none";
+    if (assessmentSection) assessmentSection.style.display = "none";
     assessmentInProgress = false;
     currentQuestionIndex = 0;
     assessmentAnswers = {};
@@ -270,9 +252,7 @@ function hideAssessment() {
 function showQuestion(index) {
     const question = academicStressQuestions[index];
     const questionContent = document.getElementById("question-content");
-    
     if (!questionContent) return;
-
     const categoryDisplay = {
         "Workforce and Workload": "Workforce & Workload",
         "Skills and Task Management": "Skills & Task Management",
@@ -280,25 +260,22 @@ function showQuestion(index) {
         "Mental and Physical Health": "Mental & Physical Health",
         "Organizational Culture and Leadership": "Culture & Leadership"
     };
-    
     const categoryLabel = categoryDisplay[question.category] || question.category;
-
     questionContent.innerHTML = `
-        <div style="font-size:0.9rem; color:#059669; font-weight:500; margin-bottom:10px;">
-            Section: ${categoryLabel}
-        </div>
-        <h4>Question ${index + 1}</h4>
-        <p>${question.question}</p>
-        <div class="question-options" id="question-options">
-            ${question.options.map((option, optionIndex) => `
-                <label class="question-option" onclick="selectOption(${option.value}, ${optionIndex})">
-                    <input type="radio" name="current-question" value="${option.value}">
-                    <span>${option.text}</span>
-                </label>
-            `).join("")}
-        </div>
-    `;
-
+<div style="font-size:0.9rem; color:#059669; font-weight:500; margin-bottom:10px;">
+Section: ${categoryLabel}
+</div>
+<h4>Question ${index + 1}</h4>
+<p>${question.question}</p>
+<div class="question-options" id="question-options">
+${question.options.map((option, optionIndex) => `
+<label class="question-option" onclick="selectOption(${option.value}, ${optionIndex})">
+<input type="radio" name="current-question" value="${option.value}">
+<span>${option.text}</span>
+</label>
+`).join("")}
+</div>
+`;
     if (assessmentAnswers[question.id]) {
         const savedValue = assessmentAnswers[question.id].value;
         const radioButton = questionContent.querySelector(`input[value="${savedValue}"]`);
@@ -314,10 +291,8 @@ function showQuestion(index) {
 function selectOption(value, optionIndex) {
     const question = academicStressQuestions[currentQuestionIndex];
     const options = document.querySelectorAll(".question-option");
-    
     options.forEach((option) => option.classList.remove("selected"));
-    if(options[optionIndex]) options[optionIndex].classList.add("selected");
-
+    if (options[optionIndex]) options[optionIndex].classList.add("selected");
     assessmentAnswers[question.id] = {
         question: question.question,
         answer: question.options[optionIndex].text,
@@ -329,20 +304,17 @@ function selectOption(value, optionIndex) {
 function nextQuestion() {
     const currentCategory = academicStressQuestions[currentQuestionIndex].category;
     const nextIndex = currentQuestionIndex + 1;
-    
     if (nextIndex < academicStressQuestions.length) {
         const nextCategory = academicStressQuestions[nextIndex].category;
-        
         if (currentCategory !== nextCategory) {
             showToast(`Now moving to: ${nextCategory}`, "info", 3000);
             setTimeout(() => {
                 const assessmentSection = document.getElementById("assessment-section");
-                if(assessmentSection) {
+                if (assessmentSection) {
                     assessmentSection.scrollIntoView({ behavior: "smooth", block: "center" });
                 }
             }, 100);
         }
-        
         currentQuestionIndex++;
         showQuestion(currentQuestionIndex);
         updateAssessmentProgress();
@@ -361,13 +333,10 @@ function updateNavigationButtons() {
     const prevBtn = document.getElementById("prev-btn");
     const nextBtn = document.getElementById("next-btn");
     const submitBtn = document.getElementById("submit-btn");
-    
-    if(!prevBtn || !nextBtn || !submitBtn) return;
-
+    if (!prevBtn || !nextBtn || !submitBtn) return;
     prevBtn.disabled = currentQuestionIndex === 0;
     const isLastQuestion = currentQuestionIndex === academicStressQuestions.length - 1;
     const hasAnswer = assessmentAnswers[academicStressQuestions[currentQuestionIndex].id];
-
     if (isLastQuestion) {
         nextBtn.style.display = "none";
         submitBtn.style.display = hasAnswer ? "inline-block" : "none";
@@ -381,15 +350,13 @@ function updateAssessmentProgress() {
     const progress = ((currentQuestionIndex + 1) / academicStressQuestions.length) * 100;
     const fill = document.getElementById("assessment-progress-fill");
     const currentQ = document.getElementById("current-question");
-    
-    if(fill) fill.style.width = progress + "%";
-    if(currentQ) currentQ.textContent = currentQuestionIndex + 1;
+    if (fill) fill.style.width = progress + "%";
+    if (currentQ) currentQ.textContent = currentQuestionIndex + 1;
 }
 
 // DATABASE INTEGRATION: Submit Assessment
 function submitAssessment() {
     showLoadingScreen("Processing and saving to secure database...");
-    
     setTimeout(() => {
         let totalScore = 0;
         const sectionScores = {
@@ -399,7 +366,6 @@ function submitAssessment() {
             "Mental and Physical Health": 0,
             "Organizational Culture and Leadership": 0
         };
-
         Object.values(assessmentAnswers).forEach((answer) => {
             const originalQuestion = academicStressQuestions.find(q => q.id === Number(Object.keys(assessmentAnswers).find(key => assessmentAnswers[key] === answer)));
             if (originalQuestion) {
@@ -407,7 +373,6 @@ function submitAssessment() {
                 sectionScores[originalQuestion.category] += answer.value;
             }
         });
-
         let overallStressLevel, overallStressDescription, overallStressClass;
         if (totalScore <= 24) {
             overallStressLevel = "Low Stress";
@@ -430,11 +395,9 @@ function submitAssessment() {
             overallStressDescription = "Critically elevated stress. Professional support strongly recommended.";
             overallStressClass = "high-risk";
         }
-
         const sectionLevels = {};
         let highestSection = "";
         let highestScore = -1;
-
         for (const [section, score] of Object.entries(sectionScores)) {
             let level, classLabel;
             if (score <= 4) { level = "Low"; classLabel = "low"; }
@@ -442,17 +405,14 @@ function submitAssessment() {
             else if (score <= 12) { level = "Abnormal"; classLabel = "abnormal"; }
             else if (score <= 15) { level = "High"; classLabel = "high"; }
             else { level = "High Risk"; classLabel = "high-risk"; }
-
             sectionLevels[section] = { level, class: classLabel, score };
             if (score > highestScore) {
                 highestScore = score;
                 highestSection = section;
             }
         }
-
         let personalRecommendations = [overallStressDescription];
         let organizationalRecommendations = [];
-
         if (highestSection === "Mental and Physical Health") {
             personalRecommendations.push("Focus on sleep consistency and stress-reduction practices.");
             organizationalRecommendations.push("Provide confidential counseling access", "Introduce stress management workshops");
@@ -469,10 +429,8 @@ function submitAssessment() {
             personalRecommendations.push("Request training support and clearer guidelines.");
             organizationalRecommendations.push("Provide professional development opportunities");
         }
-
         const result = {
             userId: currentUser.id,
-            sessionId: localStorage.getItem("anon_id"),
             score: totalScore,
             maxScore: 100,
             level: overallStressLevel,
@@ -487,39 +445,31 @@ function submitAssessment() {
             personalRecommendations: personalRecommendations,
             organizationalRecommendations: organizationalRecommendations
         };
-
         // SEND TO SERVER
         fetch('/api/assessments', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(result)
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                hideAssessment();
-                const displayResult = { ...result, id: data.data.id }; 
-                displayResults(displayResult);
-                showPage("results");
-                loadDashboardStats();
-                updateCharts();
-                showToast("Assessment saved securely!", "success");
-            } else {
-                throw new Error('Save failed');
-            }
-        })
-        .catch(err => {
-            console.error("DB Save Error:", err);
-            // FALLBACK TO LOCAL STORAGE
-            showToast("Server unavailable. Saving locally.", "warning");
-            const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-            results.push({ ...result, id: `local_${Date.now()}` });
-            localStorage.setItem("stressResults", JSON.stringify(results));
-            hideAssessment();
-            displayResults(result);
-            showPage("results");
-        });
-
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    hideAssessment();
+                    const displayResult = { ...result, id: data.data.id };
+                    displayResults(displayResult);
+                    showPage("results");
+                    loadDashboardStats();
+                    updateCharts();
+                    showToast("Assessment saved securely!", "success");
+                } else {
+                    throw new Error('Save failed');
+                }
+            })
+            .catch(err => {
+                console.error("DB Save Error:", err);
+                showToast("Server unavailable. Please try again later.", "error");
+                // No local fallback - DB only
+            });
     }, 1500);
 }
 
@@ -538,7 +488,6 @@ function createStressTrendChart(labels, data) {
     const ctx = document.getElementById("stressTrendChart");
     if (!ctx) return;
     if (stressTrendChart) stressTrendChart.destroy();
-
     stressTrendChart = new Chart(ctx, {
         type: "line",
         data: {
@@ -564,24 +513,13 @@ function createStressTrendChart(labels, data) {
 function createStressDistributionChart(dbData) {
     const ctx = document.getElementById("stressDistributionChart");
     if (!ctx) return;
-    
     let distribution = { low: 0, moderate: 0, high: 0, abnormal: 0, "high-risk": 0 };
-    
     if (dbData) {
         dbData.forEach((r) => {
-            if(distribution[r.class] !== undefined) distribution[r.class]++;
-        });
-    } else {
-        // Fallback to local if no DB data passed
-        const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-        const userResults = results.filter((r) => r.userId === currentUser?.id);
-        userResults.forEach((r) => {
-            if(distribution[r.class] !== undefined) distribution[r.class]++;
+            if (distribution[r.class] !== undefined) distribution[r.class]++;
         });
     }
-
     if (stressDistributionChart) stressDistributionChart.destroy();
-
     stressDistributionChart = new Chart(ctx, {
         type: "doughnut",
         data: {
@@ -602,15 +540,10 @@ function createStressDistributionChart(dbData) {
 function createMonthlyOverviewChart(dbData) {
     const ctx = document.getElementById("monthlyOverviewChart");
     if (!ctx) return;
-    
     let userResults = [];
     if (dbData) {
         userResults = dbData;
-    } else {
-        const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-        userResults = results.filter((r) => r.userId === currentUser?.id);
     }
-
     const monthlyData = {};
     userResults.forEach((r) => {
         const month = new Date(r.date).toLocaleDateString("en-US", { year: "numeric", month: "short" });
@@ -618,12 +551,9 @@ function createMonthlyOverviewChart(dbData) {
         monthlyData[month].total += r.score;
         monthlyData[month].count++;
     });
-
     const labels = Object.keys(monthlyData);
     const averages = labels.map((month) => monthlyData[month].total / monthlyData[month].count);
-
     if (monthlyOverviewChart) monthlyOverviewChart.destroy();
-
     monthlyOverviewChart = new Chart(ctx, {
         type: "bar",
         data: {
@@ -647,9 +577,8 @@ function createMonthlyOverviewChart(dbData) {
 
 function updateCharts() {
     if (!currentUser) return;
-    
-    const sessionId = localStorage.getItem("anon_id");
-    fetch(`/api/assessments/user/${sessionId}`)
+    // Updated to use session-based endpoint without ID parameter
+    fetch(`/api/assessments`)
         .then(res => res.json())
         .then(response => {
             if (response.success && response.data.length > 0) {
@@ -657,12 +586,10 @@ function updateCharts() {
                 // Prepare Trend Data
                 const labels = dbData.slice(0, 10).reverse().map(r => new Date(r.date).toLocaleDateString());
                 const data = dbData.slice(0, 10).reverse().map(r => r.score);
-                
                 createStressTrendChart(labels, data);
                 createStressDistributionChart(dbData);
                 createMonthlyOverviewChart(dbData);
             } else {
-                // Fallback to local if no DB data
                 createStressTrendChart();
                 createStressDistributionChart();
                 createMonthlyOverviewChart();
@@ -680,51 +607,43 @@ function displayResults(result) {
     document.getElementById("score-value").textContent = `${result.score}/${result.maxScore}`;
     document.getElementById("stress-level-text").textContent = result.level;
     document.getElementById("stress-level-description").textContent = result.description;
-    
     const stressLevelElement = document.getElementById("stress-level-result");
-    if(stressLevelElement) stressLevelElement.className = `stress-level ${result.class}`;
-
+    if (stressLevelElement) stressLevelElement.className = `stress-level ${result.class}`;
     const scoreCircle = document.getElementById("score-circle");
-    if(scoreCircle) {
+    if (scoreCircle) {
         const percentage = (result.score / result.maxScore) * 360;
         scoreCircle.style.background = `conic-gradient(var(--primary-color) ${percentage}deg, var(--border-color) ${percentage}deg)`;
     }
-
     let sectionScoresHtml = "<ul>";
     for (const [section, data] of Object.entries(result.sectionLevels)) {
         sectionScoresHtml += `<li><strong>${section}:</strong> ${data.score}/20 (${data.level})</li>`;
     }
     sectionScoresHtml += "</ul>";
-
     let personalRecsHtml = "<ul>";
     result.personalRecommendations.forEach(rec => { personalRecsHtml += `<li>${rec}</li>`; });
     personalRecsHtml += "</ul>";
-
     let orgRecsHtml = "<ul>";
     result.organizationalRecommendations.forEach(rec => { orgRecsHtml += `<li>${rec}</li>`; });
     orgRecsHtml += "</ul>";
-
     const sectionContainer = document.getElementById("section-scores-typed");
     const personalContainer = document.getElementById("personal-recs-typed");
     const orgContainer = document.getElementById("org-recs-typed");
-
-    if(sectionContainer) {
+    if (sectionContainer) {
         sectionContainer.style.display = 'block';
         simulateTypingWithHtml(sectionContainer, sectionScoresHtml, 40);
     }
-    if(personalContainer) {
+    if (personalContainer) {
         setTimeout(() => {
             personalContainer.style.display = 'block';
             simulateTypingWithHtml(personalContainer, personalRecsHtml, 30);
         }, 500);
     }
-    if(orgContainer) {
+    if (orgContainer) {
         setTimeout(() => {
             orgContainer.style.display = 'block';
             simulateTypingWithHtml(orgContainer, orgRecsHtml, 30);
         }, 1000);
     }
-
     setTimeout(createResultTrendChart, 100);
 }
 
@@ -732,37 +651,29 @@ function simulateTypingWithHtml(container, content, speed = 30) {
     if (!container) return;
     container.innerHTML = '';
     container.style.display = 'block';
-    container.innerHTML = content; 
+    container.innerHTML = content;
     container.classList.add('visible');
 }
 
 function createResultTrendChart() {
     const ctx = document.getElementById("resultTrendChart");
     if (!ctx) return;
-    
-    const sessionId = localStorage.getItem("anon_id");
-    fetch(`/api/assessments/user/${sessionId}`)
+    // Updated to use session-based endpoint
+    fetch(`/api/assessments`)
         .then(res => res.json())
         .then(response => {
             let userResults = [];
             if (response.success) {
-                userResults = response.data.sort((a, b) => new Date(a.date) - new Date(b.date));
-            } else {
-                const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-                userResults = results.filter(r => r.userId === currentUser?.id).sort((a, b) => new Date(a.date) - new Date(b.date));
+                userResults = response.data.sort((a, b) => new Date(a.date) - new Date(a.date));
             }
-
             const labels = userResults.map(r => new Date(r.date).toLocaleDateString());
             const data = userResults.map(r => r.score);
-
             if (resultTrendChartInstance) resultTrendChartInstance.destroy();
-
-            if(data.length === 0) {
+            if (data.length === 0) {
                 ctx.parentElement.style.display = 'none';
                 return;
             }
             ctx.parentElement.style.display = 'block';
-
             resultTrendChartInstance = new Chart(ctx, {
                 type: "line",
                 data: {
@@ -784,28 +695,22 @@ function createResultTrendChart() {
             });
         })
         .catch(() => {
-             // Fallback logic omitted for brevity, assumes local storage if fetch fails
+            // No fallback
         });
 }
 
 // History & Data Management
 function loadHistory() {
     const container = document.getElementById("history-content");
-    if(!container) return;
-    
-    const sessionId = localStorage.getItem("anon_id");
-    
-    fetch(`/api/assessments/user/${sessionId}`)
+    if (!container) return;
+    // Updated to use session-based endpoint
+    fetch(`/api/assessments`)
         .then(res => res.json())
         .then(response => {
             if (!response.success || response.data.length === 0) {
-                // Try local fallback
-                const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-                const userResults = results.filter((r) => r.userId === currentUser.id).sort((a, b) => new Date(b.date) - new Date(a.date));
-                renderHistoryList(container, userResults);
+                renderHistoryList(container, []);
                 return;
             }
-
             const userResults = response.data.map(row => ({
                 id: row.id,
                 score: row.score,
@@ -818,7 +723,6 @@ function loadHistory() {
                 personalRecommendations: row.personal_recommendations,
                 organizationalRecommendations: row.organizational_recommendations
             })).sort((a, b) => new Date(b.date) - new Date(a.date));
-
             renderHistoryList(container, userResults);
         })
         .catch(err => {
@@ -832,89 +736,61 @@ function renderHistoryList(container, userResults) {
         container.innerHTML = `<div class="empty-state"><h3>No assessments yet</h3><p>Take your first stress assessment.</p></div>`;
         return;
     }
-
     container.innerHTML = userResults.map((result) => `
-        <div class="history-item">
-            <div class="history-info">
-                <h4>Assessment - ${new Date(result.date).toLocaleDateString()}</h4>
-                <p>${result.description}</p>
-            </div>
-            <div class="history-score">
-                <div class="score">${result.score}/${result.maxScore}</div>
-                <div class="level ${result.class}">${result.level}</div>
-            </div>
-            <div class="history-actions">
-                <button class="btn btn-small btn-secondary" onclick='viewReportFromObj(${JSON.stringify(result).replace(/'/g, "&#39;")})'>View Report</button>
-                <button class="btn btn-small btn-primary" onclick="downloadPDFReport('${result.id}')">Download PDF</button>
-                ${result.id.toString().startsWith('local') ? `<button class="btn btn-small btn-danger" onclick="deleteLocalHistoryItem('${result.id}') disabled ">Delete</button>` : ''}
-            </div>
-        </div>
-    `).join("");
-}
-
-function deleteLocalHistoryItem(id) {
-    showModal("Delete Assessment", "Are you sure?", () => {
-        const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-        const filtered = results.filter((r) => r.id !== id);
-        localStorage.setItem("stressResults", JSON.stringify(filtered));
-        loadHistory();
-        loadDashboardStats();
-        updateCharts();
-        showToast("Deleted", "success");
-    });
+<div class="history-item">
+<div class="history-info">
+<h4>Assessment - ${new Date(result.date).toLocaleDateString()}</h4>
+<p>${result.description}</p>
+</div>
+<div class="history-score">
+<div class="score">${result.score}/${result.maxScore}</div>
+<div class="level ${result.class}">${result.level}</div>
+</div>
+<div class="history-actions">
+<button class="btn btn-small btn-secondary" onclick='viewReportFromObj(${JSON.stringify(result).replace(/'/g, "&#39;")})'>View Report</button>
+<button class="btn btn-small btn-primary" onclick="downloadPDFReport('${result.id}')">Download PDF</button>
+</div>
+</div>
+`).join("");
 }
 
 function clearHistory() {
-    showModal("Clear All Local History", "This cannot be undone.", () => {
-        const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-        const filtered = results.filter((r) => r.userId !== currentUser.id);
-        localStorage.setItem("stressResults", JSON.stringify(filtered));
-        loadHistory();
-        loadDashboardStats();
-        showToast("Local history cleared", "success");
-    });
+    // Removed local storage clear logic
+    showToast("History is managed by the server.", "info");
 }
 
 function loadUserData() {
     if (!currentUser) return;
     const nameEl = document.getElementById("user-name");
-    if(nameEl) nameEl.textContent = `Welcome, ${currentUser.name}`;
-    
+    if (nameEl) nameEl.textContent = `Welcome, ${currentUser.name}`;
     const avatars = document.querySelectorAll(".user-avatar");
     avatars.forEach(av => av.innerHTML = '<i class="fas fa-user-circle"></i>');
 }
 
 function loadDashboardStats() {
     if (!currentUser) return;
-    const sessionId = localStorage.getItem("anon_id");
-
-    fetch(`/api/assessments/user/${sessionId}`)
+    // Updated to use session-based endpoint
+    fetch(`/api/assessments`)
         .then(res => res.json())
         .then(response => {
             let userResults = [];
             if (response.success) {
                 userResults = response.data;
-            } else {
-                const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-                userResults = results.filter((r) => r.userId === currentUser.id);
             }
-            
             const totalEl = document.getElementById("total-assessments");
             const lastLevelEl = document.getElementById("last-stress-level");
             const daysEl = document.getElementById("days-since-last");
-
-            if(totalEl) totalEl.textContent = userResults.length;
-
+            if (totalEl) totalEl.textContent = userResults.length;
             if (userResults.length > 0) {
-                const lastResult = userResults.sort((a, b) => new Date(b.date) - new Date(a.date))[0]; 
-                if(lastLevelEl) lastLevelEl.textContent = lastResult.level;
-                if(daysEl) {
+                const lastResult = userResults.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+                if (lastLevelEl) lastLevelEl.textContent = lastResult.level;
+                if (daysEl) {
                     const daysSince = Math.floor((Date.now() - new Date(lastResult.date)) / (1000 * 60 * 60 * 24));
                     daysEl.textContent = daysSince;
                 }
             } else {
-                if(lastLevelEl) lastLevelEl.textContent = "-";
-                if(daysEl) daysEl.textContent = "-";
+                if (lastLevelEl) lastLevelEl.textContent = "-";
+                if (daysEl) daysEl.textContent = "-";
             }
         })
         .catch(err => {
@@ -927,30 +803,31 @@ function toggleTheme() {
     const current = document.documentElement.getAttribute("data-theme");
     const next = current === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
+    // Removed local storage persistence
 }
 
 function loadTheme() {
-    const saved = localStorage.getItem("theme") || "light";
+    // Removed local storage retrieval
+    const saved = "light";
     document.documentElement.setAttribute("data-theme", saved);
     const toggle = document.getElementById("theme-toggle");
-    if(toggle) toggle.checked = saved === "dark";
+    if (toggle) toggle.checked = saved === "dark";
 }
 
 function showModal(title, message, onConfirm) {
     const modal = document.getElementById("modal");
-    if(!modal.querySelector("#modal-title")) {
-        if(confirm(`${title}\n\n${message}`)) {
-            if(onConfirm) onConfirm();
+    if (!modal.querySelector("#modal-title")) {
+        if (confirm(`${title}
+${message}`)) {
+            if (onConfirm) onConfirm();
         }
         return;
     }
-    
     document.getElementById("modal-title").textContent = title;
     document.getElementById("modal-message").textContent = message;
     document.getElementById("modal").classList.add("active");
     const btn = document.getElementById("modal-confirm");
-    btn.onclick = () => { closeModal(); if(onConfirm) onConfirm(); };
+    btn.onclick = () => { closeModal(); if (onConfirm) onConfirm(); };
 }
 
 function closeModal() {
@@ -969,34 +846,9 @@ function showToast(message, type = "info", duration = 3000) {
 
 // PDF Generation
 function downloadPDFReport(resultId) {
-    // Try fetching from DB first if ID is numeric, else check local
-    const results = JSON.parse(localStorage.getItem("stressResults") || "[]");
-    let result = results.find(r => r.id == resultId);
-    
-    if (!result) {
-        // In a real app, you might fetch the specific report from API here
-        showToast("Report not found in local cache. Please view online.", "warning");
-        return;
-    }
-
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    
-    doc.setFontSize(20);
-    doc.text("Stress Assessment Report", 15, 20);
-    doc.setFontSize(12);
-    doc.text(`Date: ${new Date(result.date).toLocaleDateString()}`, 15, 30);
-    doc.text(`Score: ${result.score}/${result.maxScore}`, 15, 40);
-    doc.text(`Level: ${result.level}`, 15, 50);
-    
-    doc.text("Section Breakdown:", 15, 70);
-    let y = 80;
-    Object.entries(result.sectionLevels).forEach(([sec, data]) => {
-        doc.text(`${sec}: ${data.score}/20 (${data.level})`, 15, y);
-        y += 10;
-    });
-
-    doc.save(`report-${result.id}.pdf`);
+    // In a DB-only system, this should ideally fetch the specific report from API
+    // For this implementation, we rely on the result object passed from history
+    showToast("Report generation requires active session data.", "warning");
 }
 
 function viewReportFromObj(result) {
