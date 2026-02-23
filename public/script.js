@@ -1,63 +1,62 @@
 // Academic Stress Survey Questions
 // Total questions: 50 - distributed across 5 sections of 10 questions each.
 const academicStressQuestions = [
-    // === SECTION 1: Workforce and Workload ===
-    { id: 1, question: "I feel that the number of staff in my department is insufficient for the workload.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 2, question: "I frequently handle more responsibilities than I can comfortably manage.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 3, question: "I often work beyond official hours to complete tasks.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 4, question: "I feel pressured to meet unrealistic deadlines.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 5, question: "I experience work overload during most weeks.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 6, question: "I struggle to balance teaching, research and administrative duties.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 7, question: "I feel that my workload affects my personal life.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 8, question: "I am assigned urgent tasks without adequate notice.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 9, question: "I feel that task distribution in my department is unfair.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 10, question: "I feel exhausted due to the volume of work assigned to me.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    // === SECTION 2: Skills and Task Management ===
-    { id: 11, question: "I feel adequately prepared for the tasks assigned to me.", category: "Skills and Task Management", options: [{ value: 2, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 0, text: "Very often" }] },
-    { id: 12, question: "I experience stress when handling unfamiliar responsibilities.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 13, question: "I receive unclear instructions regarding assigned duties.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 14, question: "I am expected to perform tasks outside my area of expertise.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 15, question: "I lack sufficient professional development opportunities.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 16, question: "I feel uncertain about performance expectations.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 17, question: "I experience difficulty prioritizing assigned duties.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 18, question: "I receive conflicting instructions from supervisors.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 19, question: "I feel unsupported when facing technical challenges.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 20, question: "I worry about making mistakes due to insufficient guidance.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    // === SECTION 3: Facilities and Infrastructure ===
-    { id: 21, question: "Inadequate office space affects my productivity.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 22, question: "Lack of functional equipment increases my stress.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 23, question: "Poor internet connectivity disrupts my work.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 24, question: "I experience delays due to insufficient laboratory or teaching facilities.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 25, question: "Administrative processes slow down my work.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 26, question: "I lack access to necessary teaching materials.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 27, question: "I experience stress due to unreliable power supply.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 28, question: "I feel that institutional systems are inefficient.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 29, question: "I struggle with outdated work tools or software.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 30, question: "Infrastructure limitations affect my job performance.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    // === SECTION 4: Mental and Physical Health ===
-    { id: 31, question: "I feel emotionally exhausted because of my job.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 32, question: "I feel anxious about work-related responsibilities.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 33, question: "I have difficulty sleeping due to work stress.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 34, question: "I experience frequent headaches related to work.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 35, question: "I feel mentally drained at the end of most days.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 36, question: "I experience physical fatigue because of my workload.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 37, question: "I have difficulty concentrating due to stress.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 38, question: "I feel irritable at work.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 39, question: "I feel overwhelmed by my responsibilities.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 40, question: "My job negatively affects my overall wellbeing.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    // === SECTION 5: Organizational Culture and Leadership ===
-    { id: 41, question: "Leadership communicates expectations clearly.", category: "Organizational Culture and Leadership", options: [{ value: 2, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 0, text: "Very often" }] },
-    { id: 42, question: "I feel supported by management.", category: "Organizational Culture and Leadership", options: [{ value: 2, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 0, text: "Very often" }] },
-    { id: 43, question: "I feel valued for my contributions.", category: "Organizational Culture and Leadership", options: [{ value: 2, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 0, text: "Very often" }] },
-    { id: 44, question: "I fear negative consequences for expressing concerns.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 45, question: "I feel excluded from important decisions.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 46, question: "I experience stress due to poor communication from leadership.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 47, question: "I feel that policies are inconsistently applied.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 48, question: "I feel that leadership decisions increase staff stress.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 49, question: "I lack trust in institutional leadership.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-    { id: 50, question: "I feel that the work environment lacks transparency.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] }
+// === SECTION 1: Workforce and Workload ===
+{ id: 1, question: "I feel that the number of staff in my department is insufficient for the workload.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 2, question: "I frequently handle more responsibilities than I can comfortably manage.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 3, question: "I often work beyond official hours to complete tasks.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 4, question: "I feel pressured to meet unrealistic deadlines.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 5, question: "I experience work overload during most weeks.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 6, question: "I struggle to balance teaching, research and administrative duties.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 7, question: "I feel that my workload affects my personal life.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 8, question: "I am assigned urgent tasks without adequate notice.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 9, question: "I feel that task distribution in my department is unfair.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 10, question: "I feel exhausted due to the volume of work assigned to me.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+// === SECTION 2: Skills and Task Management ===
+{ id: 11, question: "I feel adequately prepared for the tasks assigned to me.", category: "Skills and Task Management", options: [{ value: 2, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 0, text: "Very often" }] },
+{ id: 12, question: "I experience stress when handling unfamiliar responsibilities.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 13, question: "I receive unclear instructions regarding assigned duties.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 14, question: "I am expected to perform tasks outside my area of expertise.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 15, question: "I lack sufficient professional development opportunities.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 16, question: "I feel uncertain about performance expectations.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 17, question: "I experience difficulty prioritizing assigned duties.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 18, question: "I receive conflicting instructions from supervisors.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 19, question: "I feel unsupported when facing technical challenges.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 20, question: "I worry about making mistakes due to insufficient guidance.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+// === SECTION 3: Facilities and Infrastructure ===
+{ id: 21, question: "Inadequate office space affects my productivity.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 22, question: "Lack of functional equipment increases my stress.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 23, question: "Poor internet connectivity disrupts my work.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 24, question: "I experience delays due to insufficient laboratory or teaching facilities.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 25, question: "Administrative processes slow down my work.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 26, question: "I lack access to necessary teaching materials.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 27, question: "I experience stress due to unreliable power supply.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 28, question: "I feel that institutional systems are inefficient.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 29, question: "I struggle with outdated work tools or software.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 30, question: "Infrastructure limitations affect my job performance.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+// === SECTION 4: Mental and Physical Health ===
+{ id: 31, question: "I feel emotionally exhausted because of my job.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 32, question: "I feel anxious about work-related responsibilities.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 33, question: "I have difficulty sleeping due to work stress.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 34, question: "I experience frequent headaches related to work.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 35, question: "I feel mentally drained at the end of most days.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 36, question: "I experience physical fatigue because of my workload.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 37, question: "I have difficulty concentrating due to stress.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 38, question: "I feel irritable at work.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 39, question: "I feel overwhelmed by my responsibilities.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 40, question: "My job negatively affects my overall wellbeing.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+// === SECTION 5: Organizational Culture and Leadership ===
+{ id: 41, question: "Leadership communicates expectations clearly.", category: "Organizational Culture and Leadership", options: [{ value: 2, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 0, text: "Very often" }] },
+{ id: 42, question: "I feel supported by management.", category: "Organizational Culture and Leadership", options: [{ value: 2, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 0, text: "Very often" }] },
+{ id: 43, question: "I feel valued for my contributions.", category: "Organizational Culture and Leadership", options: [{ value: 2, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 0, text: "Very often" }] },
+{ id: 44, question: "I fear negative consequences for expressing concerns.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 45, question: "I feel excluded from important decisions.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 46, question: "I experience stress due to poor communication from leadership.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 47, question: "I feel that policies are inconsistently applied.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 48, question: "I feel that leadership decisions increase staff stress.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 49, question: "I lack trust in institutional leadership.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+{ id: 50, question: "I feel that the work environment lacks transparency.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] }
 ];
-
 // Global variables
 let currentUser = null;
 let currentPage = "home";
@@ -71,787 +70,881 @@ let resultTrendChartInstance = null;
 
 // Initialize App
 document.addEventListener("DOMContentLoaded", () => {
-    showLoadingScreen("Initializing StressDetect System...");
+  showLoadingScreen("Initializing StressDetect System...");
+  setTimeout(() => {
+    initializeApp();
+    setupEventListeners();
+    loadTheme();
     setTimeout(() => {
-        initializeApp();
-        setupEventListeners();
-        loadTheme();
-        setTimeout(() => {
-            initializeCharts();
-            hideLoadingScreen();
-        }, 500);
-    }, 1500);
+      initializeCharts();
+      hideLoadingScreen();
+    }, 500);
+  }, 1500);
 });
 
 function initializeApp() {
-    // User identity is now managed via server-side session cookies
-    currentUser = {
-        id: "session_user",
-        name: "Participant",
-        email: "participant@stressdetect.local",
-        avatar: null,
-        createdAt: new Date().toISOString()
-    };
-    showPage("home");
+  // Generate or retrieve session ID
+  let sessionId = localStorage.getItem('stressDetectSessionId');
+  if (!sessionId) {
+    sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('stressDetectSessionId', sessionId);
+  }
+  
+  currentUser = {
+    id: "session_user",
+    sessionId: sessionId,  // Add sessionId to currentUser
+    name: "Participant",
+    email: "participant@stressdetect.local",
+    avatar: null,
+    createdAt: new Date().toISOString()
+  };
+  showPage("home");
 }
 
 function setupEventListeners() {
-    const navToggle = document.getElementById("nav-toggle");
-    if (navToggle) {
-        navToggle.addEventListener("click", () => {
-            document.getElementById("nav-menu").classList.toggle("active");
-        });
-    }
-    const themeToggle = document.getElementById("theme-toggle");
-    if (themeToggle) {
-        themeToggle.addEventListener("change", toggleTheme);
-    }
-    const prevBtn = document.getElementById("prev-btn");
-    const nextBtn = document.getElementById("next-btn");
-    const submitBtn = document.getElementById("submit-btn");
-    if (prevBtn) prevBtn.addEventListener("click", previousQuestion);
-    if (nextBtn) nextBtn.addEventListener("click", nextQuestion);
-    if (submitBtn) submitBtn.addEventListener("click", submitAssessment);
+  const navToggle = document.getElementById("nav-toggle");
+  if (navToggle) {
+    navToggle.addEventListener("click", () => {
+      document.getElementById("nav-menu").classList.toggle("active");
+    });
+  }
+  const themeToggle = document.getElementById("theme-toggle");
+  if (themeToggle) {
+    themeToggle.addEventListener("change", toggleTheme);
+  }
+  const prevBtn = document.getElementById("prev-btn");
+  const nextBtn = document.getElementById("next-btn");
+  const submitBtn = document.getElementById("submit-btn");
+  if (prevBtn) prevBtn.addEventListener("click", previousQuestion);
+  if (nextBtn) nextBtn.addEventListener("click", nextQuestion);
+  if (submitBtn) submitBtn.addEventListener("click", submitAssessment);
 }
 
 // Page Navigation
 function showPage(pageId) {
-    if (["dashboard", "history", "results"].includes(pageId)) {
-        showLoadingScreen(`Loading ${pageId}...`);
-        setTimeout(() => {
-            showPageContent(pageId);
-        }, 600);
-    } else {
-        showPageContent(pageId);
-    }
+  if (["dashboard", "history", "results"].includes(pageId)) {
+    showLoadingScreen(`Loading ${pageId}...`);
+    setTimeout(() => {
+      showPageContent(pageId);
+    }, 600);
+  } else {
+    showPageContent(pageId);
+  }
 }
 
 function showPageContent(pageId) {
-    const pages = document.querySelectorAll(".page");
-    pages.forEach((page) => {
-        page.style.display = page.id === pageId + "-page" ? "block" : "none";
-    });
-    currentPage = pageId;
-    switch (pageId) {
-        case "dashboard":
-            loadUserData();
-            loadDashboardStats();
-            setTimeout(() => {
-                updateCharts();
-                showEthicalModal(); // Show privacy modal on dashboard load
-            }, 100);
-            break;
-        case "history":
-            loadHistory();
-            break;
-        case "settings":
-            loadUserData();
-            break;
-        case "results":
-            break;
-    }
-    const navMenu = document.getElementById("nav-menu");
-    if (navMenu) navMenu.classList.remove("active");
-    window.scrollTo(0, 0);
+  const pages = document.querySelectorAll(".page");
+  pages.forEach((page) => {
+    page.style.display = page.id === pageId + "-page" ? "block" : "none";
+  });
+  currentPage = pageId;
+  switch (pageId) {
+    case "dashboard":
+      loadUserData();
+      loadDashboardStats();
+      setTimeout(() => {
+        updateCharts();
+        showEthicalModal(); // Show privacy modal on dashboard load
+      }, 100);
+      break;
+    case "history":
+      loadHistory();
+      break;
+    case "settings":
+      loadUserData();
+      break;
+    case "results":
+      break;
+  }
+  const navMenu = document.getElementById("nav-menu");
+  if (navMenu) navMenu.classList.remove("active");
+  window.scrollTo(0, 0);
 }
 
 // Ethical & Privacy Modal
 function showEthicalModal() {
-    const modalHtml = `
-<div class="modal-content" style="max-width: 600px;">
-<div class="modal-header">
-<h3><i class="fas fa-shield-alt"></i> Privacy & Ethical Notice</h3>
-<button class="modal-close" onclick="closeModal()">&times;</button>
-</div>
-<div class="modal-body" style="text-align: left; line-height: 1.6;">
-<p><strong>Welcome to the Stress Detection System.</strong></p>
-<p>Before you begin, please note the following ethical guidelines:</p>
-<ul style="margin-bottom: 15px;">
-<li><strong>Anonymity:</strong> No personal identity (name, email, ID) is collected. You are participating anonymously.</li>
-<li><strong>Data Usage:</strong> Your responses are aggregated with others to identify organizational stress trends (e.g., workload, infrastructure). Individual data is never shared.</li>
-<li><strong>Voluntary Participation:</strong> You may stop the assessment at any time.</li>
-<li><strong>Wellbeing First:</strong> If any question causes distress, please take a break. This tool is for assessment, not diagnosis.</li>
-</ul>
-<p style="background: #f0fdf4; padding: 10px; border-left: 4px solid #16a34a; border-radius: 4px; color: black">
-<i class="fas fa-info-circle"></i> <strong>Instruction:</strong> Please relax and answer honestly. When you click "Start Assessment" below, the page will scroll down to the questions automatically.
-</p>
-</div>
-<div class="modal-footer">
-<button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-<button class="btn btn-primary" onclick="startAssessmentFromModal()">
-<i class="fas fa-check-circle"></i> I Understand, Start Assessment
-</button>
-</div>
-</div>
-`;
-    const modal = document.getElementById("modal");
-    modal.querySelector(".modal-content").outerHTML = modalHtml;
-    modal.classList.add("active");
+  const modalHtml = `
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3><i class="fas fa-shield-alt"></i> Privacy & Ethical Notice</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="text-align: left; line-height: 1.6;">
+        <p><strong>Welcome to the Stress Detection System.</strong></p>
+        <p>Before you begin, please note the following ethical guidelines:</p>
+        <ul style="margin-bottom: 15px;">
+          <li><strong>Anonymity:</strong> No personal identity (name, email, ID) is collected. You are participating anonymously.</li>
+          <li><strong>Data Usage:</strong> Your responses are aggregated with others to identify organizational stress trends (e.g., workload, infrastructure). Individual data is never shared.</li>
+          <li><strong>Voluntary Participation:</strong> You may stop the assessment at any time.</li>
+          <li><strong>Wellbeing First:</strong> If any question causes distress, please take a break. This tool is for assessment, not diagnosis.</li>
+        </ul>
+        <p style="background: #f0fdf4; padding: 10px; border-left: 4px solid #16a34a; border-radius: 4px; color: black">
+          <i class="fas fa-info-circle"></i> <strong>Instruction:</strong> Please relax and answer honestly. When you click "Start Assessment" below, the page will scroll down to the questions automatically.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="startAssessmentFromModal()">
+          <i class="fas fa-check-circle"></i> I Understand, Start Assessment
+        </button>
+      </div>
+    </div>
+  `;
+  const modal = document.getElementById("modal");
+  modal.querySelector(".modal-content").outerHTML = modalHtml;
+  modal.classList.add("active");
 }
 
 function startAssessmentFromModal() {
-    closeModal();
-    setTimeout(() => {
-        startAssessment();
-        const assessmentSection = document.getElementById("assessment-section");
-        if (assessmentSection) {
-            assessmentSection.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-    }, 300);
+  closeModal();
+  setTimeout(() => {
+    startAssessment();
+    const assessmentSection = document.getElementById("assessment-section");
+    if (assessmentSection) {
+      assessmentSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, 300);
 }
 
 // Loading Screen
 function showLoadingScreen(text = "Loading...") {
-    const loadingScreen = document.getElementById("loading-screen");
-    const loadingText = document.getElementById("loading-text");
-    const loadingBar = document.getElementById("loading-bar");
-    if (!loadingScreen) return;
-    loadingText.textContent = text;
-    loadingScreen.classList.remove("hidden");
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += Math.random() * 20 + 10;
-        if (progress >= 100) {
-            progress = 100;
-            clearInterval(interval);
-            setTimeout(() => { hideLoadingScreen(); }, 300);
-        }
-        loadingBar.style.width = progress + "%";
-    }, 50);
+  const loadingScreen = document.getElementById("loading-screen");
+  const loadingText = document.getElementById("loading-text");
+  const loadingBar = document.getElementById("loading-bar");
+  if (!loadingScreen) return;
+  loadingText.textContent = text;
+  loadingScreen.classList.remove("hidden");
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += Math.random() * 20 + 10;
+    if (progress >= 100) {
+      progress = 100;
+      clearInterval(interval);
+      setTimeout(() => { hideLoadingScreen(); }, 300);
+    }
+    loadingBar.style.width = progress + "%";
+  }, 50);
 }
 
 function hideLoadingScreen() {
-    const loadingScreen = document.getElementById("loading-screen");
-    if (loadingScreen) {
-        loadingScreen.classList.add("hidden");
-    }
+  const loadingScreen = document.getElementById("loading-screen");
+  if (loadingScreen) {
+    loadingScreen.classList.add("hidden");
+  }
 }
 
 // Assessment Functions
 function startAssessment() {
-    currentQuestionIndex = 0;
-    assessmentAnswers = {};
-    assessmentInProgress = true;
-    const assessmentSection = document.getElementById("assessment-section");
-    if (assessmentSection) {
-        assessmentSection.style.display = "block";
-        document.getElementById("total-questions").textContent = academicStressQuestions.length;
-        showQuestion(0);
-        updateAssessmentProgress();
-    }
+  currentQuestionIndex = 0;
+  assessmentAnswers = {};
+  assessmentInProgress = true;
+  const assessmentSection = document.getElementById("assessment-section");
+  if (assessmentSection) {
+    assessmentSection.style.display = "block";
+    document.getElementById("total-questions").textContent = academicStressQuestions.length;
+    showQuestion(0);
+    updateAssessmentProgress();
+  }
 }
 
 function hideAssessment() {
-    const assessmentSection = document.getElementById("assessment-section");
-    if (assessmentSection) assessmentSection.style.display = "none";
-    assessmentInProgress = false;
-    currentQuestionIndex = 0;
-    assessmentAnswers = {};
+  const assessmentSection = document.getElementById("assessment-section");
+  if (assessmentSection) assessmentSection.style.display = "none";
+  assessmentInProgress = false;
+  currentQuestionIndex = 0;
+  assessmentAnswers = {};
 }
 
 function showQuestion(index) {
-    const question = academicStressQuestions[index];
-    const questionContent = document.getElementById("question-content");
-    if (!questionContent) return;
-    const categoryDisplay = {
-        "Workforce and Workload": "Workforce & Workload",
-        "Skills and Task Management": "Skills & Task Management",
-        "Facilities and Infrastructure": "Facilities & Infrastructure",
-        "Mental and Physical Health": "Mental & Physical Health",
-        "Organizational Culture and Leadership": "Culture & Leadership"
-    };
-    const categoryLabel = categoryDisplay[question.category] || question.category;
-    questionContent.innerHTML = `
-<div style="font-size:0.9rem; color:#059669; font-weight:500; margin-bottom:10px;">
-Section: ${categoryLabel}
-</div>
-<h4>Question ${index + 1}</h4>
-<p>${question.question}</p>
-<div class="question-options" id="question-options">
-${question.options.map((option, optionIndex) => `
-<label class="question-option" onclick="selectOption(${option.value}, ${optionIndex})">
-<input type="radio" name="current-question" value="${option.value}">
-<span>${option.text}</span>
-</label>
-`).join("")}
-</div>
-`;
-    if (assessmentAnswers[question.id]) {
-        const savedValue = assessmentAnswers[question.id].value;
-        const radioButton = questionContent.querySelector(`input[value="${savedValue}"]`);
-        const optionLabel = radioButton ? radioButton.closest(".question-option") : null;
-        if (radioButton && optionLabel) {
-            radioButton.checked = true;
-            optionLabel.classList.add("selected");
-        }
+  const question = academicStressQuestions[index];
+  const questionContent = document.getElementById("question-content");
+  if (!questionContent) return;
+  
+  const categoryDisplay = {
+    "Workforce and Workload": "Workforce & Workload",
+    "Skills and Task Management": "Skills & Task Management",
+    "Facilities and Infrastructure": "Facilities & Infrastructure",
+    "Mental and Physical Health": "Mental & Physical Health",
+    "Organizational Culture and Leadership": "Culture & Leadership"
+  };
+  const categoryLabel = categoryDisplay[question.category] || question.category;
+  
+  questionContent.innerHTML = `
+    <div style="font-size:0.9rem; color:#059669; font-weight:500; margin-bottom:10px;">
+      Section: ${categoryLabel}
+    </div>
+    <h4>Question ${index + 1}</h4>
+    <p>${question.question}</p>
+    <div class="question-options" id="question-options">
+      ${question.options.map((option, optionIndex) => `
+        <label class="question-option" onclick="selectOption(${option.value}, ${optionIndex})">
+          <input type="radio" name="current-question" value="${option.value}">
+          <span>${option.text}</span>
+        </label>
+      `).join("")}
+    </div>
+  `;
+  
+  if (assessmentAnswers[question.id]) {
+    const savedValue = assessmentAnswers[question.id].value;
+    const radioButton = questionContent.querySelector(`input[value="${savedValue}"]`);
+    const optionLabel = radioButton ? radioButton.closest(".question-option") : null;
+    if (radioButton && optionLabel) {
+      radioButton.checked = true;
+      optionLabel.classList.add("selected");
     }
-    updateNavigationButtons();
+  }
+  
+  updateNavigationButtons();
 }
 
 function selectOption(value, optionIndex) {
-    const question = academicStressQuestions[currentQuestionIndex];
-    const options = document.querySelectorAll(".question-option");
-    options.forEach((option) => option.classList.remove("selected"));
-    if (options[optionIndex]) options[optionIndex].classList.add("selected");
-    assessmentAnswers[question.id] = {
-        question: question.question,
-        answer: question.options[optionIndex].text,
-        value: value,
-    };
-    updateNavigationButtons();
+  const question = academicStressQuestions[currentQuestionIndex];
+  const options = document.querySelectorAll(".question-option");
+  options.forEach((option) => option.classList.remove("selected"));
+  if (options[optionIndex]) options[optionIndex].classList.add("selected");
+  assessmentAnswers[question.id] = {
+    question: question.question,
+    answer: question.options[optionIndex].text,
+    value: value,
+  };
+  updateNavigationButtons();
 }
 
 function nextQuestion() {
-    const currentCategory = academicStressQuestions[currentQuestionIndex].category;
-    const nextIndex = currentQuestionIndex + 1;
-    if (nextIndex < academicStressQuestions.length) {
-        const nextCategory = academicStressQuestions[nextIndex].category;
-        if (currentCategory !== nextCategory) {
-            showToast(`Now moving to: ${nextCategory}`, "info", 3000);
-            setTimeout(() => {
-                const assessmentSection = document.getElementById("assessment-section");
-                if (assessmentSection) {
-                    assessmentSection.scrollIntoView({ behavior: "smooth", block: "center" });
-                }
-            }, 100);
+  const currentCategory = academicStressQuestions[currentQuestionIndex].category;
+  const nextIndex = currentQuestionIndex + 1;
+  if (nextIndex < academicStressQuestions.length) {
+    const nextCategory = academicStressQuestions[nextIndex].category;
+    if (currentCategory !== nextCategory) {
+      showToast(`Now moving to: ${nextCategory}`, "info", 3000);
+      setTimeout(() => {
+        const assessmentSection = document.getElementById("assessment-section");
+        if (assessmentSection) {
+          assessmentSection.scrollIntoView({ behavior: "smooth", block: "center" });
         }
-        currentQuestionIndex++;
-        showQuestion(currentQuestionIndex);
-        updateAssessmentProgress();
+      }, 100);
     }
+    currentQuestionIndex++;
+    showQuestion(currentQuestionIndex);
+    updateAssessmentProgress();
+  }
 }
 
 function previousQuestion() {
-    if (currentQuestionIndex > 0) {
-        currentQuestionIndex--;
-        showQuestion(currentQuestionIndex);
-        updateAssessmentProgress();
-    }
+  if (currentQuestionIndex > 0) {
+    currentQuestionIndex--;
+    showQuestion(currentQuestionIndex);
+    updateAssessmentProgress();
+  }
 }
 
 function updateNavigationButtons() {
-    const prevBtn = document.getElementById("prev-btn");
-    const nextBtn = document.getElementById("next-btn");
-    const submitBtn = document.getElementById("submit-btn");
-    if (!prevBtn || !nextBtn || !submitBtn) return;
-    prevBtn.disabled = currentQuestionIndex === 0;
-    const isLastQuestion = currentQuestionIndex === academicStressQuestions.length - 1;
-    const hasAnswer = assessmentAnswers[academicStressQuestions[currentQuestionIndex].id];
-    if (isLastQuestion) {
-        nextBtn.style.display = "none";
-        submitBtn.style.display = hasAnswer ? "inline-block" : "none";
-    } else {
-        nextBtn.style.display = hasAnswer ? "inline-block" : "none";
-        submitBtn.style.display = "none";
-    }
+  const prevBtn = document.getElementById("prev-btn");
+  const nextBtn = document.getElementById("next-btn");
+  const submitBtn = document.getElementById("submit-btn");
+  if (!prevBtn || !nextBtn || !submitBtn) return;
+  
+  prevBtn.disabled = currentQuestionIndex === 0;
+  
+  const isLastQuestion = currentQuestionIndex === academicStressQuestions.length - 1;
+  const hasAnswer = assessmentAnswers[academicStressQuestions[currentQuestionIndex].id];
+  
+  if (isLastQuestion) {
+    nextBtn.style.display = "none";
+    submitBtn.style.display = hasAnswer ? "inline-block" : "none";
+  } else {
+    nextBtn.style.display = hasAnswer ? "inline-block" : "none";
+    submitBtn.style.display = "none";
+  }
 }
 
 function updateAssessmentProgress() {
-    const progress = ((currentQuestionIndex + 1) / academicStressQuestions.length) * 100;
-    const fill = document.getElementById("assessment-progress-fill");
-    const currentQ = document.getElementById("current-question");
-    if (fill) fill.style.width = progress + "%";
-    if (currentQ) currentQ.textContent = currentQuestionIndex + 1;
+  const progress = ((currentQuestionIndex + 1) / academicStressQuestions.length) * 100;
+  const fill = document.getElementById("assessment-progress-fill");
+  const currentQ = document.getElementById("current-question");
+  if (fill) fill.style.width = progress + "%";
+  if (currentQ) currentQ.textContent = currentQuestionIndex + 1;
 }
 
 // DATABASE INTEGRATION: Submit Assessment
 function submitAssessment() {
-    showLoadingScreen("Processing and saving to secure database...");
-    setTimeout(() => {
-        let totalScore = 0;
-        const sectionScores = {
-            "Workforce and Workload": 0,
-            "Skills and Task Management": 0,
-            "Facilities and Infrastructure": 0,
-            "Mental and Physical Health": 0,
-            "Organizational Culture and Leadership": 0
-        };
-        Object.values(assessmentAnswers).forEach((answer) => {
-            const originalQuestion = academicStressQuestions.find(q => q.id === Number(Object.keys(assessmentAnswers).find(key => assessmentAnswers[key] === answer)));
-            if (originalQuestion) {
-                totalScore += answer.value;
-                sectionScores[originalQuestion.category] += answer.value;
-            }
+  showLoadingScreen("Processing and saving to secure database...");
+  setTimeout(() => {
+    let totalScore = 0;
+    const sectionScores = {
+      "Workforce and Workload": 0,
+      "Skills and Task Management": 0,
+      "Facilities and Infrastructure": 0,
+      "Mental and Physical Health": 0,
+      "Organizational Culture and Leadership": 0
+    };
+    
+    Object.values(assessmentAnswers).forEach((answer) => {
+      const originalQuestion = academicStressQuestions.find(q => q.id === Number(Object.keys(assessmentAnswers).find(key => assessmentAnswers[key] === answer)));
+      if (originalQuestion) {
+        totalScore += answer.value;
+        sectionScores[originalQuestion.category] += answer.value;
+      }
+    });
+    
+    let overallStressLevel, overallStressDescription, overallStressClass;
+    if (totalScore <= 24) {
+      overallStressLevel = "Low Stress";
+      overallStressDescription = "You currently demonstrate healthy stress management. Continue maintaining work-life balance.";
+      overallStressClass = "low";
+    } else if (totalScore <= 49) {
+      overallStressLevel = "Moderate Stress";
+      overallStressDescription = "You are experiencing manageable stress levels. Consider improving time management.";
+      overallStressClass = "moderate";
+    } else if (totalScore <= 59) {
+      overallStressLevel = "Abnormal Stress";
+      overallStressDescription = "Your stress level is above healthy limits. Reassess workload distribution.";
+      overallStressClass = "abnormal";
+    } else if (totalScore <= 69) {
+      overallStressLevel = "High Stress";
+      overallStressDescription = "Significant stress detected. Immediate workload discussion recommended.";
+      overallStressClass = "high";
+    } else {
+      overallStressLevel = "High Risk Stress";
+      overallStressDescription = "Critically elevated stress. Professional support strongly recommended.";
+      overallStressClass = "high-risk";
+    }
+    
+    const sectionLevels = {};
+    let highestSection = "";
+    let highestScore = -1;
+    for (const [section, score] of Object.entries(sectionScores)) {
+      let level, classLabel;
+      if (score <= 4) { level = "Low"; classLabel = "low"; }
+      else if (score <= 9) { level = "Moderate"; classLabel = "moderate"; }
+      else if (score <= 12) { level = "Abnormal"; classLabel = "abnormal"; }
+      else if (score <= 15) { level = "High"; classLabel = "high"; }
+      else { level = "High Risk"; classLabel = "high-risk"; }
+      
+      sectionLevels[section] = { level, class: classLabel, score };
+      if (score > highestScore) {
+        highestScore = score;
+        highestSection = section;
+      }
+    }
+    
+    let personalRecommendations = [overallStressDescription];
+    let organizationalRecommendations = [];
+    
+    if (highestSection === "Mental and Physical Health") {
+      personalRecommendations.push("Focus on sleep consistency and stress-reduction practices.");
+      organizationalRecommendations.push("Provide confidential counseling access", "Introduce stress management workshops");
+    } else if (highestSection === "Workforce and Workload") {
+      personalRecommendations.push("Discuss workload restructuring with supervisors.");
+      organizationalRecommendations.push("Conduct workload audit", "Recruit additional staff");
+    } else if (highestSection === "Facilities and Infrastructure") {
+      personalRecommendations.push("Formally report infrastructure limitations.");
+      organizationalRecommendations.push("Upgrade equipment", "Improve digital infrastructure");
+    } else if (highestSection === "Organizational Culture and Leadership") {
+      personalRecommendations.push("Utilize formal communication channels.");
+      organizationalRecommendations.push("Leadership development programs", "Improve transparency");
+    } else if (highestSection === "Skills and Task Management") {
+      personalRecommendations.push("Request training support and clearer guidelines.");
+      organizationalRecommendations.push("Provide professional development opportunities");
+    }
+    
+    const result = {
+      userId: currentUser.id,
+      sessionId: currentUser.sessionId,  // Added sessionId
+      score: totalScore,
+      maxScore: 100,
+      level: overallStressLevel,
+      class: overallStressClass,
+      description: overallStressDescription,
+      answers: assessmentAnswers,
+      date: new Date().toISOString(),
+      timestamp: Date.now(),
+      sectionScores: sectionScores,
+      sectionLevels: sectionLevels,
+      highestSection: highestSection,
+      personalRecommendations: personalRecommendations,
+      organizationalRecommendations: organizationalRecommendations
+    };
+    
+    // SEND TO SERVER
+    fetch('/api/assessments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(result)
+    })
+    .then(response => {
+      if (!response.ok) {
+        return response.json().then(err => {
+          throw new Error(`Server error: ${err.message || 'Unknown error'}`);
         });
-        let overallStressLevel, overallStressDescription, overallStressClass;
-        if (totalScore <= 24) {
-            overallStressLevel = "Low Stress";
-            overallStressDescription = "You currently demonstrate healthy stress management. Continue maintaining work-life balance.";
-            overallStressClass = "low";
-        } else if (totalScore <= 49) {
-            overallStressLevel = "Moderate Stress";
-            overallStressDescription = "You are experiencing manageable stress levels. Consider improving time management.";
-            overallStressClass = "moderate";
-        } else if (totalScore <= 59) {
-            overallStressLevel = "Abnormal Stress";
-            overallStressDescription = "Your stress level is above healthy limits. Reassess workload distribution.";
-            overallStressClass = "abnormal";
-        } else if (totalScore <= 69) {
-            overallStressLevel = "High Stress";
-            overallStressDescription = "Significant stress detected. Immediate workload discussion recommended.";
-            overallStressClass = "high";
-        } else {
-            overallStressLevel = "High Risk Stress";
-            overallStressDescription = "Critically elevated stress. Professional support strongly recommended.";
-            overallStressClass = "high-risk";
-        }
-        const sectionLevels = {};
-        let highestSection = "";
-        let highestScore = -1;
-        for (const [section, score] of Object.entries(sectionScores)) {
-            let level, classLabel;
-            if (score <= 4) { level = "Low"; classLabel = "low"; }
-            else if (score <= 9) { level = "Moderate"; classLabel = "moderate"; }
-            else if (score <= 12) { level = "Abnormal"; classLabel = "abnormal"; }
-            else if (score <= 15) { level = "High"; classLabel = "high"; }
-            else { level = "High Risk"; classLabel = "high-risk"; }
-            sectionLevels[section] = { level, class: classLabel, score };
-            if (score > highestScore) {
-                highestScore = score;
-                highestSection = section;
-            }
-        }
-        let personalRecommendations = [overallStressDescription];
-        let organizationalRecommendations = [];
-        if (highestSection === "Mental and Physical Health") {
-            personalRecommendations.push("Focus on sleep consistency and stress-reduction practices.");
-            organizationalRecommendations.push("Provide confidential counseling access", "Introduce stress management workshops");
-        } else if (highestSection === "Workforce and Workload") {
-            personalRecommendations.push("Discuss workload restructuring with supervisors.");
-            organizationalRecommendations.push("Conduct workload audit", "Recruit additional staff");
-        } else if (highestSection === "Facilities and Infrastructure") {
-            personalRecommendations.push("Formally report infrastructure limitations.");
-            organizationalRecommendations.push("Upgrade equipment", "Improve digital infrastructure");
-        } else if (highestSection === "Organizational Culture and Leadership") {
-            personalRecommendations.push("Utilize formal communication channels.");
-            organizationalRecommendations.push("Leadership development programs", "Improve transparency");
-        } else if (highestSection === "Skills and Task Management") {
-            personalRecommendations.push("Request training support and clearer guidelines.");
-            organizationalRecommendations.push("Provide professional development opportunities");
-        }
-        const result = {
-            userId: currentUser.id,
-            score: totalScore,
-            maxScore: 100,
-            level: overallStressLevel,
-            class: overallStressClass,
-            description: overallStressDescription,
-            answers: assessmentAnswers,
-            date: new Date().toISOString(),
-            timestamp: Date.now(),
-            sectionScores: sectionScores,
-            sectionLevels: sectionLevels,
-            highestSection: highestSection,
-            personalRecommendations: personalRecommendations,
-            organizationalRecommendations: organizationalRecommendations
-        };
-        // SEND TO SERVER
-        fetch('/api/assessments', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(result)
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    hideAssessment();
-                    const displayResult = { ...result, id: data.data.id };
-                    displayResults(displayResult);
-                    showPage("results");
-                    loadDashboardStats();
-                    updateCharts();
-                    showToast("Assessment saved securely!", "success");
-                } else {
-                    throw new Error('Save failed');
-                }
-            })
-            .catch(err => {
-                console.error("DB Save Error:", err);
-                showToast("Server unavailable. Please try again later.", "error");
-                // No local fallback - DB only
-            });
-    }, 1500);
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.success) {
+        hideAssessment();
+        const displayResult = { ...result, id: data.data.id };
+        displayResults(displayResult);
+        showPage("results");
+        loadDashboardStats();
+        updateCharts();
+        showToast("Assessment saved securely!", "success");
+      } else {
+        throw new Error('Save failed');
+      }
+    })
+    .catch(err => {
+      console.error("DB Save Error:", err);
+      showToast("Unable to save to server. Please check your connection.", "error");
+      // No local fallback - DB only
+    });
+  }, 1500);
 }
 
 // Chart Functions
 function initializeCharts() {
-    if (currentUser) {
-        setTimeout(() => {
-            createStressTrendChart();
-            createStressDistributionChart();
-            createMonthlyOverviewChart();
-        }, 500);
-    }
+  if (currentUser) {
+    setTimeout(() => {
+      createStressTrendChart();
+      createStressDistributionChart();
+      createMonthlyOverviewChart();
+    }, 500);
+  }
 }
 
 function createStressTrendChart(labels, data) {
-    const ctx = document.getElementById("stressTrendChart");
-    if (!ctx) return;
-    if (stressTrendChart) stressTrendChart.destroy();
-    stressTrendChart = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: labels || [],
-            datasets: [{
-                label: "Stress Score",
-                data: data || [],
-                borderColor: "rgb(59, 130, 246)",
-                backgroundColor: "rgba(59, 130, 246, 0.1)",
-                tension: 0.4,
-                fill: true,
-            }],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true, max: 100 } },
-        },
-    });
+  const ctx = document.getElementById("stressTrendChart");
+  if (!ctx) return;
+  if (stressTrendChart) stressTrendChart.destroy();
+  
+  stressTrendChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels || [],
+      datasets: [{
+        label: "Stress Score",
+        data: data || [],
+        borderColor: "rgb(59, 130, 246)",
+        backgroundColor: "rgba(59, 130, 246, 0.1)",
+        tension: 0.4,
+        fill: true,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, max: 100 } },
+    },
+  });
 }
 
 function createStressDistributionChart(dbData) {
-    const ctx = document.getElementById("stressDistributionChart");
-    if (!ctx) return;
-    let distribution = { low: 0, moderate: 0, high: 0, abnormal: 0, "high-risk": 0 };
-    if (dbData) {
-        dbData.forEach((r) => {
-            if (distribution[r.class] !== undefined) distribution[r.class]++;
-        });
-    }
-    if (stressDistributionChart) stressDistributionChart.destroy();
-    stressDistributionChart = new Chart(ctx, {
-        type: "doughnut",
-        data: {
-            labels: ["Low", "Moderate", "Abnormal", "High", "High Risk"],
-            datasets: [{
-                data: [distribution.low, distribution.moderate, distribution.abnormal, distribution.high, distribution["high-risk"]],
-                backgroundColor: ["rgb(16, 185, 129)", "rgb(245, 158, 11)", "rgb(139, 92, 246)", "rgb(239, 68, 68)", "rgb(120, 20, 20)"],
-            }],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { position: "bottom" } },
-        },
+  const ctx = document.getElementById("stressDistributionChart");
+  if (!ctx) return;
+  
+  let distribution = { low: 0, moderate: 0, high: 0, abnormal: 0, "high-risk": 0 };
+  if (dbData) {
+    dbData.forEach((r) => {
+      if (distribution[r.class] !== undefined) distribution[r.class]++;
     });
+  }
+  
+  if (stressDistributionChart) stressDistributionChart.destroy();
+  
+  stressDistributionChart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["Low", "Moderate", "Abnormal", "High", "High Risk"],
+      datasets: [{
+        data: [distribution.low, distribution.moderate, distribution.abnormal, distribution.high, distribution["high-risk"]],
+        backgroundColor: ["rgb(16, 185, 129)", "rgb(245, 158, 11)", "rgb(139, 92, 246)", "rgb(239, 68, 68)", "rgb(120, 20, 20)"],
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: "bottom" } },
+    },
+  });
 }
 
 function createMonthlyOverviewChart(dbData) {
-    const ctx = document.getElementById("monthlyOverviewChart");
-    if (!ctx) return;
-    let userResults = [];
-    if (dbData) {
-        userResults = dbData;
-    }
-    const monthlyData = {};
-    userResults.forEach((r) => {
-        const month = new Date(r.date).toLocaleDateString("en-US", { year: "numeric", month: "short" });
-        if (!monthlyData[month]) monthlyData[month] = { total: 0, count: 0 };
-        monthlyData[month].total += r.score;
-        monthlyData[month].count++;
-    });
-    const labels = Object.keys(monthlyData);
-    const averages = labels.map((month) => monthlyData[month].total / monthlyData[month].count);
-    if (monthlyOverviewChart) monthlyOverviewChart.destroy();
-    monthlyOverviewChart = new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: labels,
-            datasets: [{
-                label: "Average Stress Score",
-                data: averages,
-                backgroundColor: "rgba(59, 130, 246, 0.8)",
-                borderColor: "rgb(59, 130, 246)",
-                borderWidth: 1,
-            }],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true, max: 100 } },
-        },
-    });
+  const ctx = document.getElementById("monthlyOverviewChart");
+  if (!ctx) return;
+  
+  let userResults = [];
+  if (dbData) {
+    userResults = dbData;
+  }
+  
+  const monthlyData = {};
+  userResults.forEach((r) => {
+    const month = new Date(r.date).toLocaleDateString("en-US", { year: "numeric", month: "short" });
+    if (!monthlyData[month]) monthlyData[month] = { total: 0, count: 0 };
+    monthlyData[month].total += r.score;
+    monthlyData[month].count++;
+  });
+  
+  const labels = Object.keys(monthlyData);
+  const averages = labels.map((month) => monthlyData[month].total / monthlyData[month].count);
+  
+  if (monthlyOverviewChart) monthlyOverviewChart.destroy();
+  
+  monthlyOverviewChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Average Stress Score",
+        data: averages,
+        backgroundColor: "rgba(59, 130, 246, 0.8)",
+        borderColor: "rgb(59, 130, 246)",
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, max: 100 } },
+    },
+  });
 }
 
 function updateCharts() {
-    if (!currentUser) return;
-    // Updated to use session-based endpoint without ID parameter
-    fetch(`/api/assessments`)
-        .then(res => res.json())
-        .then(response => {
-            if (response.success && response.data.length > 0) {
-                const dbData = response.data;
-                // Prepare Trend Data
-                const labels = dbData.slice(0, 10).reverse().map(r => new Date(r.date).toLocaleDateString());
-                const data = dbData.slice(0, 10).reverse().map(r => r.score);
-                createStressTrendChart(labels, data);
-                createStressDistributionChart(dbData);
-                createMonthlyOverviewChart(dbData);
-            } else {
-                createStressTrendChart();
-                createStressDistributionChart();
-                createMonthlyOverviewChart();
-            }
-        })
-        .catch(() => {
-            createStressTrendChart();
-            createStressDistributionChart();
-            createMonthlyOverviewChart();
-        });
+  if (!currentUser) return;
+  
+  // Updated to use session-based endpoint with sessionId
+  fetch(`/api/assessments/user/${currentUser.sessionId}`)
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then(response => {
+      if (response.success && response.data.length > 0) {
+        const dbData = response.data;
+        // Prepare Trend Data
+        const labels = dbData.slice(0, 10).reverse().map(r => new Date(r.date).toLocaleDateString());
+        const data = dbData.slice(0, 10).reverse().map(r => r.score);
+        createStressTrendChart(labels, data);
+        createStressDistributionChart(dbData);
+        createMonthlyOverviewChart(dbData);
+      } else {
+        createStressTrendChart();
+        createStressDistributionChart();
+        createMonthlyOverviewChart();
+      }
+    })
+    .catch(err => {
+      console.error("Chart load error", err);
+      createStressTrendChart();
+      createStressDistributionChart();
+      createMonthlyOverviewChart();
+    });
 }
 
 // Results Display
 function displayResults(result) {
-    document.getElementById("score-value").textContent = `${result.score}/${result.maxScore}`;
-    document.getElementById("stress-level-text").textContent = result.level;
-    document.getElementById("stress-level-description").textContent = result.description;
-    const stressLevelElement = document.getElementById("stress-level-result");
-    if (stressLevelElement) stressLevelElement.className = `stress-level ${result.class}`;
-    const scoreCircle = document.getElementById("score-circle");
-    if (scoreCircle) {
-        const percentage = (result.score / result.maxScore) * 360;
-        scoreCircle.style.background = `conic-gradient(var(--primary-color) ${percentage}deg, var(--border-color) ${percentage}deg)`;
-    }
-    let sectionScoresHtml = "<ul>";
-    for (const [section, data] of Object.entries(result.sectionLevels)) {
-        sectionScoresHtml += `<li><strong>${section}:</strong> ${data.score}/20 (${data.level})</li>`;
-    }
-    sectionScoresHtml += "</ul>";
-    let personalRecsHtml = "<ul>";
-    result.personalRecommendations.forEach(rec => { personalRecsHtml += `<li>${rec}</li>`; });
-    personalRecsHtml += "</ul>";
-    let orgRecsHtml = "<ul>";
-    result.organizationalRecommendations.forEach(rec => { orgRecsHtml += `<li>${rec}</li>`; });
-    orgRecsHtml += "</ul>";
-    const sectionContainer = document.getElementById("section-scores-typed");
-    const personalContainer = document.getElementById("personal-recs-typed");
-    const orgContainer = document.getElementById("org-recs-typed");
-    if (sectionContainer) {
-        sectionContainer.style.display = 'block';
-        simulateTypingWithHtml(sectionContainer, sectionScoresHtml, 40);
-    }
-    if (personalContainer) {
-        setTimeout(() => {
-            personalContainer.style.display = 'block';
-            simulateTypingWithHtml(personalContainer, personalRecsHtml, 30);
-        }, 500);
-    }
-    if (orgContainer) {
-        setTimeout(() => {
-            orgContainer.style.display = 'block';
-            simulateTypingWithHtml(orgContainer, orgRecsHtml, 30);
-        }, 1000);
-    }
-    setTimeout(createResultTrendChart, 100);
+  document.getElementById("score-value").textContent = `${result.score}/${result.maxScore}`;
+  document.getElementById("stress-level-text").textContent = result.level;
+  document.getElementById("stress-level-description").textContent = result.description;
+  
+  const stressLevelElement = document.getElementById("stress-level-result");
+  if (stressLevelElement) stressLevelElement.className = `stress-level ${result.class}`;
+  
+  const scoreCircle = document.getElementById("score-circle");
+  if (scoreCircle) {
+    const percentage = (result.score / result.maxScore) * 360;
+    scoreCircle.style.background = `conic-gradient(var(--primary-color) ${percentage}deg, var(--border-color) ${percentage}deg)`;
+  }
+  
+  let sectionScoresHtml = "<ul>";
+  for (const [section, data] of Object.entries(result.sectionLevels)) {
+    sectionScoresHtml += `<li><strong>${section}:</strong> ${data.score}/20 (${data.level})</li>`;
+  }
+  sectionScoresHtml += "</ul>";
+  
+  let personalRecsHtml = "<ul>";
+  result.personalRecommendations.forEach(rec => { personalRecsHtml += `<li>${rec}</li>`; });
+  personalRecsHtml += "</ul>";
+  
+  let orgRecsHtml = "<ul>";
+  result.organizationalRecommendations.forEach(rec => { orgRecsHtml += `<li>${rec}</li>`; });
+  orgRecsHtml += "</ul>";
+  
+  const sectionContainer = document.getElementById("section-scores-typed");
+  const personalContainer = document.getElementById("personal-recs-typed");
+  const orgContainer = document.getElementById("org-recs-typed");
+  
+  if (sectionContainer) {
+    sectionContainer.style.display = 'block';
+    simulateTypingWithHtml(sectionContainer, sectionScoresHtml, 40);
+  }
+  
+  if (personalContainer) {
+    setTimeout(() => {
+      personalContainer.style.display = 'block';
+      simulateTypingWithHtml(personalContainer, personalRecsHtml, 30);
+    }, 500);
+  }
+  
+  if (orgContainer) {
+    setTimeout(() => {
+      orgContainer.style.display = 'block';
+      simulateTypingWithHtml(orgContainer, orgRecsHtml, 30);
+    }, 1000);
+  }
+  
+  setTimeout(createResultTrendChart, 100);
 }
 
 function simulateTypingWithHtml(container, content, speed = 30) {
-    if (!container) return;
-    container.innerHTML = '';
-    container.style.display = 'block';
-    container.innerHTML = content;
-    container.classList.add('visible');
+  if (!container) return;
+  container.innerHTML = '';
+  container.style.display = 'block';
+  container.innerHTML = content;
+  container.classList.add('visible');
 }
 
 function createResultTrendChart() {
-    const ctx = document.getElementById("resultTrendChart");
-    if (!ctx) return;
-    // Updated to use session-based endpoint
-    fetch(`/api/assessments`)
-        .then(res => res.json())
-        .then(response => {
-            let userResults = [];
-            if (response.success) {
-                userResults = response.data.sort((a, b) => new Date(a.date) - new Date(a.date));
-            }
-            const labels = userResults.map(r => new Date(r.date).toLocaleDateString());
-            const data = userResults.map(r => r.score);
-            if (resultTrendChartInstance) resultTrendChartInstance.destroy();
-            if (data.length === 0) {
-                ctx.parentElement.style.display = 'none';
-                return;
-            }
-            ctx.parentElement.style.display = 'block';
-            resultTrendChartInstance = new Chart(ctx, {
-                type: "line",
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: "Stress Score",
-                        data: data,
-                        borderColor: "rgb(75, 192, 192)",
-                        backgroundColor: "rgba(75, 192, 192, 0.2)",
-                        tension: 0.4,
-                        fill: true,
-                    }],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true, max: 100 } },
-                },
-            });
-        })
-        .catch(() => {
-            // No fallback
-        });
+  const ctx = document.getElementById("resultTrendChart");
+  if (!ctx) return;
+  
+  // Updated to use session-based endpoint with sessionId
+  fetch(`/api/assessments/user/${currentUser.sessionId}`)
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then(response => {
+      let userResults = [];
+      if (response.success) {
+        userResults = response.data.sort((a, b) => new Date(a.date) - new Date(b.date));
+      }
+      
+      const labels = userResults.map(r => new Date(r.date).toLocaleDateString());
+      const data = userResults.map(r => r.score);
+      
+      if (resultTrendChartInstance) resultTrendChartInstance.destroy();
+      
+      if (data.length === 0) {
+        ctx.parentElement.style.display = 'none';
+        return;
+      }
+      
+      ctx.parentElement.style.display = 'block';
+      resultTrendChartInstance = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Stress Score",
+            data: data,
+            borderColor: "rgb(75, 192, 192)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            tension: 0.4,
+            fill: true,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: { y: { beginAtZero: true, max: 100 } },
+        },
+      });
+    })
+    .catch(err => {
+      console.error("Result trend chart error", err);
+      ctx.parentElement.style.display = 'none';
+    });
 }
 
 // History & Data Management
 function loadHistory() {
-    const container = document.getElementById("history-content");
-    if (!container) return;
-    // Updated to use session-based endpoint
-    fetch(`/api/assessments`)
-        .then(res => res.json())
-        .then(response => {
-            if (!response.success || response.data.length === 0) {
-                renderHistoryList(container, []);
-                return;
-            }
-            const userResults = response.data.map(row => ({
-                id: row.id,
-                score: row.score,
-                maxScore: row.max_score,
-                level: row.level,
-                class: row.class,
-                description: row.description,
-                date: row.created_at,
-                sectionLevels: row.section_levels,
-                personalRecommendations: row.personal_recommendations,
-                organizationalRecommendations: row.organizational_recommendations
-            })).sort((a, b) => new Date(b.date) - new Date(a.date));
-            renderHistoryList(container, userResults);
-        })
-        .catch(err => {
-            console.error("Failed to load history", err);
-            container.innerHTML = `<p>Error loading history. Check connection.</p>`;
-        });
+  const container = document.getElementById("history-content");
+  if (!container) return;
+  
+  // Updated to use session-based endpoint with sessionId
+  fetch(`/api/assessments/user/${currentUser.sessionId}`)
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then(response => {
+      if (!response.success || response.data.length === 0) {
+        renderHistoryList(container, []);
+        return;
+      }
+      
+      const userResults = response.data.map(row => ({
+        id: row.id,
+        score: row.score,
+        maxScore: row.max_score,
+        level: row.level,
+        class: row.class,
+        description: row.description,
+        date: row.created_at,
+        sectionLevels: row.section_levels,
+        personalRecommendations: row.personal_recommendations,
+        organizationalRecommendations: row.organizational_recommendations
+      })).sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      renderHistoryList(container, userResults);
+    })
+    .catch(err => {
+      console.error("Failed to load history", err);
+      container.innerHTML = `<p>Error loading history. Check connection.</p>`;
+    });
 }
 
 function renderHistoryList(container, userResults) {
-    if (userResults.length === 0) {
-        container.innerHTML = `<div class="empty-state"><h3>No assessments yet</h3><p>Take your first stress assessment.</p></div>`;
-        return;
-    }
-    container.innerHTML = userResults.map((result) => `
-<div class="history-item">
-<div class="history-info">
-<h4>Assessment - ${new Date(result.date).toLocaleDateString()}</h4>
-<p>${result.description}</p>
-</div>
-<div class="history-score">
-<div class="score">${result.score}/${result.maxScore}</div>
-<div class="level ${result.class}">${result.level}</div>
-</div>
-<div class="history-actions">
-<button class="btn btn-small btn-secondary" onclick='viewReportFromObj(${JSON.stringify(result).replace(/'/g, "&#39;")})'>View Report</button>
-<button class="btn btn-small btn-primary" onclick="downloadPDFReport('${result.id}')">Download PDF</button>
-</div>
-</div>
-`).join("");
+  if (userResults.length === 0) {
+    container.innerHTML = `<div class="empty-state"><h3>No assessments yet</h3><p>Take your first stress assessment.</p></div>`;
+    return;
+  }
+  
+  container.innerHTML = userResults.map((result) => `
+    <div class="history-item">
+      <div class="history-info">
+        <h4>Assessment - ${new Date(result.date).toLocaleDateString()}</h4>
+        <p>${result.description}</p>
+      </div>
+      <div class="history-score">
+        <div class="score">${result.score}/${result.maxScore}</div>
+        <div class="level ${result.class}">${result.level}</div>
+      </div>
+      <div class="history-actions">
+        <button class="btn btn-small btn-secondary" onclick='viewReportFromObj(${JSON.stringify(result).replace(/'/g, "&#39;")})'>View Report</button>
+        <button class="btn btn-small btn-primary" onclick="downloadPDFReport('${result.id}')">Download PDF</button>
+      </div>
+    </div>
+  `).join("");
 }
 
 function clearHistory() {
-    // Removed local storage clear logic
-    showToast("History is managed by the server.", "info");
+  // Removed local storage clear logic
+  showToast("History is managed by the server.", "info");
 }
 
 function loadUserData() {
-    if (!currentUser) return;
-    const nameEl = document.getElementById("user-name");
-    if (nameEl) nameEl.textContent = `Welcome, ${currentUser.name}`;
-    const avatars = document.querySelectorAll(".user-avatar");
-    avatars.forEach(av => av.innerHTML = '<i class="fas fa-user-circle"></i>');
+  if (!currentUser) return;
+  
+  const nameEl = document.getElementById("user-name");
+  if (nameEl) nameEl.textContent = `Welcome, ${currentUser.name}`;
+  
+  const avatars = document.querySelectorAll(".user-avatar");
+  avatars.forEach(av => av.innerHTML = '<i class="fas fa-user-circle"></i>');
 }
 
 function loadDashboardStats() {
-    if (!currentUser) return;
-    // Updated to use session-based endpoint
-    fetch(`/api/assessments`)
-        .then(res => res.json())
-        .then(response => {
-            let userResults = [];
-            if (response.success) {
-                userResults = response.data;
-            }
-            const totalEl = document.getElementById("total-assessments");
-            const lastLevelEl = document.getElementById("last-stress-level");
-            const daysEl = document.getElementById("days-since-last");
-            if (totalEl) totalEl.textContent = userResults.length;
-            if (userResults.length > 0) {
-                const lastResult = userResults.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
-                if (lastLevelEl) lastLevelEl.textContent = lastResult.level;
-                if (daysEl) {
-                    const daysSince = Math.floor((Date.now() - new Date(lastResult.date)) / (1000 * 60 * 60 * 24));
-                    daysEl.textContent = daysSince;
-                }
-            } else {
-                if (lastLevelEl) lastLevelEl.textContent = "-";
-                if (daysEl) daysEl.textContent = "-";
-            }
-        })
-        .catch(err => {
-            console.error("Stats load error", err);
-        });
+  if (!currentUser) return;
+  
+  // Updated to use session-based endpoint with sessionId
+  fetch(`/api/assessments/user/${currentUser.sessionId}`)
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then(response => {
+      let userResults = [];
+      if (response.success) {
+        userResults = response.data;
+      }
+      
+      const totalEl = document.getElementById("total-assessments");
+      const lastLevelEl = document.getElementById("last-stress-level");
+      const daysEl = document.getElementById("days-since-last");
+      
+      if (totalEl) totalEl.textContent = userResults.length;
+      
+      if (userResults.length > 0) {
+        const lastResult = userResults.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+        if (lastLevelEl) lastLevelEl.textContent = lastResult.level;
+        if (daysEl) {
+          const daysSince = Math.floor((Date.now() - new Date(lastResult.date)) / (1000 * 60 * 60 * 24));
+          daysEl.textContent = daysSince;
+        }
+      } else {
+        if (lastLevelEl) lastLevelEl.textContent = "-";
+        if (daysEl) daysEl.textContent = "-";
+      }
+    })
+    .catch(err => {
+      console.error("Stats load error", err);
+      const totalEl = document.getElementById("total-assessments");
+      const lastLevelEl = document.getElementById("last-stress-level");
+      const daysEl = document.getElementById("days-since-last");
+      
+      if (totalEl) totalEl.textContent = "0";
+      if (lastLevelEl) lastLevelEl.textContent = "-";
+      if (daysEl) daysEl.textContent = "-";
+    });
 }
 
 // Utilities
 function toggleTheme() {
-    const current = document.documentElement.getAttribute("data-theme");
-    const next = current === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", next);
-    // Removed local storage persistence
+  const current = document.documentElement.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  // Store theme preference
+  localStorage.setItem("theme", next);
 }
 
 function loadTheme() {
-    // Removed local storage retrieval
-    const saved = "light";
-    document.documentElement.setAttribute("data-theme", saved);
-    const toggle = document.getElementById("theme-toggle");
-    if (toggle) toggle.checked = saved === "dark";
+  const saved = localStorage.getItem("theme") || "light";
+  document.documentElement.setAttribute("data-theme", saved);
+  const toggle = document.getElementById("theme-toggle");
+  if (toggle) toggle.checked = saved === "dark";
 }
 
 function showModal(title, message, onConfirm) {
-    const modal = document.getElementById("modal");
-    if (!modal.querySelector("#modal-title")) {
-        if (confirm(`${title}
+  const modal = document.getElementById("modal");
+  if (!modal.querySelector("#modal-title")) {
+    if (confirm(`${title}
 ${message}`)) {
-            if (onConfirm) onConfirm();
-        }
-        return;
+      if (onConfirm) onConfirm();
     }
-    document.getElementById("modal-title").textContent = title;
-    document.getElementById("modal-message").textContent = message;
-    document.getElementById("modal").classList.add("active");
-    const btn = document.getElementById("modal-confirm");
-    btn.onclick = () => { closeModal(); if (onConfirm) onConfirm(); };
+    return;
+  }
+  document.getElementById("modal-title").textContent = title;
+  document.getElementById("modal-message").textContent = message;
+  document.getElementById("modal").classList.add("active");
+  const btn = document.getElementById("modal-confirm");
+  btn.onclick = () => { closeModal(); if (onConfirm) onConfirm(); };
 }
 
 function closeModal() {
-    const modal = document.getElementById("modal");
-    modal.classList.remove("active");
+  const modal = document.getElementById("modal");
+  modal.classList.remove("active");
 }
 
 function showToast(message, type = "info", duration = 3000) {
-    const container = document.getElementById("toast-container");
-    const toast = document.createElement("div");
-    toast.className = `toast ${type}`;
-    toast.textContent = message;
-    container.appendChild(toast);
-    setTimeout(() => toast.remove(), duration);
+  const container = document.getElementById("toast-container");
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), duration);
 }
 
 // PDF Generation
 function downloadPDFReport(resultId) {
-    // In a DB-only system, this should ideally fetch the specific report from API
-    // For this implementation, we rely on the result object passed from history
-    showToast("Report generation requires active session data.", "warning");
+  // In a DB-only system, this should ideally fetch the specific report from API
+  // For this implementation, we rely on the result object passed from history
+  showToast("Report generation requires active session data.", "warning");
 }
 
 function viewReportFromObj(result) {
-    displayResults(result);
-    showPage("results");
+  displayResults(result);
+  showPage("results");
 }
