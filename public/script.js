@@ -164,24 +164,30 @@ function showPageContent(pageId) {
 // Ethical & Privacy Modal
 function showEthicalModal() {
   const modalHtml = `
-    <div class="modal-content" style="max-width: 600px;">
+    <div class="modal-content">
       <div class="modal-header">
         <h3><i class="fas fa-shield-alt"></i> Privacy & Ethical Notice</h3>
         <button class="modal-close" onclick="closeModal()">&times;</button>
       </div>
-      <div class="modal-body" style="text-align: left; line-height: 1.6;">
+
+      <div class="modal-body">
         <p><strong>Welcome to the Stress Detection System.</strong></p>
         <p>Before you begin, please note the following ethical guidelines:</p>
+
         <ul style="margin-bottom: 15px;">
           <li><strong>Anonymity:</strong> No personal identity (name, email, ID) is collected. You are participating anonymously.</li>
           <li><strong>Data Usage:</strong> Your responses are aggregated with others to identify organizational stress trends (e.g., workload, infrastructure). Individual data is never shared.</li>
           <li><strong>Voluntary Participation:</strong> You may stop the assessment at any time.</li>
           <li><strong>Wellbeing First:</strong> If any question causes distress, please take a break. This tool is for assessment, not diagnosis.</li>
         </ul>
-        <p style="background: #f0fdf4; padding: 10px; border-left: 4px solid #16a34a; border-radius: 4px; color: black">
-          <i class="fas fa-info-circle"></i> <strong>Instruction:</strong> Please relax and answer honestly. When you click "Start Assessment" below, the page will scroll down to the questions automatically.
+
+        <p style="background: #f0fdf4; padding: 10px; border-left: 4px solid #16a34a; border-radius: 4px; color: black;">
+          <i class="fas fa-info-circle"></i>
+          <strong>Instruction:</strong>
+          Please relax and answer honestly. When you click "Start Assessment" below, the page will scroll down to the questions automatically.
         </p>
       </div>
+
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
         <button class="btn btn-primary" onclick="startAssessmentFromModal()">
@@ -190,9 +196,23 @@ function showEthicalModal() {
       </div>
     </div>
   `;
+
   const modal = document.getElementById("modal");
-  modal.querySelector(".modal-content").outerHTML = modalHtml;
+  modal.innerHTML = modalHtml;
   modal.classList.add("active");
+}
+
+function closeModal() {
+  document.getElementById("modal").classList.remove("active");
+}
+
+function startAssessmentFromModal() {
+  closeModal();
+
+  const questionsSection = document.getElementById("questions");
+  if (questionsSection) {
+    questionsSection.scrollIntoView({ behavior: "smooth" });
+  }
 }
 
 function startAssessmentFromModal() {

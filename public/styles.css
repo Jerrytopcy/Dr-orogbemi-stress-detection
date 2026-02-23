@@ -2442,3 +2442,430 @@ input:checked + .toggle-slider:before {
         width: 100%;
     }
 }
+/* === MOBILE-FIRST RESPONSIVE STYLES === */
+
+/* Base mobile styles (default) */
+.aggregate-section {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.aggregate-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.aggregate-header h2 {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.aggregate-header p {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.aggregate-header .btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+}
+
+/* Computation Overlay - Mobile Optimized */
+.computation-content {
+    padding: 1.5rem 1rem;
+    max-width: 95%;
+    width: 95%;
+    margin: 0 1rem;
+    border-radius: 14px;
+}
+
+.computation-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1.25rem;
+}
+
+.computation-icon i {
+    font-size: 1.75rem;
+}
+
+.computation-steps {
+    margin: 1.25rem 0;
+}
+
+.step {
+    padding: 0.4rem 0;
+    font-size: 0.85rem;
+}
+
+.progress-track {
+    height: 6px;
+}
+
+#computation-percentage {
+    font-size: 0.85rem;
+}
+
+/* Results Summary - Mobile Stack */
+.results-summary {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.summary-card {
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.summary-card h4 {
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+}
+
+.summary-value {
+    font-size: 1.5rem;
+}
+
+/* Section Bars - Mobile Layout */
+.section-analysis h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+}
+
+.section-bar-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+}
+
+.section-label {
+    min-width: auto;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.section-bar-track {
+    height: 20px;
+    border-radius: 10px;
+}
+
+.section-bar-fill {
+    font-size: 0.75rem;
+    padding-right: 0.5rem;
+    min-width: 35px;
+}
+
+.section-value {
+    min-width: auto;
+    text-align: left;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Computation Details - Mobile Grid */
+.computation-details {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+}
+
+.computation-details h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.details-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+}
+
+.detail-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4rem 0;
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.detail-value {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    text-align: right;
+    max-width: 60%;
+    word-wrap: break-word;
+}
+
+/* Aggregate Actions - Mobile Stack */
+.aggregate-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 1rem;
+}
+
+.aggregate-actions .btn {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+}
+
+/* Tablet breakpoint */
+@media (min-width: 600px) {
+    .aggregate-section {
+        padding: 1.25rem;
+    }
+    
+    .aggregate-header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .aggregate-header .btn {
+        width: auto;
+    }
+    
+    .results-summary {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .details-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .detail-item {
+        flex-direction: column;
+        align-items: flex-start;
+        border-bottom: none;
+        padding: 0;
+    }
+    
+    .detail-value {
+        text-align: left;
+        max-width: 100%;
+    }
+}
+
+/* Desktop breakpoint */
+@media (min-width: 768px) {
+    .aggregate-section {
+        margin-top: 1.5rem;
+        padding: 1.5rem;
+    }
+    
+    .section-bar-item {
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .section-label {
+        min-width: 180px;
+    }
+    
+    .aggregate-actions {
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+    
+    .aggregate-actions .btn {
+        width: auto;
+    }
+}
+
+/* Large desktop */
+@media (min-width: 1024px) {
+    .results-summary {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .details-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Touch-friendly adjustments */
+@media (hover: none) and (pointer: coarse) {
+    .section-bar-item,
+    .summary-card,
+    .detail-item {
+        min-height: 44px;
+    }
+    
+    .btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .question-option {
+        padding: 0.75rem;
+    }
+}
+
+/* Prevent horizontal scroll on mobile */
+body {
+    overflow-x: hidden;
+}
+
+/* Ensure images and charts scale */
+canvas {
+    max-width: 100%;
+    height: auto !important;
+}
+
+/* Improve readability on small screens */
+@media (max-width: 480px) {
+    h2 {
+        font-size: 1.3rem;
+    }
+    
+    h3 {
+        font-size: 1.1rem;
+    }
+    
+    h4 {
+        font-size: 1rem;
+    }
+    
+    p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+/* Animation performance on mobile */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Section bar fill animation - mobile optimized */
+.section-bar-fill {
+    transition: width 0.6s ease-out;
+    will-change: width;
+}
+
+/* Smooth scrolling for mobile */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Fix for iOS viewport height */
+@supports (-webkit-touch-callout: none) {
+    .computation-overlay {
+        min-height: -webkit-fill-available;
+    }
+}
+
+/* Modal Overlay */
+#modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s ease;
+  z-index: 9999;
+}
+
+#modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Modal Box */
+.modal-content {
+  background: #ffffff;
+  width: 95%;
+  max-width: 600px;
+  max-height: 90vh;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header */
+.modal-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+/* Body (Scrollable Part) */
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+  line-height: 1.6;
+}
+
+/* Footer */
+.modal-footer {
+  padding: 15px 20px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Close Button */
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 14px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: #e5e7eb;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: #ffffff;
+}
