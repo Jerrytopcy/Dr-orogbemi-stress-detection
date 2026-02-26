@@ -233,17 +233,21 @@ async function startAssessmentFromModal() {
 
   closeModal();
 
-  setTimeout(() => {
-    startAssessment();
+  startAssessment();
 
-    const assessmentSection = document.getElementById('assessment-section');
-    if (assessmentSection) {
-      assessmentSection.scrollIntoView({
+  // Wait for DOM update after assessment starts
+  requestAnimationFrame(() => {
+    const questionsSection = document.getElementById('questions');
+
+    if (questionsSection) {
+      questionsSection.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
+    } else {
+      console.log('questions section not found');
     }
-  }, 300);
+  });
 }
 
 function closeModal() {
