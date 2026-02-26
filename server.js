@@ -11,7 +11,32 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json({ limit: '10mb' })); // Increase limit for large assessment objects
 app.use(express.static(path.join(__dirname, 'public')));
-
+// Add this middleware after app.use(express.json())
+app.use((req, res, next) => {
+  // Override JSON response to ensure consistent field naming
+  const originalJson = res.json;
+  res.json = function(data) {
+    // If this is an assessments response, standardize field names
+    if (data && data.data && Array.isArray(data.data)) {
+      data.data = data.data.map(item => {
+        // Convert snake_case to camelCase for consistency
+        return {
+          ...item,
+          maxScore: item.max_score,
+          sectionLevels: item.section_levels,
+          personalRecommendations: item.personal_recommendations,
+          organizationalRecommendations: item.organizational_recommendations,
+          sessionId: item.session_id,
+          userId: item.user_id,
+          createdAt: item.created_at,
+          updatedAt: item.updated_at
+        };
+      });
+    }
+    return originalJson.call(this, data);
+  };
+  next();
+});
 
 // Add this helper function near the top of server.js, after pool initialization
 const validateAdminAccess = (req, res, next) => {
