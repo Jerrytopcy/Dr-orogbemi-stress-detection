@@ -128,9 +128,33 @@ function setupEventListeners() {
   if (nextBtn) nextBtn.addEventListener("click", nextQuestion);
   if (submitBtn) submitBtn.addEventListener("click", submitAssessment);
 }
+function navigateToAssessment() {
+    if (!isTokenValidated) {
+        showModal(
+            'Token Required',
+            'This assessment requires a valid one-time access link. Please contact your administrator for access.',
+            null
+        );
+        return;
+    }
+    showPage('dashboard');
+}
 
 // Page Navigation
 function showPage(pageId) {
+     // Block history and settings for participants without valid token
+    if (!isTokenValidated && currentUserRole === 'participant') {
+        if (pageId === 'dashboard' || pageId === 'history' || pageId === 'settings') {
+            // Allow dashboard view but block assessment features
+            if (pageId === 'dashboard') {
+                blockAssessmentAccess('Please validate your assessment token to begin.');
+            } else {
+                showToast('A valid assessment token is required to access this section.', 'warning');
+                showPage('home');
+                return;
+            }
+        }
+    }
   // Block history page for participants
   if (currentInvitationToken && currentUserRole === 'participant') {
     if (pageId === 'history' || pageId === 'settings') {
@@ -247,7 +271,7 @@ async function startAssessmentFromModal() {
     } else {
       console.log('assessment-section not found');
     }
-  }, 600);
+  }, 300);
 }
 
 function closeModal() {
@@ -285,6 +309,15 @@ function hideLoadingScreen() {
 
 // Assessment Functions
 async function startAssessment() {
+      // Enforce token requirement
+    if (!isTokenValidated || tokenValidationStatus !== 'valid') {
+        showModal(
+            'Access Required',
+            'A valid one-time assessment token is required to begin. Please use the link provided by your administrator.',
+            null
+        );
+        return;
+    }
   // Check if user has already completed an assessment
   const alreadyCompleted = await hasCompletedAssessment();
   
@@ -1311,34 +1344,66 @@ function loadHistory() {
 }
 // function to validate token from URL
 async function validateInvitationToken() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get('token');
-  
-  if (!token) {
-    // No token - treat as regular session
-    currentUserRole = 'participant';
-    applyRoleBasedUI();
-    return;
-  }
-  
-  currentInvitationToken = token;
-  
-  try {
-    const response = await fetch(`/api/validate-token/${token}`);
-    const data = await response.json();
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
     
-    if (data.success) {
-      currentUserRole = data.data.user_role;
-      applyRoleBasedUI();
-      showToast('Assessment link validated', 'success');
-    } else {
-      // Token invalid or already used
-      showTokenError(data.message);
+    if (!token) {
+        // No token provided - block assessment access
+        currentUserRole = 'participant';
+        isTokenValidated = false;
+        tokenValidationStatus = 'missing';
+        applyRoleBasedUI();
+        blockAssessmentAccess('A valid assessment token is required to proceed.');
+        return;
     }
-  } catch (err) {
-    console.error('Token validation failed:', err);
-    showToast('Could not validate assessment link', 'error');
-  }
+    
+    currentInvitationToken = token;
+    
+    try {
+        const response = await fetch(`/api/validate-token/${token}`);
+        const data = await response.json();
+        
+        if (data.success) {
+            currentUserRole = data.data.user_role;
+            isTokenValidated = true;
+            tokenValidationStatus = 'valid';
+            applyRoleBasedUI();
+            showToast('Assessment link validated', 'success');
+        } else {
+            // Token invalid or already used
+            isTokenValidated = false;
+            tokenValidationStatus = data.message?.includes('already been used') ? 'used' : 'invalid';
+            showTokenError(data.message);
+        }
+    } catch (err) {
+        console.error('Token validation failed:', err);
+        isTokenValidated = false;
+        tokenValidationStatus = 'error';
+        showToast('Could not validate assessment link', 'error');
+        blockAssessmentAccess('Unable to verify your assessment link. Please check your connection.');
+    }
+}
+
+function blockAssessmentAccess(message) {
+    // Disable assessment start buttons
+    const startBtns = document.querySelectorAll('[onclick="startAssessment()"], .btn-primary[onclick*="assessment"]');
+    startBtns.forEach(btn => {
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+        btn.style.cursor = 'not-allowed';
+        btn.title = message;
+    });
+    
+    // Hide assessment section if visible
+    const assessmentSection = document.getElementById('assessment-section');
+    if (assessmentSection) {
+        assessmentSection.style.display = 'none';
+    }
+    
+    // Show warning on dashboard if user tries to access
+    if (currentPage === 'dashboard') {
+        showToast(message, 'warning', 5000);
+    }
 }
 
 function showTokenError(message) {
@@ -1352,7 +1417,7 @@ function showTokenError(message) {
         <p style="font-size: 0.9rem; color: var(--danger-color); background-color: white; padding:.5em;">
           Each assessment link can only be used once for security and data integrity.
         </p>
-        <button class="btn btn-primary" onclick="window.close() style="margin-top: 50px;">
+        <button class="btn btn-primary" onclick="window.close()" style="margin-top: 50px;">
           <i class="fas fa-sign-out-alt"></i> Exit Application
         </button>
       </div>
