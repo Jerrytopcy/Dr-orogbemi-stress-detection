@@ -179,31 +179,34 @@ function showPageContent(pageId) {
 
 // Ethical & Privacy Modal
 function showEthicalModal() {
-  const modalHtml = `
+  // Check if already completed before showing modal
+  hasCompletedAssessment().then(alreadyCompleted => {
+    if (alreadyCompleted) {
+      showToast('You have already completed your assessment for this session.', 'info');
+      return;
+    }
+    
+    const modalHtml = `
     <div class="modal-content">
       <div class="modal-header">
         <h3><i class="fas fa-shield-alt"></i> Privacy & Ethical Notice</h3>
         <button class="modal-close" onclick="closeModal()">&times;</button>
       </div>
-
       <div class="modal-body">
         <p><strong>Welcome to the Stress Detection System.</strong></p>
         <p>Before you begin, please note the following ethical guidelines:</p>
-
         <ul style="margin-bottom: 15px;">
-          <li><strong>Anonymity:</strong> No personal identity (name, email, ID) is collected. You are participating anonymously.</li>
-          <li><strong>Data Usage:</strong> Your responses are aggregated with others to identify organizational stress trends (e.g., workload, infrastructure). Individual data is never shared.</li>
+          <li><strong>Anonymity:</strong> No personal identity is collected. You are participating anonymously.</li>
+          <li><strong>Data Usage:</strong> Your responses are aggregated to identify organizational stress trends. Individual data is never shared.</li>
           <li><strong>Voluntary Participation:</strong> You may stop the assessment at any time.</li>
-          <li><strong>Wellbeing First:</strong> If any question causes distress, please take a break. This tool is for assessment, not diagnosis.</li>
+          <li><strong>Wellbeing First:</strong> If any question causes distress, please take a break.</li>
         </ul>
-
         <p style="background: #f0fdf4; padding: 10px; border-left: 4px solid #16a34a; border-radius: 4px; color: black;">
           <i class="fas fa-info-circle"></i>
           <strong>Instruction:</strong>
-          Please relax and answer honestly. When you click "Start Assessment" below, the page will scroll down to the questions automatically.
+          Please relax and answer honestly. When you click "Start Assessment" below, the page will scroll to the questions automatically.
         </p>
       </div>
-
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
         <button class="btn btn-primary" onclick="startAssessmentFromModal()">
@@ -211,11 +214,32 @@ function showEthicalModal() {
         </button>
       </div>
     </div>
-  `;
+    `;
+    
+    const modal = document.getElementById('modal');
+    modal.innerHTML = modalHtml;
+    modal.classList.add('active');
+  });
+}
 
-  const modal = document.getElementById("modal");
-  modal.innerHTML = modalHtml;
-  modal.classList.add("active");
+function startAssessmentFromModal() {
+  // Double-check before starting from modal
+  hasCompletedAssessment().then(alreadyCompleted => {
+    if (alreadyCompleted) {
+      closeModal();
+      showToast('You have already completed your assessment for this session.', 'info');
+      return;
+    }
+    
+    closeModal();
+    setTimeout(() => {
+      startAssessment();
+      const assessmentSection = document.getElementById('assessment-section');
+      if (assessmentSection) {
+        assessmentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 300);
+  });
 }
 
 function closeModal() {
@@ -270,14 +294,32 @@ function hideLoadingScreen() {
 }
 
 // Assessment Functions
-function startAssessment() {
+async function startAssessment() {
+  // Check if user has already completed an assessment
+  const alreadyCompleted = await hasCompletedAssessment();
+  
+  if (alreadyCompleted) {
+    showToast('You have already completed your assessment for this session. Each participant may submit only one response.', 'info', 5000);
+    
+    // Optional: Show a modal with more detail
+    showModal(
+      'Assessment Already Completed',
+      'Thank you for your contribution. You have already submitted your stress assessment for this session. Your response has been securely recorded and will contribute to organizational insights while maintaining your anonymity.',
+      null
+    );
+    
+    return; // Exit early - do not start a new assessment
+  }
+  
+  // Proceed with normal assessment flow
   currentQuestionIndex = 0;
   assessmentAnswers = {};
   assessmentInProgress = true;
-  const assessmentSection = document.getElementById("assessment-section");
+  
+  const assessmentSection = document.getElementById('assessment-section');
   if (assessmentSection) {
-    assessmentSection.style.display = "block";
-    document.getElementById("total-questions").textContent = academicStressQuestions.length;
+    assessmentSection.style.display = 'block';
+    document.getElementById('total-questions').textContent = academicStressQuestions.length;
     showQuestion(0);
     updateAssessmentProgress();
   }
@@ -911,51 +953,86 @@ function loadUserData() {
   avatars.forEach(av => av.innerHTML = '<i class="fas fa-user-circle"></i>');
 }
 
-function loadDashboardStats() {
+// Add this inside loadDashboardStats() after fetching user data
+async function loadDashboardStats() {
   if (!currentUser) return;
   
-  // Updated to use session-based endpoint with sessionId
-  fetch(`/api/assessments/user/${currentUser.sessionId}`)
-    .then(res => {
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
+  try {
+    const response = await fetch(`/api/assessments/user/${currentUser.sessionId}`);
+    const data = await response.json();
+    
+    let userResults = [];
+    if (data.success) {
+      userResults = data.data;
+    }
+    
+    // Update stats display
+    const totalEl = document.getElementById('total-assessments');
+    const lastLevelEl = document.getElementById('last-stress-level');
+    const daysEl = document.getElementById('days-since-last');
+    
+    if (totalEl) totalEl.textContent = userResults.length;
+    
+    // Check if assessment already completed and update UI
+    const startBtn = document.querySelector('.action-card[onclick="startAssessment()"]');
+    const quickStartBtn = document.querySelector('.hero-buttons .btn-primary');
+    
+    if (userResults.length > 0) {
+      // User has completed assessment - disable start buttons
+      if (startBtn) {
+        startBtn.style.opacity = '0.6';
+        startBtn.style.cursor = 'not-allowed';
+        startBtn.onclick = null; // Remove click handler
+        startBtn.innerHTML = `
+          <i class="fas fa-check-circle"></i>
+          <h4>Assessment Completed</h4>
+          <p>Thank you for your contribution</p>
+        `;
       }
-      return res.json();
-    })
-    .then(response => {
-      let userResults = [];
-      if (response.success) {
-        userResults = response.data;
+      
+      if (quickStartBtn) {
+        quickStartBtn.disabled = true;
+        quickStartBtn.title = 'You have already completed your assessment';
+        quickStartBtn.innerHTML = '<i class="fas fa-check"></i> Assessment Submitted';
       }
       
-      const totalEl = document.getElementById("total-assessments");
-      const lastLevelEl = document.getElementById("last-stress-level");
-      const daysEl = document.getElementById("days-since-last");
-      
-      if (totalEl) totalEl.textContent = userResults.length;
-      
-      if (userResults.length > 0) {
-        const lastResult = userResults.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
-        if (lastLevelEl) lastLevelEl.textContent = lastResult.level;
-        if (daysEl) {
-          const daysSince = Math.floor((Date.now() - new Date(lastResult.date)) / (1000 * 60 * 60 * 24));
-          daysEl.textContent = daysSince;
-        }
-      } else {
-        if (lastLevelEl) lastLevelEl.textContent = "-";
-        if (daysEl) daysEl.textContent = "-";
+      // Update last result display
+      const lastResult = userResults.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+      if (lastLevelEl) lastLevelEl.textContent = lastResult.level;
+      if (daysEl) {
+        const daysSince = Math.floor((Date.now() - new Date(lastResult.date)) / (1000 * 60 * 60 * 24));
+        daysEl.textContent = daysSince;
       }
-    })
-    .catch(err => {
-      console.error("Stats load error", err);
-      const totalEl = document.getElementById("total-assessments");
-      const lastLevelEl = document.getElementById("last-stress-level");
-      const daysEl = document.getElementById("days-since-last");
+    } else {
+      // No assessment yet - ensure buttons are enabled
+      if (startBtn) {
+        startBtn.style.opacity = '';
+        startBtn.style.cursor = 'pointer';
+        startBtn.onclick = startAssessment;
+        startBtn.innerHTML = `
+          <i class="fas fa-play-circle"></i>
+          <h4>Start Assessment</h4>
+          <p>Take a new academic stress assessment</p>
+        `;
+      }
       
-      if (totalEl) totalEl.textContent = "0";
-      if (lastLevelEl) lastLevelEl.textContent = "-";
-      if (daysEl) daysEl.textContent = "-";
-    });
+      if (quickStartBtn) {
+        quickStartBtn.disabled = false;
+        quickStartBtn.title = '';
+        quickStartBtn.innerHTML = 'Get Assessed';
+        quickStartBtn.onclick = () => showPage('dashboard');
+      }
+      
+      if (lastLevelEl) lastLevelEl.textContent = '-';
+      if (daysEl) daysEl.textContent = '-';
+    }
+    
+  } catch (err) {
+    console.error('Stats load error', err);
+    // Fallback values
+    const totalEl = document.getElementById('total-assessments');
+    if (totalEl) totalEl.textContent = '0';
+  }
 }
 
 // Utilities
@@ -1282,11 +1359,11 @@ function showTokenError(message) {
         <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: var(--danger-color); margin-bottom: 20px;"></i>
         <h2>Link Not Available</h2>
         <p style="color: var(--text-secondary); margin: 20px 0;">${message}</p>
-        <p style="font-size: 0.9rem; color: var(--text-secondary);">
+        <p style="font-size: 0.9rem; color: var(--danger-color);">
           Each assessment link can only be used once for security and data integrity.
         </p>
-        <button class="btn btn-primary" onclick="window.location.href='/'" style="margin-top: 20px;">
-          Return to Home
+        <button class="btn btn-primary" onclick="window.close() style="margin-top: 20px;">
+          <i class="fas fa-sign-out-alt"></i> Exit Application
         </button>
       </div>
     `;
@@ -1313,6 +1390,24 @@ function applyRoleBasedUI() {
     if (historyNav) historyNav.style.display = '';
     if (historyPage) historyPage.style.display = '';
     if (aggregateSection) aggregateSection.style.display = '';
+  }
+}
+
+// Check if user has already completed an assessment for this session
+async function hasCompletedAssessment() {
+  if (!currentUser || !currentUser.sessionId) return false;
+  
+  try {
+    const response = await fetch(`/api/assessments/user/${currentUser.sessionId}`);
+    const data = await response.json();
+    
+    if (data.success && data.data && data.data.length > 0) {
+      return true;
+    }
+    return false;
+  } catch (err) {
+    console.error('Error checking assessment status:', err);
+    return false;
   }
 }
 
