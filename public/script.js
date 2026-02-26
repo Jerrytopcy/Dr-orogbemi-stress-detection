@@ -235,17 +235,17 @@ async function startAssessmentFromModal() {
 
   startAssessment();
 
-  // Wait for DOM update after assessment starts
+  // Wait for next render frame
   requestAnimationFrame(() => {
-    const questionsSection = document.getElementById('questions');
+    const assessmentSection = document.getElementById('assessment-section');
 
-    if (questionsSection) {
-      questionsSection.scrollIntoView({
+    if (assessmentSection) {
+      assessmentSection.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
     } else {
-      console.log('questions section not found');
+      console.log("assessment-section not found");
     }
   });
 }
