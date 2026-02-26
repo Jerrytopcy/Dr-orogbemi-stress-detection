@@ -1787,28 +1787,46 @@ async function revokeToken(token) {
 }
 
 
-const validateAdminAccess = (req, res, next) => {
+const validateAdminAccess = async (req, res, next) => {
   const adminToken = req.headers['x-admin-token'] || req.query.admin_token;
   const validToken = process.env.ADMIN_SECRET_KEY;
   
   console.log('Admin access check:', {
     tokenProvided: !!adminToken,
-    tokenLength: adminToken ? adminToken.length : 0,
-    serverKeyConfigured: !!validToken,
-    serverKeyLength: validToken ? validToken.length : 0,
     path: req.path
   });
   
-  if (!validToken) {
-    console.error('ADMIN_SECRET_KEY not configured on server');
+  if (!validToken && !adminToken) {
     return res.status(500).json({ success: false, message: 'Admin key not configured' });
   }
   
-  if (!adminToken || adminToken !== validToken) {
-    console.warn('Admin token mismatch or missing');
-    return res.status(403).json({ success: false, message: 'Unauthorized' });
+  // Check against master secret first (fast path)
+  if (adminToken === validToken) {
+    console.log('Admin access granted via master key');
+    return next();
   }
   
-  console.log('Admin access granted');
-  next();
+  // Check against generated tokens in database
+  if (adminToken) {
+    try {
+      const tokenCheck = await pool.query(
+        `SELECT * FROM invitation_tokens 
+         WHERE token = $1 
+         AND user_role = 'admin'
+         AND is_used = FALSE
+         AND (expires_at IS NULL OR expires_at > NOW())`,
+        [adminToken]
+      );
+      
+      if (tokenCheck.rows.length > 0) {
+        console.log('Admin access granted via generated token');
+        return next();
+      }
+    } catch (err) {
+      console.error('Token database check failed:', err);
+    }
+  }
+  
+  console.warn('Admin token validation failed');
+  return res.status(403).json({ success: false, message: 'Unauthorized' });
 };
