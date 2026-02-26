@@ -145,10 +145,9 @@ function navigateToAssessment() {
 
 // Page Navigation
 function showPage(pageId) {
-     // Block history and settings for participants without valid token
+    // Block history and settings for participants without valid token
     if (!isTokenValidated && currentUserRole === 'participant') {
         if (pageId === 'dashboard' || pageId === 'history' || pageId === 'settings') {
-            // Allow dashboard view but block assessment features
             if (pageId === 'dashboard') {
                 blockAssessmentAccess('Please validate your assessment token to begin.');
             } else {
@@ -158,23 +157,36 @@ function showPage(pageId) {
             }
         }
     }
-  // Block history page for participants
-  if (currentInvitationToken && currentUserRole === 'participant') {
-    if (pageId === 'history' || pageId === 'settings') {
-      showToast('This section is not available for assessment participants', 'warning');
-      return;
-    }
-  }
-  if (["dashboard", "history", "results"].includes(pageId)) {
-    showLoadingScreen(`Loading ${pageId}...`);
-    setTimeout(() => {
-      showPageContent(pageId);
-    }, 600);
-  } else {
-    showPageContent(pageId);
-  }
-}
 
+    // Block history page for participants with invitation token only
+    if (currentInvitationToken && currentUserRole === 'participant') {
+        if (pageId === 'history' || pageId === 'settings') {
+            showToast('This section is not available for assessment participants', 'warning');
+            return;
+        }
+    }
+
+    // Admins can access all pages
+    if (currentUserRole === 'admin') {
+        if (["dashboard", "history", "results"].includes(pageId)) {
+            showLoadingScreen(`Loading ${pageId}...`);
+            setTimeout(() => {
+                showPageContent(pageId);
+            }, 600);
+            return;
+        }
+    }
+
+    // Standard page loading for other cases
+    if (["dashboard", "history", "results"].includes(pageId)) {
+        showLoadingScreen(`Loading ${pageId}...`);
+        setTimeout(() => {
+            showPageContent(pageId);
+        }, 600);
+    } else {
+        showPageContent(pageId);
+    }
+}
 function showPageContent(pageId) {
   const pages = document.querySelectorAll(".page");
   pages.forEach((page) => {
@@ -902,66 +914,85 @@ function createResultTrendChart() {
 
 // History & Data Management
 function loadHistory() {
-  const container = document.getElementById("history-content");
-  if (!container) return;
-  
-  // Updated to use session-based endpoint with sessionId
-  fetch(`/api/assessments/user/${currentUser.sessionId}`)
+    const container = document.getElementById('history-content');
+    const aggregateSection = document.getElementById('aggregate-section');
+    if (!container) return;
+
+    // Show aggregate section only for admins
+    if (aggregateSection) {
+        aggregateSection.style.display = currentUserRole === 'admin' ? 'block' : 'none';
+    }
+
+    // Determine endpoint and headers based on role
+    let url = `/api/assessments/user/${currentUser.sessionId}`;
+    let headers = {};
+
+    if (currentUserRole === 'admin' && adminToken) {
+        url = '/api/assessments/all';
+        headers['x-admin-token'] = adminToken;
+    }
+
+    fetch(url, { headers })
     .then(res => {
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-      return res.json();
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
     })
     .then(response => {
-      if (!response.success || response.data.length === 0) {
-        renderHistoryList(container, []);
-        return;
-      }
-      
-      const userResults = response.data.map(row => ({
-        id: row.id,
-        score: row.score,
-        maxScore: row.max_score,
-        level: row.level,
-        class: row.class,
-        description: row.description,
-        date: row.created_at,
-        sectionLevels: row.section_levels,
-        personalRecommendations: row.personal_recommendations,
-        organizationalRecommendations: row.organizational_recommendations
-      })).sort((a, b) => new Date(b.date) - new Date(a.date));
-      
-      renderHistoryList(container, userResults);
+        if (!response.success || response.data.length === 0) {
+            renderHistoryList(container, []);
+            return;
+        }
+
+        const userResults = response.data.map(row => ({
+            id: row.id,
+            score: row.score,
+            maxScore: row.max_score,
+            level: row.level,
+            class: row.class,
+            description: row.description,
+            date: row.created_at,
+            sectionLevels: row.section_levels,
+            personalRecommendations: row.personal_recommendations,
+            organizationalRecommendations: row.organizational_recommendations,
+            sessionId: row.session_id || 'N/A',
+            userId: row.user_id || 'anonymous'
+        })).sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        renderHistoryList(container, userResults);
     })
     .catch(err => {
-      console.error("Failed to load history", err);
-      container.innerHTML = `<p>Error loading history. Check connection.</p>`;
+        console.error('Failed to load history', err);
+        container.innerHTML = `<p>Error loading history. Check connection.</p>`;
     });
 }
 
 function renderHistoryList(container, userResults) {
-  if (userResults.length === 0) {
-    container.innerHTML = `<div class="empty-state"><h3>No assessments yet</h3><p>Take your first stress assessment.</p></div>`;
-    return;
-  }
-  
-  container.innerHTML = userResults.map((result) => `
-    <div class="history-item">
-      <div class="history-info">
-        <h4>Assessment - ${new Date(result.date).toLocaleDateString()}</h4>
-        <p>${result.description}</p>
-      </div>
-      <div class="history-score">
-        <div class="score">${result.score}/${result.maxScore}</div>
-        <div class="level ${result.class}">${result.level}</div>
-      </div>
-      <div class="history-actions">
-        <button class="btn btn-small btn-secondary" onclick='viewReportFromObj(${JSON.stringify(result).replace(/'/g, "&#39;")})'>View Report</button>
-        <button class="btn btn-small btn-primary" onclick="downloadPDFReport('${result.id}')">Download PDF</button>
-      </div>
-    </div>
-  `).join("");
+    if (userResults.length === 0) {
+        container.innerHTML = `<div class="empty-state"><h3>No assessments yet</h3><p>Take your first stress assessment.</p></div>`;
+        return;
+    }
+
+    const isAdminView = currentUserRole === 'admin';
+
+    container.innerHTML = userResults.map((result) => `
+        <div class="history-item">
+            <div class="history-info">
+                <h4>Assessment - ${new Date(result.date).toLocaleDateString()}</h4>
+                ${isAdminView ? `<p style="font-size:0.8rem; color:var(--text-secondary);">Session: ${result.sessionId}</p>` : ''}
+                <p>${result.description}</p>
+            </div>
+            <div class="history-score">
+                <div class="score">${result.score}/${result.maxScore}</div>
+                <div class="level ${result.class}">${result.level}</div>
+            </div>
+            <div class="history-actions">
+                <button class="btn btn-small btn-secondary" onclick='viewReportFromObj(${JSON.stringify(result).replace(/'/g, "&#39;")})'>View Report</button>
+                <button class="btn btn-small btn-primary" onclick="downloadPDFReport('${result.id}')">Download PDF</button>
+            </div>
+        </div>
+    `).join("");
 }
 
 function clearHistory() {
