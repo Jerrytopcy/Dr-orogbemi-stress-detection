@@ -390,31 +390,7 @@ app.delete('/api/admin/tokens/:token', validateAdminAccess, async (req, res) => 
     res.status(500).json({ success: false, message: 'Failed to revoke token' });
   }
 });
-const validateAdminAccess = (req, res, next) => {
-  const adminToken = req.headers['x-admin-token'] || req.query.admin_token;
-  const validToken = process.env.ADMIN_SECRET_KEY;
-  
-  console.log('Admin access check:', {
-    tokenProvided: !!adminToken,
-    tokenLength: adminToken ? adminToken.length : 0,
-    serverKeyConfigured: !!validToken,
-    serverKeyLength: validToken ? validToken.length : 0,
-    path: req.path
-  });
-  
-  if (!validToken) {
-    console.error('ADMIN_SECRET_KEY not configured on server');
-    return res.status(500).json({ success: false, message: 'Admin key not configured' });
-  }
-  
-  if (!adminToken || adminToken !== validToken) {
-    console.warn('Admin token mismatch or missing');
-    return res.status(403).json({ success: false, message: 'Unauthorized' });
-  }
-  
-  console.log('Admin access granted');
-  next();
-};
+
 
 // Default Route
 app.get('/', (req, res) => {
