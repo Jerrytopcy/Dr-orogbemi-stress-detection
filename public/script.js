@@ -1358,7 +1358,7 @@ function showTokenError(message) {
       <div style="text-align: center; padding: 60px 20px;">
         <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: var(--danger-color); margin-bottom: 20px;"></i>
         <h2>Link Not Available</h2>
-        <p style="color: var(--text-secondary); margin: 20px 0;">${message}</p>
+        <p style="color: var(--warning-color); margin: 20px 0;">${message}</p>
         <p style="font-size: 0.9rem; color: var(--danger-color); background color: white; padding:.5em;">
           Each assessment link can only be used once for security and data integrity.
         </p>
