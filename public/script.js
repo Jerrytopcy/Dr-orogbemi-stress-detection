@@ -961,7 +961,6 @@ function loadHistory() {
       organizationalRecommendations: typeof row.organizational_recommendations === 'string' ? JSON.parse(row.organizational_recommendations) : row.organizational_recommendations,
       sessionId: row.session_id || 'N/A',
       userId: row.user_id || 'anonymous',
-      // Add flag to indicate if this is a global view item
       isGlobalView: isGlobalView
     })).sort((a, b) => new Date(b.date) - new Date(a.date));
     
