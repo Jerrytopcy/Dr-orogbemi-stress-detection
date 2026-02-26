@@ -235,8 +235,8 @@ async function startAssessmentFromModal() {
 
   startAssessment();
 
-  // Wait for next render frame
-  requestAnimationFrame(() => {
+  // Wait for assessment to render before scrolling
+  setTimeout(() => {
     const assessmentSection = document.getElementById('assessment-section');
 
     if (assessmentSection) {
@@ -245,9 +245,9 @@ async function startAssessmentFromModal() {
         block: 'start'
       });
     } else {
-      console.log("assessment-section not found");
+      console.log('assessment-section not found');
     }
-  });
+  }, 600);
 }
 
 function closeModal() {
