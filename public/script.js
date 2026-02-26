@@ -918,31 +918,32 @@ function loadHistory() {
   const aggregateSection = document.getElementById('aggregate-section');
   if (!container) return;
   
-  // Show aggregate section only for admins
   if (aggregateSection) {
-    aggregateSection.style.display = (currentUserRole === 'admin' || isAdmin) ? 'block' : 'none';
+    aggregateSection.style.display = currentUserRole === 'admin' ? 'block' : 'none';
   }
   
-  // Determine endpoint and headers based on role
   let url = `/api/assessments/user/${currentUser.sessionId}`;
   let headers = {};
   let isGlobalView = false;
   
-  // Use robust admin check: either role or token present
+  // Robust admin check
   const isAdminUser = currentUserRole === 'admin' || isAdmin || (adminToken && adminToken.length > 0);
   
   if (isAdminUser) {
     url = '/api/assessments/all';
     if (adminToken) {
       headers['x-admin-token'] = adminToken;
+      console.log('Fetching admin assessments with token length:', adminToken.length);
     }
     isGlobalView = true;
   }
   
   fetch(url, { headers })
-    .then(res => {
+    .then(async res => {
       if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
+        const errorText = await res.text().catch(() => 'No error body');
+        console.error('History fetch failed:', res.status, res.statusText, errorText);
+        throw new Error(`HTTP error! status: ${res.status} - ${errorText}`);
       }
       return res.json();
     })
@@ -952,7 +953,6 @@ function loadHistory() {
         return;
       }
       
-      // Map and normalize data for display
       const assessments = response.data.map(row => ({
         id: row.id,
         score: row.score,
@@ -973,7 +973,7 @@ function loadHistory() {
     })
     .catch(err => {
       console.error('Failed to load history', err);
-      container.innerHTML = `<div class="error-state"><p>Error loading history. Check connection and admin credentials.</p></div>`;
+      container.innerHTML = `<div class="error-state"><p>Error: ${err.message}. Verify admin token and server configuration.</p></div>`;
     });
 }
 
@@ -1473,30 +1473,46 @@ async function checkAdminAccess() {
   const token = urlParams.get('admin_token');
   
   if (token) {
-    adminToken = token;
-    sessionStorage.setItem('adminToken', token);
+    adminToken = token.trim();
+    sessionStorage.setItem('adminToken', adminToken);
+    localStorage.setItem('adminToken', adminToken);
     window.history.replaceState({}, document.title, window.location.pathname);
+    console.log('Admin token set from URL');
   } else {
     adminToken = sessionStorage.getItem('adminToken') || localStorage.getItem('adminToken');
+    if (adminToken) {
+      adminToken = adminToken.trim();
+      console.log('Admin token retrieved from storage');
+    }
   }
   
   if (adminToken) {
     try {
+      // Test the token against a protected endpoint
       const response = await fetch('/api/assessments/aggregate', {
         headers: { 'x-admin-token': adminToken }
       });
+      
       if (response.ok) {
         isAdmin = true;
         currentUserRole = 'admin';
         applyRoleBasedUI();
         applyAdminUI();
         showToast('Admin mode enabled', 'success');
+        console.log('Admin access confirmed');
         return;
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.warn('Admin token rejected:', response.status, errorData.message);
+        showToast('Admin access denied - check token', 'warning');
       }
     } catch (err) {
       console.error('Admin check failed:', err);
-      // Do not remove token on transient errors
     }
+    // Clear invalid token
+    sessionStorage.removeItem('adminToken');
+    localStorage.removeItem('adminToken');
+    adminToken = null;
   }
   
   if (!isAdmin) {
@@ -1762,3 +1778,30 @@ async function revokeToken(token) {
     showToast('Network error', 'error');
   }
 }
+
+
+const validateAdminAccess = (req, res, next) => {
+  const adminToken = req.headers['x-admin-token'] || req.query.admin_token;
+  const validToken = process.env.ADMIN_SECRET_KEY;
+  
+  console.log('Admin access check:', {
+    tokenProvided: !!adminToken,
+    tokenLength: adminToken ? adminToken.length : 0,
+    serverKeyConfigured: !!validToken,
+    serverKeyLength: validToken ? validToken.length : 0,
+    path: req.path
+  });
+  
+  if (!validToken) {
+    console.error('ADMIN_SECRET_KEY not configured on server');
+    return res.status(500).json({ success: false, message: 'Admin key not configured' });
+  }
+  
+  if (!adminToken || adminToken !== validToken) {
+    console.warn('Admin token mismatch or missing');
+    return res.status(403).json({ success: false, message: 'Unauthorized' });
+  }
+  
+  console.log('Admin access granted');
+  next();
+};
