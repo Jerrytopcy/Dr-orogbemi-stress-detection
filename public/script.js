@@ -920,7 +920,7 @@ function loadHistory() {
   
   // Show aggregate section only for admins
   if (aggregateSection) {
-    aggregateSection.style.display = currentUserRole === 'admin' ? 'block' : 'none';
+    aggregateSection.style.display = (currentUserRole === 'admin' || isAdmin) ? 'block' : 'none';
   }
   
   // Determine endpoint and headers based on role
@@ -928,48 +928,53 @@ function loadHistory() {
   let headers = {};
   let isGlobalView = false;
   
-  if (currentUserRole === 'admin' && adminToken) {
+  // Use robust admin check: either role or token present
+  const isAdminUser = currentUserRole === 'admin' || isAdmin || (adminToken && adminToken.length > 0);
+  
+  if (isAdminUser) {
     url = '/api/assessments/all';
-    headers['x-admin-token'] = adminToken;
+    if (adminToken) {
+      headers['x-admin-token'] = adminToken;
+    }
     isGlobalView = true;
   }
   
   fetch(url, { headers })
-  .then(res => {
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
-    }
-    return res.json();
-  })
-  .then(response => {
-    if (!response.success || !response.data || response.data.length === 0) {
-      container.innerHTML = `<div class="empty-state"><h3>No assessments found</h3><p>No assessments have been submitted yet.</p></div>`;
-      return;
-    }
-    
-    // For admins, we want to show ALL assessments, not filter by user
-    const userResults = response.data.map(row => ({
-      id: row.id,
-      score: row.score,
-      maxScore: row.max_score,
-      level: row.level,
-      class: row.class,
-      description: row.description,
-      date: row.created_at,
-      sectionLevels: typeof row.section_levels === 'string' ? JSON.parse(row.section_levels) : row.section_levels,
-      personalRecommendations: typeof row.personal_recommendations === 'string' ? JSON.parse(row.personal_recommendations) : row.personal_recommendations,
-      organizationalRecommendations: typeof row.organizational_recommendations === 'string' ? JSON.parse(row.organizational_recommendations) : row.organizational_recommendations,
-      sessionId: row.session_id || 'N/A',
-      userId: row.user_id || 'anonymous',
-      isGlobalView: isGlobalView
-    })).sort((a, b) => new Date(b.date) - new Date(a.date));
-    
-    renderHistoryList(container, userResults, isGlobalView);
-  })
-  .catch(err => {
-    console.error('Failed to load history', err);
-    container.innerHTML = `<div class="error-state"><p>Error loading history. Check connection.</p></div>`;
-  });
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then(response => {
+      if (!response.success || !response.data || response.data.length === 0) {
+        container.innerHTML = `<div class="empty-state"><h3>No assessments found</h3><p>No assessments have been submitted yet.</p></div>`;
+        return;
+      }
+      
+      // Map and normalize data for display
+      const assessments = response.data.map(row => ({
+        id: row.id,
+        score: row.score,
+        maxScore: row.max_score || row.maxScore,
+        level: row.level,
+        class: row.class,
+        description: row.description,
+        date: row.created_at || row.createdAt,
+        sectionLevels: typeof row.section_levels === 'string' ? JSON.parse(row.section_levels) : row.section_levels || row.sectionLevels,
+        personalRecommendations: typeof row.personal_recommendations === 'string' ? JSON.parse(row.personal_recommendations) : row.personal_recommendations,
+        organizationalRecommendations: typeof row.organizational_recommendations === 'string' ? JSON.parse(row.organizational_recommendations) : row.organizational_recommendations,
+        sessionId: row.session_id || row.sessionId,
+        userId: row.user_id || row.userId,
+        isGlobalView: isGlobalView
+      })).sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      renderHistoryList(container, assessments, isGlobalView);
+    })
+    .catch(err => {
+      console.error('Failed to load history', err);
+      container.innerHTML = `<div class="error-state"><p>Error loading history. Check connection and admin credentials.</p></div>`;
+    });
 }
 
 function renderHistoryList(container, userResults, isGlobalView = false) {

@@ -14,24 +14,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Add this middleware after app.use(express.json())
 app.use((req, res, next) => {
-  // Override JSON response to ensure consistent field naming
   const originalJson = res.json;
   res.json = function(data) {
-    // If this is an assessments response, standardize field names
     if (data && data.data && Array.isArray(data.data)) {
       data.data = data.data.map(item => {
-        // Convert snake_case to camelCase for consistency
-        return {
-          ...item,
-          maxScore: item.max_score,
-          sectionLevels: item.section_levels,
-          personalRecommendations: item.personal_recommendations,
-          organizationalRecommendations: item.organizational_recommendations,
-          sessionId: item.session_id,
-          userId: item.user_id,
-          createdAt: item.created_at,
-          updatedAt: item.updated_at
-        };
+        const normalized = { ...item };
+        // Only add camelCase if snake_case exists and camelCase does not
+        if (item.max_score !== undefined && item.maxScore === undefined) normalized.maxScore = item.max_score;
+        if (item.section_levels !== undefined && item.sectionLevels === undefined) normalized.sectionLevels = item.section_levels;
+        if (item.personal_recommendations !== undefined && item.personalRecommendations === undefined) normalized.personalRecommendations = item.personal_recommendations;
+        if (item.organizational_recommendations !== undefined && item.organizationalRecommendations === undefined) normalized.organizationalRecommendations = item.organizational_recommendations;
+        if (item.session_id !== undefined && item.sessionId === undefined) normalized.sessionId = item.session_id;
+        if (item.user_id !== undefined && item.userId === undefined) normalized.userId = item.user_id;
+        if (item.created_at !== undefined && item.createdAt === undefined) normalized.createdAt = item.created_at;
+        if (item.updated_at !== undefined && item.updatedAt === undefined) normalized.updatedAt = item.updated_at;
+        return normalized;
       });
     }
     return originalJson.call(this, data);
@@ -150,8 +147,7 @@ app.get('/api/assessments/all', validateAdminAccess, async (req, res) => {
          personal_recommendations, organizational_recommendations, 
          answers, created_at, updated_at
        FROM assessments 
-       ORDER BY created_at DESC 
-       LIMIT 500`,
+       ORDER BY created_at DESC`,
       []
     );
     
