@@ -1,6 +1,9 @@
+
 // global variables section
 let currentInvitationToken = null;
 let currentUserRole = 'participant'; // 'participant' or 'admin'
+let isTokenValidated = false;
+let tokenValidationStatus = 'pending';
 
 
 // Academic Stress Survey Questions
