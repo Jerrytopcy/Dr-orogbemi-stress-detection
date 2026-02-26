@@ -1334,52 +1334,7 @@ function exportAggregateReport() {
     // Future: Implement PDF generation using jsPDF with aggregate data
 }
 
-// Update loadHistory function to show the aggregate section button
-function loadHistory() {
-    const container = document.getElementById('history-content');
-    const aggregateSection = document.getElementById('aggregate-section');
-    
-    if (!container) return;
-    
-    // Show aggregate section on history page load
-    if (aggregateSection) {
-        aggregateSection.style.display = 'block';
-    }
-    
-    // Updated to use session-based endpoint with sessionId
-    fetch(`/api/assessments/user/${currentUser.sessionId}`)
-        .then(res => {
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            return res.json();
-        })
-        .then(response => {
-            if (!response.success || response.data.length === 0) {
-                renderHistoryList(container, []);
-                return;
-            }
-            
-            const userResults = response.data.map(row => ({
-                id: row.id,
-                score: row.score,
-                maxScore: row.max_score,
-                level: row.level,
-                class: row.class,
-                description: row.description,
-                date: row.created_at,
-                sectionLevels: row.section_levels,
-                personalRecommendations: row.personal_recommendations,
-                organizationalRecommendations: row.organizational_recommendations
-            })).sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            renderHistoryList(container, userResults);
-        })
-        .catch(err => {
-            console.error('Failed to load history', err);
-            container.innerHTML = `<p>Error loading history. Check connection.</p>`;
-        });
-}
+
 // function to validate token from URL
 async function validateInvitationToken() {
     const urlParams = new URLSearchParams(window.location.search);
