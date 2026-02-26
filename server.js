@@ -37,21 +37,38 @@ const pool = new Pool({
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
-// --- API ROUTES ---
-
-// 1. Submit Assessment
+// Updated POST /api/assessments endpoint
 app.post('/api/assessments', async (req, res) => {
-  console.log("DEBUG: POST /api/assessments received"); // <-- ADD THIS LINE
-  console.log("DEBUG: Request body (first 100 chars):", JSON.stringify(req.body).substring(0, 100)); // Optional: log part of the body
-
   const {
     userId, sessionId, score, maxScore, level, class: stressClass,
     description, sectionScores, sectionLevels, highestSection,
-    personalRecommendations, organizationalRecommendations, answers
+    personalRecommendations, organizationalRecommendations, answers,
+    invitationToken // NEW: token from client
   } = req.body;
 
   try {
-    console.log("DEBUG: Attempting to insert into DB..."); // <-- Optional: Log before DB call
+    // Validate token if provided
+    if (invitationToken) {
+      const tokenCheck = await pool.query(
+        'SELECT * FROM invitation_tokens WHERE token = $1',
+        [invitationToken]
+      );
+      
+      if (tokenCheck.rows.length === 0) {
+        return res.status(400).json({ success: false, message: 'Invalid invitation token' });
+      }
+      
+      if (tokenCheck.rows[0].is_used) {
+        return res.status(410).json({ success: false, message: 'This link has already been used' });
+      }
+      
+      // Mark token as used
+      await pool.query(
+        'UPDATE invitation_tokens SET is_used = TRUE, used_at = CURRENT_TIMESTAMP WHERE token = $1',
+        [invitationToken]
+      );
+    }
+
     const result = await pool.query(
       `INSERT INTO assessments 
       (user_id, session_id, score, max_score, level, class, description, 
@@ -65,14 +82,13 @@ app.post('/api/assessments', async (req, res) => {
         JSON.stringify(personalRecommendations), JSON.stringify(organizationalRecommendations), JSON.stringify(answers)
       ]
     );
-    console.log("DEBUG: Insert successful, sending response."); // <-- Optional: Log after DB call
+    
     res.status(201).json({ success: true, data: result.rows[0] });
   } catch (err) {
     console.error('Error saving assessment:', err);
     res.status(500).json({ success: false, message: 'Failed to save assessment' });
   }
 });
-
 // 2. Get User History (for the specific anonymous session)
 app.get('/api/assessments/user/:sessionId', async (req, res) => {
   const { sessionId } = req.params;
@@ -185,59 +201,6 @@ app.get('/api/validate-token/:token', async (req, res) => {
   } catch (err) {
     console.error('Token validation error:', err);
     res.status(500).json({ success: false, message: 'Server error' });
-  }
-});
-
-// Updated POST /api/assessments endpoint
-app.post('/api/assessments', async (req, res) => {
-  const {
-    userId, sessionId, score, maxScore, level, class: stressClass,
-    description, sectionScores, sectionLevels, highestSection,
-    personalRecommendations, organizationalRecommendations, answers,
-    invitationToken // NEW: token from client
-  } = req.body;
-
-  try {
-    // Validate token if provided
-    if (invitationToken) {
-      const tokenCheck = await pool.query(
-        'SELECT * FROM invitation_tokens WHERE token = $1',
-        [invitationToken]
-      );
-      
-      if (tokenCheck.rows.length === 0) {
-        return res.status(400).json({ success: false, message: 'Invalid invitation token' });
-      }
-      
-      if (tokenCheck.rows[0].is_used) {
-        return res.status(410).json({ success: false, message: 'This link has already been used' });
-      }
-      
-      // Mark token as used
-      await pool.query(
-        'UPDATE invitation_tokens SET is_used = TRUE, used_at = CURRENT_TIMESTAMP WHERE token = $1',
-        [invitationToken]
-      );
-    }
-
-    const result = await pool.query(
-      `INSERT INTO assessments 
-      (user_id, session_id, score, max_score, level, class, description, 
-       section_scores, section_levels, highest_section, 
-       personal_recommendations, organizational_recommendations, answers)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-       RETURNING *`,
-      [
-        userId, sessionId, score, maxScore, level, stressClass, description,
-        JSON.stringify(sectionScores), JSON.stringify(sectionLevels), highestSection,
-        JSON.stringify(personalRecommendations), JSON.stringify(organizationalRecommendations), JSON.stringify(answers)
-      ]
-    );
-    
-    res.status(201).json({ success: true, data: result.rows[0] });
-  } catch (err) {
-    console.error('Error saving assessment:', err);
-    res.status(500).json({ success: false, message: 'Failed to save assessment' });
   }
 });
 

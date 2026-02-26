@@ -1327,9 +1327,7 @@ async function checkAdminAccess() {
   
   if (token) {
     adminToken = token;
-    // Store in sessionStorage (not localStorage) for security
     sessionStorage.setItem('adminToken', token);
-    // Remove from URL to avoid sharing
     window.history.replaceState({}, document.title, window.location.pathname);
   } else {
     adminToken = sessionStorage.getItem('adminToken');
@@ -1342,19 +1340,33 @@ async function checkAdminAccess() {
       });
       if (response.ok) {
         isAdmin = true;
-        applyAdminUI();
+        currentUserRole = 'admin'; // Add this line
+        applyRoleBasedUI(); // Add this line to sync UI
+        applyAdminUI(); // Then apply admin-specific additions
         showToast('Admin mode enabled', 'success');
+        return; // Exit early to avoid participant role override
       }
     } catch (err) {
       console.error('Admin check failed:', err);
       sessionStorage.removeItem('adminToken');
     }
   }
+  
+  // Only validate invitation token if not admin
+  if (!isAdmin) {
+    validateInvitationToken();
+  }
 }
 
 // Apply admin-specific UI changes
 function applyAdminUI() {
-  // Show admin controls in history header
+  // Sync the role variable to ensure applyRoleBasedUI works correctly
+  currentUserRole = 'admin';
+  
+  // Apply role-based UI first to show all elements
+  applyRoleBasedUI();
+  
+  // Then add admin-specific controls
   const historyHeader = document.querySelector('.history-header');
   if (historyHeader && !document.getElementById('admin-token-panel')) {
     const adminPanel = document.createElement('div');
@@ -1371,16 +1383,10 @@ function applyAdminUI() {
     historyHeader.appendChild(adminPanel);
   }
   
-  // Show aggregate section for admin
+  // Ensure aggregate section is visible
   const aggregateSection = document.getElementById('aggregate-section');
   if (aggregateSection) {
     aggregateSection.style.display = 'block';
-  }
-  
-  // Enable history actions for admin
-  const historyPage = document.getElementById('history-page');
-  if (historyPage) {
-    historyPage.style.display = 'block';
   }
 }
 
