@@ -279,8 +279,8 @@ app.post('/api/admin/generate-tokens', async (req, res) => {
   const { count = 1, role = 'participant' } = req.body;
   
   // Simple auth check - replace with proper authentication
-  const adminKey = req.headers['x-admin-key'];
-  if (adminKey !== process.env.ADMIN_SECRET_KEY) {
+const adminToken = req.headers['x-admin-token'];
+if (adminToken !== process.env.ADMIN_SECRET_KEY) {
     return res.status(403).json({ success: false, message: 'Unauthorized' });
   }
   

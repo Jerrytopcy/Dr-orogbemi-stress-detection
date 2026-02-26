@@ -1787,31 +1787,33 @@ async function revokeToken(token) {
 }
 
 
+// Replace the simple validateAdminAccess with this version
 const validateAdminAccess = async (req, res, next) => {
   const adminToken = req.headers['x-admin-token'] || req.query.admin_token;
   const validToken = process.env.ADMIN_SECRET_KEY;
   
   console.log('Admin access check:', {
     tokenProvided: !!adminToken,
-    path: req.path
+    path: req.path,
+    tokenLength: adminToken ? adminToken.length : 0
   });
   
   if (!validToken && !adminToken) {
     return res.status(500).json({ success: false, message: 'Admin key not configured' });
   }
   
-  // Check against master secret first (fast path)
+  // Fast path: check against master secret first
   if (adminToken === validToken) {
-    console.log('Admin access granted via master key');
+    showToast('Admin access granted via master key');
     return next();
   }
   
-  // Check against generated tokens in database
+  // Secondary path: check against generated tokens in database
   if (adminToken) {
     try {
       const tokenCheck = await pool.query(
-        `SELECT * FROM invitation_tokens 
-         WHERE token = $1 
+        `SELECT * FROM invitation_tokens
+         WHERE token = $1
          AND user_role = 'admin'
          AND is_used = FALSE
          AND (expires_at IS NULL OR expires_at > NOW())`,
@@ -1819,7 +1821,7 @@ const validateAdminAccess = async (req, res, next) => {
       );
       
       if (tokenCheck.rows.length > 0) {
-        console.log('Admin access granted via generated token');
+        showToast('Admin access granted via generated token');
         return next();
       }
     } catch (err) {
