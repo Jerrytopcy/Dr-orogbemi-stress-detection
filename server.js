@@ -12,6 +12,24 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' })); // Increase limit for large assessment objects
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+// Add this helper function near the top of server.js, after pool initialization
+const validateAdminAccess = (req, res, next) => {
+  const adminToken = req.headers['x-admin-token'] || req.query.admin_token;
+  const validToken = process.env.ADMIN_SECRET_KEY;
+  
+  if (!validToken) {
+    return res.status(500).json({ success: false, message: 'Admin key not configured' });
+  }
+  
+  if (adminToken !== validToken) {
+    return res.status(403).json({ success: false, message: 'Unauthorized' });
+  }
+  
+  next();
+};
+
+
 // Database Connection
 // Railway automatically provides DATABASE_URL environment variable
 const pool = new Pool({
@@ -19,39 +37,8 @@ const pool = new Pool({
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
-// Initialize Database Table
-const initDB = async () => {
-  try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS assessments (
-        id SERIAL PRIMARY KEY,
-        user_id VARCHAR(255) NOT NULL,
-        session_id VARCHAR(255) NOT NULL,
-        score INTEGER NOT NULL,
-        max_score INTEGER DEFAULT 100,
-        level VARCHAR(50) NOT NULL,
-        class VARCHAR(50) NOT NULL,
-        description TEXT,
-        section_scores JSONB,
-        section_levels JSONB,
-        highest_section VARCHAR(255),
-        personal_recommendations JSONB,
-        organizational_recommendations JSONB,
-        answers JSONB,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-    console.log('✅ Database table initialized');
-  } catch (err) {
-    console.error('❌ Database initialization error:', err);
-  }
-};
-
-initDB();
-
 // --- API ROUTES ---
 
-// 1. Submit Assessment
 // 1. Submit Assessment
 app.post('/api/assessments', async (req, res) => {
   console.log("DEBUG: POST /api/assessments received"); // <-- ADD THIS LINE
@@ -162,6 +149,215 @@ app.get('/api/assessments/aggregate', async (req, res) => {
   } catch (err) {
     console.error('Aggregate error:', err);
     res.status(500).json({ success: false, message: 'Failed to fetch aggregate data' });
+  }
+});
+
+// Validate invitation token
+app.get('/api/validate-token/:token', async (req, res) => {
+  const { token } = req.params;
+  try {
+    const result = await pool.query(
+      'SELECT * FROM invitation_tokens WHERE token = $1',
+      [token]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Invalid token' });
+    }
+    
+    const tokenData = result.rows[0];
+    
+    if (tokenData.is_used) {
+      return res.status(410).json({ 
+        success: false, 
+        message: 'This assessment link has already been used',
+        used_at: tokenData.used_at 
+      });
+    }
+    
+    res.json({ 
+      success: true, 
+      data: { 
+        token: tokenData.token,
+        user_role: tokenData.user_role 
+      } 
+    });
+  } catch (err) {
+    console.error('Token validation error:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+// Updated POST /api/assessments endpoint
+app.post('/api/assessments', async (req, res) => {
+  const {
+    userId, sessionId, score, maxScore, level, class: stressClass,
+    description, sectionScores, sectionLevels, highestSection,
+    personalRecommendations, organizationalRecommendations, answers,
+    invitationToken // NEW: token from client
+  } = req.body;
+
+  try {
+    // Validate token if provided
+    if (invitationToken) {
+      const tokenCheck = await pool.query(
+        'SELECT * FROM invitation_tokens WHERE token = $1',
+        [invitationToken]
+      );
+      
+      if (tokenCheck.rows.length === 0) {
+        return res.status(400).json({ success: false, message: 'Invalid invitation token' });
+      }
+      
+      if (tokenCheck.rows[0].is_used) {
+        return res.status(410).json({ success: false, message: 'This link has already been used' });
+      }
+      
+      // Mark token as used
+      await pool.query(
+        'UPDATE invitation_tokens SET is_used = TRUE, used_at = CURRENT_TIMESTAMP WHERE token = $1',
+        [invitationToken]
+      );
+    }
+
+    const result = await pool.query(
+      `INSERT INTO assessments 
+      (user_id, session_id, score, max_score, level, class, description, 
+       section_scores, section_levels, highest_section, 
+       personal_recommendations, organizational_recommendations, answers)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+       RETURNING *`,
+      [
+        userId, sessionId, score, maxScore, level, stressClass, description,
+        JSON.stringify(sectionScores), JSON.stringify(sectionLevels), highestSection,
+        JSON.stringify(personalRecommendations), JSON.stringify(organizationalRecommendations), JSON.stringify(answers)
+      ]
+    );
+    
+    res.status(201).json({ success: true, data: result.rows[0] });
+  } catch (err) {
+    console.error('Error saving assessment:', err);
+    res.status(500).json({ success: false, message: 'Failed to save assessment' });
+  }
+});
+
+// Generate new invitation tokens (protect this endpoint in production)
+app.post('/api/admin/generate-tokens', async (req, res) => {
+  const { count = 1, role = 'participant' } = req.body;
+  
+  // Simple auth check - replace with proper authentication
+  const adminKey = req.headers['x-admin-key'];
+  if (adminKey !== process.env.ADMIN_SECRET_KEY) {
+    return res.status(403).json({ success: false, message: 'Unauthorized' });
+  }
+  
+  try {
+    const tokens = [];
+    for (let i = 0; i < count; i++) {
+      const token = 'tok_' + Math.random().toString(36).substr(2, 16) + Date.now().toString(36);
+      const result = await pool.query(
+        `INSERT INTO invitation_tokens (token, user_role) VALUES ($1, $2) RETURNING *`,
+        [token, role]
+      );
+      tokens.push(result.rows[0]);
+    }
+    
+    res.json({ success: true, data: tokens });
+  } catch (err) {
+    console.error('Token generation error:', err);
+    res.status(500).json({ success: false, message: 'Failed to generate tokens' });
+  }
+});
+
+// Add after your existing routes, before app.listen()
+
+// Generate one-time assessment tokens (Admin only)
+app.post('/api/admin/generate-token', validateAdminAccess, async (req, res) => {
+  const { role = 'participant', count = 1, expires_hours = 168 } = req.body; // default: 7 days
+  
+  try {
+    const tokens = [];
+    
+    for (let i = 0; i < count; i++) {
+      // Generate cryptographically secure token
+      const crypto = require('crypto');
+      const token = 'tok_' + crypto.randomBytes(16).toString('hex');
+      const expiresAt = new Date(Date.now() + expires_hours * 60 * 60 * 1000);
+      
+      const result = await pool.query(
+        `INSERT INTO invitation_tokens (token, user_role, expires_at) 
+         VALUES ($1, $2, $3) RETURNING *`,
+        [token, role, expiresAt]
+      );
+      
+      tokens.push(result.rows[0]);
+    }
+    
+    res.json({ 
+      success: true, 
+      message: `Generated ${count} token(s)`,
+      data: tokens.map(t => ({
+        token: t.token,
+        role: t.user_role,
+        expires_at: t.expires_at,
+        link: `${process.env.APP_URL || 'https://dr-orogbemi-stress-detection-production.up.railway.app'}/?token=${t.token}`
+      }))
+    });
+    
+  } catch (err) {
+    console.error('Token generation error:', err);
+    res.status(500).json({ success: false, message: 'Failed to generate tokens' });
+  }
+});
+
+// List generated tokens (Admin only - for management)
+app.get('/api/admin/tokens', validateAdminAccess, async (req, res) => {
+  const { limit = 50, include_used = false } = req.query;
+  
+  try {
+    const query = include_used === 'true' 
+      ? 'SELECT * FROM invitation_tokens ORDER BY created_at DESC LIMIT $1'
+      : 'SELECT * FROM invitation_tokens WHERE is_used = FALSE AND (expires_at IS NULL OR expires_at > NOW()) ORDER BY created_at DESC LIMIT $1';
+    
+    const result = await pool.query(query, [parseInt(limit)]);
+    
+    res.json({ 
+      success: true, 
+      data: result.rows.map(t => ({
+        id: t.id,
+        token: t.token,
+        role: t.user_role,
+        is_used: t.is_used,
+        used_at: t.used_at,
+        created_at: t.created_at,
+        expires_at: t.expires_at,
+        link: `${process.env.APP_URL || 'https://dr-orogbemi-stress-detection-production.up.railway.app'}/?token=${t.token}`
+      }))
+    });
+  } catch (err) {
+    console.error('Token list error:', err);
+    res.status(500).json({ success: false, message: 'Failed to fetch tokens' });
+  }
+});
+
+// Revoke a token (Admin only)
+app.delete('/api/admin/tokens/:token', validateAdminAccess, async (req, res) => {
+  const { token } = req.params;
+  
+  try {
+    const result = await pool.query(
+      'DELETE FROM invitation_tokens WHERE token = $1 RETURNING *',
+      [token]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Token not found' });
+    }
+    
+    res.json({ success: true, message: 'Token revoked successfully' });
+  } catch (err) {
+    console.error('Token revoke error:', err);
+    res.status(500).json({ success: false, message: 'Failed to revoke token' });
   }
 });
 

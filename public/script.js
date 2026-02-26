@@ -1,3 +1,8 @@
+// global variables section
+let currentInvitationToken = null;
+let currentUserRole = 'participant'; // 'participant' or 'admin'
+
+
 // Academic Stress Survey Questions
 // Total questions: 50 - distributed across 5 sections of 10 questions each.
 const academicStressQuestions = [
@@ -99,6 +104,7 @@ function initializeApp() {
     createdAt: new Date().toISOString()
   };
   showPage("home");
+  setTimeout(validateInvitationToken, 300);
 }
 
 function setupEventListeners() {
@@ -122,6 +128,11 @@ function setupEventListeners() {
 
 // Page Navigation
 function showPage(pageId) {
+  // Block history page for participants
+  if (pageId === 'history' && currentUserRole === 'participant') {
+    showToast('This section is not available', 'warning');
+    return;
+  }
   if (["dashboard", "history", "results"].includes(pageId)) {
     showLoadingScreen(`Loading ${pageId}...`);
     setTimeout(() => {
@@ -502,7 +513,8 @@ function submitAssessment() {
       sectionLevels: sectionLevels,
       highestSection: highestSection,
       personalRecommendations: personalRecommendations,
-      organizationalRecommendations: organizationalRecommendations
+      organizationalRecommendations: organizationalRecommendations,
+      invitationToken: currentInvitationToken || null 
     };
     
     // SEND TO SERVER
@@ -1224,4 +1236,77 @@ function loadHistory() {
             console.error('Failed to load history', err);
             container.innerHTML = `<p>Error loading history. Check connection.</p>`;
         });
+}
+// function to validate token from URL
+async function validateInvitationToken() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('token');
+  
+  if (!token) {
+    // No token - treat as regular session
+    currentUserRole = 'participant';
+    applyRoleBasedUI();
+    return;
+  }
+  
+  currentInvitationToken = token;
+  
+  try {
+    const response = await fetch(`/api/validate-token/${token}`);
+    const data = await response.json();
+    
+    if (data.success) {
+      currentUserRole = data.data.user_role;
+      applyRoleBasedUI();
+      showToast('Assessment link validated', 'success');
+    } else {
+      // Token invalid or already used
+      showTokenError(data.message);
+    }
+  } catch (err) {
+    console.error('Token validation failed:', err);
+    showToast('Could not validate assessment link', 'error');
+  }
+}
+
+function showTokenError(message) {
+  const container = document.querySelector('.container');
+  if (container) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 60px 20px;">
+        <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: var(--danger-color); margin-bottom: 20px;"></i>
+        <h2>Link Not Available</h2>
+        <p style="color: var(--text-secondary); margin: 20px 0;">${message}</p>
+        <p style="font-size: 0.9rem; color: var(--text-secondary);">
+          Each assessment link can only be used once for security and data integrity.
+        </p>
+        <button class="btn btn-primary" onclick="window.location.href='/'" style="margin-top: 20px;">
+          Return to Home
+        </button>
+      </div>
+    `;
+  }
+}
+
+function applyRoleBasedUI() {
+  // Hide history and aggregate sections for participants
+  const historyNav = document.querySelector('a[onclick="showPage(\'history\')"]');
+  const historyPage = document.getElementById('history-page');
+  const aggregateSection = document.getElementById('aggregate-section');
+  
+  if (currentUserRole === 'participant') {
+    if (historyNav) historyNav.style.display = 'none';
+    if (historyPage) historyPage.style.display = 'none';
+    if (aggregateSection) aggregateSection.style.display = 'none';
+    
+    // Also hide history-related quick actions
+    const historyAction = document.querySelector('.action-card[onclick="showPage(\'history\')"]');
+    if (historyAction) historyAction.style.display = 'none';
+    
+  } else if (currentUserRole === 'admin') {
+    // Admin sees everything - no changes needed
+    if (historyNav) historyNav.style.display = '';
+    if (historyPage) historyPage.style.display = '';
+    if (aggregateSection) aggregateSection.style.display = '';
+  }
 }
