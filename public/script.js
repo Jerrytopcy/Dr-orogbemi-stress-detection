@@ -222,49 +222,35 @@ function showEthicalModal() {
   });
 }
 
-function startAssessmentFromModal() {
-  // Double-check before starting from modal
-  hasCompletedAssessment().then(alreadyCompleted => {
-    if (alreadyCompleted) {
-      closeModal();
-      showToast('You have already completed your assessment for this session.', 'info');
-      return;
-    }
-    
+async function startAssessmentFromModal() {
+  const alreadyCompleted = await hasCompletedAssessment();
+
+  if (alreadyCompleted) {
     closeModal();
-    setTimeout(() => {
-      startAssessment();
-      const assessmentSection = document.getElementById('assessment-section');
-      if (assessmentSection) {
-        assessmentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 300);
-  });
+    showToast('You have already completed your assessment for this session.', 'info');
+    return;
+  }
+
+  closeModal();
+
+  setTimeout(() => {
+    startAssessment();
+
+    const assessmentSection = document.getElementById('assessment-section');
+    if (assessmentSection) {
+      assessmentSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  }, 300);
 }
 
 function closeModal() {
   document.getElementById("modal").classList.remove("active");
 }
 
-function startAssessmentFromModal() {
-  closeModal();
 
-  const questionsSection = document.getElementById("questions");
-  if (questionsSection) {
-    questionsSection.scrollIntoView({ behavior: "smooth" });
-  }
-}
-
-function startAssessmentFromModal() {
-  closeModal();
-  setTimeout(() => {
-    startAssessment();
-    const assessmentSection = document.getElementById("assessment-section");
-    if (assessmentSection) {
-      assessmentSection.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, 300);
-}
 
 // Loading Screen
 function showLoadingScreen(text = "Loading...") {
@@ -1362,7 +1348,7 @@ function showTokenError(message) {
         <p style="font-size: 0.9rem; color: var(--danger-color); background-color: white; padding:.5em;">
           Each assessment link can only be used once for security and data integrity.
         </p>
-        <button class="btn btn-primary" onclick="window.close() style="margin-top: 20px;">
+        <button class="btn btn-primary" onclick="window.close() style="margin-top: 50px;">
           <i class="fas fa-sign-out-alt"></i> Exit Application
         </button>
       </div>
