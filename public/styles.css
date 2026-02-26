@@ -2846,6 +2846,59 @@ html {
 }
 
 
+/* Admin Panel in History Header */
+.admin-panel {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
 
+/* Badge styles for token list */
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge.primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.badge.warning {
+  background-color: var(--warning-color);
+  color: white;
+}
+
+/* Form select styling */
+.form-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  margin-top: 5px;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* Token list table responsive */
+@media (max-width: 600px) {
+  #token-list-body table {
+    font-size: 0.8rem;
+  }
+  #token-list-body th,
+  #token-list-body td {
+    padding: 8px 5px;
+  }
+}
 
 

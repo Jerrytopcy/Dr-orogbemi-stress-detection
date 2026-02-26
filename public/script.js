@@ -104,7 +104,10 @@ function initializeApp() {
     createdAt: new Date().toISOString()
   };
   showPage("home");
-  setTimeout(validateInvitationToken, 300);
+  setTimeout(() => {
+    checkAdminAccess();
+    validateInvitationToken();
+  }, 300);
 }
 
 function setupEventListeners() {
@@ -129,9 +132,11 @@ function setupEventListeners() {
 // Page Navigation
 function showPage(pageId) {
   // Block history page for participants
-  if (pageId === 'history' && currentUserRole === 'participant') {
-    showToast('This section is not available', 'warning');
-    return;
+  if (currentInvitationToken && currentUserRole === 'participant') {
+    if (pageId === 'history' || pageId === 'settings') {
+      showToast('This section is not available for assessment participants', 'warning');
+      return;
+    }
   }
   if (["dashboard", "history", "results"].includes(pageId)) {
     showLoadingScreen(`Loading ${pageId}...`);
@@ -1308,5 +1313,300 @@ function applyRoleBasedUI() {
     if (historyNav) historyNav.style.display = '';
     if (historyPage) historyPage.style.display = '';
     if (aggregateSection) aggregateSection.style.display = '';
+  }
+}
+
+// Add to global variables section
+let isAdmin = false;
+let adminToken = null;
+
+// Add this function to check admin access on app load
+async function checkAdminAccess() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('admin_token');
+  
+  if (token) {
+    adminToken = token;
+    // Store in sessionStorage (not localStorage) for security
+    sessionStorage.setItem('adminToken', token);
+    // Remove from URL to avoid sharing
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else {
+    adminToken = sessionStorage.getItem('adminToken');
+  }
+  
+  if (adminToken) {
+    try {
+      const response = await fetch('/api/assessments/aggregate', {
+        headers: { 'x-admin-token': adminToken }
+      });
+      if (response.ok) {
+        isAdmin = true;
+        applyAdminUI();
+        showToast('Admin mode enabled', 'success');
+      }
+    } catch (err) {
+      console.error('Admin check failed:', err);
+      sessionStorage.removeItem('adminToken');
+    }
+  }
+}
+
+// Apply admin-specific UI changes
+function applyAdminUI() {
+  // Show admin controls in history header
+  const historyHeader = document.querySelector('.history-header');
+  if (historyHeader && !document.getElementById('admin-token-panel')) {
+    const adminPanel = document.createElement('div');
+    adminPanel.id = 'admin-token-panel';
+    adminPanel.className = 'admin-panel';
+    adminPanel.innerHTML = `
+      <button class="btn btn-primary" onclick="showTokenGenerator()">
+        <i class="fas fa-link"></i> Generate Assessment Links
+      </button>
+      <button class="btn btn-secondary" onclick="showTokenList()">
+        <i class="fas fa-list"></i> Manage Links
+      </button>
+    `;
+    historyHeader.appendChild(adminPanel);
+  }
+  
+  // Show aggregate section for admin
+  const aggregateSection = document.getElementById('aggregate-section');
+  if (aggregateSection) {
+    aggregateSection.style.display = 'block';
+  }
+  
+  // Enable history actions for admin
+  const historyPage = document.getElementById('history-page');
+  if (historyPage) {
+    historyPage.style.display = 'block';
+  }
+}
+
+// Show token generator modal
+function showTokenGenerator() {
+  const modal = document.getElementById('modal');
+  modal.innerHTML = `
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-link"></i> Generate Assessment Links</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Link Type</label>
+          <select id="token-role" class="form-select">
+            <option value="participant">Participant (one-time use)</option>
+            <option value="admin">Admin (full access)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Number of Links</label>
+          <input type="number" id="token-count" value="1" min="1" max="50">
+        </div>
+        <div class="form-group">
+          <label>Expiration</label>
+          <select id="token-expiry">
+            <option value="24">24 hours</option>
+            <option value="168" selected>7 days</option>
+            <option value="720">30 days</option>
+            <option value="">Never</option>
+          </select>
+        </div>
+        <div id="generated-links" style="display:none; margin-top:20px;">
+          <p><strong>Generated Links:</strong></p>
+          <div id="links-list" style="max-height:200px; overflow-y:auto; background:var(--surface-color); padding:10px; border-radius:6px; margin:10px 0;"></div>
+          <button class="btn btn-secondary btn-small" onclick="copyAllLinks()">
+            <i class="fas fa-copy"></i> Copy All
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="generateTokens()">
+          <i class="fas fa-plus"></i> Generate
+        </button>
+      </div>
+    </div>
+  `;
+  modal.classList.add('active');
+}
+
+// Generate tokens via API
+async function generateTokens() {
+  const role = document.getElementById('token-role').value;
+  const count = parseInt(document.getElementById('token-count').value) || 1;
+  const expires_hours = document.getElementById('token-expiry').value;
+  
+  const btn = document.querySelector('#modal .btn-primary');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+  
+  try {
+    const response = await fetch('/api/admin/generate-token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-admin-token': adminToken
+      },
+      body: JSON.stringify({
+        role,
+        count,
+        expires_hours: expires_hours ? parseInt(expires_hours) : null
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      const linksList = document.getElementById('links-list');
+      linksList.innerHTML = data.data.map(item => `
+        <div style="margin:8px 0; padding:8px; background:var(--background-color); border-radius:4px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+          <span style="font-size:0.85rem; word-break:break-all; flex:1;">${item.link}</span>
+          <button class="btn btn-small btn-secondary" onclick="copyToClipboard('${item.link}')">
+            <i class="fas fa-copy"></i>
+          </button>
+        </div>
+      `).join('');
+      
+      document.getElementById('generated-links').style.display = 'block';
+      showToast(`${count} link(s) generated successfully`, 'success');
+    } else {
+      showToast(data.message || 'Generation failed', 'error');
+    }
+  } catch (err) {
+    console.error('Generation error:', err);
+    showToast('Network error - check connection', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-plus"></i> Generate';
+  }
+}
+
+// Copy single link to clipboard
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('Link copied to clipboard', 'success');
+  }).catch(() => {
+    // Fallback for older browsers
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showToast('Link copied to clipboard', 'success');
+  });
+}
+
+// Copy all generated links
+function copyAllLinks() {
+  const links = document.querySelectorAll('#links-list span');
+  const allLinks = Array.from(links).map(el => el.textContent).join('\n');
+  copyToClipboard(allLinks);
+}
+
+// Show token management list
+async function showTokenList() {
+  const modal = document.getElementById('modal');
+  modal.innerHTML = `
+    <div class="modal-content" style="max-width:700px; max-height:80vh;">
+      <div class="modal-header">
+        <h3><i class="fas fa-list"></i> Manage Assessment Links</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="token-list-body" style="max-height:60vh; overflow-y:auto;">
+        <p style="text-align:center; color:var(--text-secondary);">Loading tokens...</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+        <button class="btn btn-primary" onclick="showTokenGenerator()">
+          <i class="fas fa-plus"></i> New Link
+        </button>
+      </div>
+    </div>
+  `;
+  modal.classList.add('active');
+  
+  await loadTokenList();
+}
+
+// Load and display token list
+async function loadTokenList() {
+  const container = document.getElementById('token-list-body');
+  
+  try {
+    const response = await fetch('/api/admin/tokens?include_used=false', {
+      headers: { 'x-admin-token': adminToken }
+    });
+    const data = await response.json();
+    
+    if (!data.success || data.data.length === 0) {
+      container.innerHTML = '<p style="text-align:center;">No active tokens found. Generate a new link to get started.</p>';
+      return;
+    }
+    
+    container.innerHTML = `
+      <table style="width:100%; border-collapse:collapse; font-size:0.9rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--border-color); text-align:left;">
+            <th style="padding:10px;">Role</th>
+            <th style="padding:10px;">Created</th>
+            <th style="padding:10px;">Expires</th>
+            <th style="padding:10px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.data.map(token => `
+            <tr style="border-bottom:1px solid var(--border-color);">
+              <td style="padding:10px;">
+                <span class="badge ${token.role === 'admin' ? 'warning' : 'primary'}">
+                  ${token.role}
+                </span>
+              </td>
+              <td style="padding:10px;">${new Date(token.created_at).toLocaleDateString()}</td>
+              <td style="padding:10px;">
+                ${token.expires_at ? new Date(token.expires_at).toLocaleDateString() : 'Never'}
+              </td>
+              <td style="padding:10px;">
+                <button class="btn btn-small btn-secondary" onclick="copyToClipboard('${token.link}')" title="Copy link">
+                  <i class="fas fa-copy"></i>
+                </button>
+                <button class="btn btn-small btn-danger" onclick="revokeToken('${token.token}')" title="Revoke">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  } catch (err) {
+    console.error('Load tokens error:', err);
+    container.innerHTML = '<p style="text-align:center; color:var(--danger-color);">Failed to load tokens</p>';
+  }
+}
+
+// Revoke a token
+async function revokeToken(token) {
+  if (!confirm('Revoke this link? It will no longer work.')) return;
+  
+  try {
+    const response = await fetch(`/api/admin/tokens/${token}`, {
+      method: 'DELETE',
+      headers: { 'x-admin-token': adminToken }
+    });
+    const data = await response.json();
+    
+    if (data.success) {
+      showToast('Link revoked', 'success');
+      await loadTokenList();
+    } else {
+      showToast(data.message || 'Revocation failed', 'error');
+    }
+  } catch (err) {
+    console.error('Revoke error:', err);
+    showToast('Network error', 'error');
   }
 }
