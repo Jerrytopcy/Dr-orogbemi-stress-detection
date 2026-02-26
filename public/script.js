@@ -1477,7 +1477,7 @@ async function checkAdminAccess() {
     sessionStorage.setItem('adminToken', token);
     window.history.replaceState({}, document.title, window.location.pathname);
   } else {
-    adminToken = sessionStorage.getItem('adminToken');
+    adminToken = sessionStorage.getItem('adminToken') || localStorage.getItem('adminToken');
   }
   
   if (adminToken) {
@@ -1487,19 +1487,18 @@ async function checkAdminAccess() {
       });
       if (response.ok) {
         isAdmin = true;
-        currentUserRole = 'admin'; // Add this line
-        applyRoleBasedUI(); // Add this line to sync UI
-        applyAdminUI(); // Then apply admin-specific additions
+        currentUserRole = 'admin';
+        applyRoleBasedUI();
+        applyAdminUI();
         showToast('Admin mode enabled', 'success');
-        return; // Exit early to avoid participant role override
+        return;
       }
     } catch (err) {
       console.error('Admin check failed:', err);
-      sessionStorage.removeItem('adminToken');
+      // Do not remove token on transient errors
     }
   }
   
-  // Only validate invitation token if not admin
   if (!isAdmin) {
     validateInvitationToken();
   }
