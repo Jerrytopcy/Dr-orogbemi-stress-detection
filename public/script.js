@@ -914,85 +914,89 @@ function createResultTrendChart() {
 
 // History & Data Management
 function loadHistory() {
-    const container = document.getElementById('history-content');
-    const aggregateSection = document.getElementById('aggregate-section');
-    if (!container) return;
-
-    // Show aggregate section only for admins
-    if (aggregateSection) {
-        aggregateSection.style.display = currentUserRole === 'admin' ? 'block' : 'none';
+  const container = document.getElementById('history-content');
+  const aggregateSection = document.getElementById('aggregate-section');
+  if (!container) return;
+  
+  // Show aggregate section only for admins
+  if (aggregateSection) {
+    aggregateSection.style.display = currentUserRole === 'admin' ? 'block' : 'none';
+  }
+  
+  // Determine endpoint and headers based on role
+  let url = `/api/assessments/user/${currentUser.sessionId}`;
+  let headers = {};
+  let isGlobalView = false;
+  
+  if (currentUserRole === 'admin' && adminToken) {
+    url = '/api/assessments/all';
+    headers['x-admin-token'] = adminToken;
+    isGlobalView = true;
+  }
+  
+  fetch(url, { headers })
+  .then(res => {
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
     }
-
-    // Determine endpoint and headers based on role
-    let url = `/api/assessments/user/${currentUser.sessionId}`;
-    let headers = {};
-
-    if (currentUserRole === 'admin' && adminToken) {
-        url = '/api/assessments/all';
-        headers['x-admin-token'] = adminToken;
+    return res.json();
+  })
+  .then(response => {
+    if (!response.success || !response.data || response.data.length === 0) {
+      container.innerHTML = `<div class="empty-state"><h3>No assessments found</h3><p>No assessments have been submitted yet.</p></div>`;
+      return;
     }
-
-    fetch(url, { headers })
-    .then(res => {
-        if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-    })
-    .then(response => {
-        if (!response.success || response.data.length === 0) {
-            renderHistoryList(container, []);
-            return;
-        }
-
-        const userResults = response.data.map(row => ({
-            id: row.id,
-            score: row.score,
-            maxScore: row.max_score,
-            level: row.level,
-            class: row.class,
-            description: row.description,
-            date: row.created_at,
-            sectionLevels: row.section_levels,
-            personalRecommendations: row.personal_recommendations,
-            organizationalRecommendations: row.organizational_recommendations,
-            sessionId: row.session_id || 'N/A',
-            userId: row.user_id || 'anonymous'
-        })).sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        renderHistoryList(container, userResults);
-    })
-    .catch(err => {
-        console.error('Failed to load history', err);
-        container.innerHTML = `<p>Error loading history. Check connection.</p>`;
-    });
+    
+    // For admins, we want to show ALL assessments, not filter by user
+    const userResults = response.data.map(row => ({
+      id: row.id,
+      score: row.score,
+      maxScore: row.max_score,
+      level: row.level,
+      class: row.class,
+      description: row.description,
+      date: row.created_at,
+      sectionLevels: typeof row.section_levels === 'string' ? JSON.parse(row.section_levels) : row.section_levels,
+      personalRecommendations: typeof row.personal_recommendations === 'string' ? JSON.parse(row.personal_recommendations) : row.personal_recommendations,
+      organizationalRecommendations: typeof row.organizational_recommendations === 'string' ? JSON.parse(row.organizational_recommendations) : row.organizational_recommendations,
+      sessionId: row.session_id || 'N/A',
+      userId: row.user_id || 'anonymous',
+      // Add flag to indicate if this is a global view item
+      isGlobalView: isGlobalView
+    })).sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    renderHistoryList(container, userResults, isGlobalView);
+  })
+  .catch(err => {
+    console.error('Failed to load history', err);
+    container.innerHTML = `<div class="error-state"><p>Error loading history. Check connection.</p></div>`;
+  });
 }
 
-function renderHistoryList(container, userResults) {
-    if (userResults.length === 0) {
-        container.innerHTML = `<div class="empty-state"><h3>No assessments yet</h3><p>Take your first stress assessment.</p></div>`;
-        return;
-    }
-
-    const isAdminView = currentUserRole === 'admin';
-
-    container.innerHTML = userResults.map((result) => `
-        <div class="history-item">
-            <div class="history-info">
-                <h4>Assessment - ${new Date(result.date).toLocaleDateString()}</h4>
-                ${isAdminView ? `<p style="font-size:0.8rem; color:var(--text-secondary);">Session: ${result.sessionId}</p>` : ''}
-                <p>${result.description}</p>
-            </div>
-            <div class="history-score">
-                <div class="score">${result.score}/${result.maxScore}</div>
-                <div class="level ${result.class}">${result.level}</div>
-            </div>
-            <div class="history-actions">
-                <button class="btn btn-small btn-secondary" onclick='viewReportFromObj(${JSON.stringify(result).replace(/'/g, "&#39;")})'>View Report</button>
-                <button class="btn btn-small btn-primary" onclick="downloadPDFReport('${result.id}')">Download PDF</button>
-            </div>
-        </div>
-    `).join("");
+function renderHistoryList(container, userResults, isGlobalView = false) {
+  if (userResults.length === 0) {
+    container.innerHTML = `<div class="empty-state"><h3>No assessments found</h3><p>No assessments have been submitted yet.</p></div>`;
+    return;
+  }
+  
+  container.innerHTML = userResults.map((result) => `
+    <div class="history-item">
+      <div class="history-info">
+        <h4>${isGlobalView ? 'Assessment' : 'Your Assessment'} - ${new Date(result.date).toLocaleDateString()}</h4>
+        ${isGlobalView ? `<p style="font-size:0.8rem; color:var(--text-secondary);">Session: ${result.sessionId}</p>` : ''}
+        ${isGlobalView ? `<p style="font-size:0.8rem; color:var(--text-secondary);">User: ${result.userId === 'anonymous' ? 'Anonymous' : result.userId}</p>` : ''}
+        <p>${result.description}</p>
+      </div>
+      <div class="history-score">
+        <div class="score">${result.score}/${result.maxScore}</div>
+        <div class="level ${result.class}">${result.level}</div>
+      </div>
+      <div class="history-actions">
+        <button class="btn btn-small btn-secondary" onclick='viewReportFromObj(${JSON.stringify(result).replace(/'/g, "&#39;")})'>View Report</button>
+        ${isGlobalView ? `<button class="btn btn-small btn-primary" onclick="downloadPDFReport('${result.id}')">Download PDF</button>` : ''}
+      </div>
+    </div>
+  `).join("");
 }
 
 function clearHistory() {
