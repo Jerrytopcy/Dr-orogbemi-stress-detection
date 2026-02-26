@@ -953,21 +953,28 @@ function loadHistory() {
         return;
       }
       
-      const assessments = response.data.map(row => ({
-        id: row.id,
-        score: row.score,
-        maxScore: row.max_score || row.maxScore,
-        level: row.level,
-        class: row.class,
-        description: row.description,
-        date: row.created_at || row.createdAt,
-        sectionLevels: typeof row.section_levels === 'string' ? JSON.parse(row.section_levels) : row.section_levels || row.sectionLevels,
-        personalRecommendations: typeof row.personal_recommendations === 'string' ? JSON.parse(row.personal_recommendations) : row.personal_recommendations,
-        organizationalRecommendations: typeof row.organizational_recommendations === 'string' ? JSON.parse(row.organizational_recommendations) : row.organizational_recommendations,
-        sessionId: row.session_id || row.sessionId,
-        userId: row.user_id || row.userId,
-        isGlobalView: isGlobalView
-      })).sort((a, b) => new Date(b.date) - new Date(a.date));
+     const assessments = response.data.map(row => ({
+  id: row.id,
+  score: row.score,
+  maxScore: row.max_score || row.maxScore,
+  level: row.level,
+  class: row.class,
+  description: row.description,
+  date: row.created_at || row.createdAt,  // Use created_at only
+  sectionLevels: typeof row.section_levels === 'string' 
+    ? JSON.parse(row.section_levels) 
+    : row.section_levels || row.sectionLevels,
+  personalRecommendations: typeof row.personal_recommendations === 'string' 
+    ? JSON.parse(row.personal_recommendations) 
+    : row.personal_recommendations,
+  organizationalRecommendations: typeof row.organizational_recommendations === 'string' 
+    ? JSON.parse(row.organizational_recommendations) 
+    : row.organizational_recommendations,
+  sessionId: row.session_id || row.sessionId,
+  userId: row.user_id || row.userId,
+  isGlobalView: isGlobalView
+  // Note: Do not reference row.updated_at
+})).sort((a, b) => new Date(b.date) - new Date(a.date));
       
       renderHistoryList(container, assessments, isGlobalView);
     })

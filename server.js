@@ -139,24 +139,24 @@ app.get('/api/assessments/user/:sessionId', async (req, res) => {
 });
 // Get all assessments (Admin only)
 app.get('/api/assessments/all', validateAdminAccess, async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 100;
-  const offset = (page - 1) * limit;
-  
   try {
-    const [result, countResult] = await Promise.all([
-      pool.query(
-        `SELECT id, user_id, session_id, score, max_score, level, class, 
-                description, section_scores, section_levels, highest_section,
-                personal_recommendations, organizational_recommendations, 
-                answers, created_at, updated_at
-         FROM assessments 
-         ORDER BY created_at DESC 
-         LIMIT $1 OFFSET $2`,
-        [limit, offset]
-      ),
-      pool.query('SELECT COUNT(*) FROM assessments')
-    ]);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 100;
+    const offset = (page - 1) * limit;
+    
+    const result = await pool.query(
+      `SELECT 
+         id, user_id, session_id, score, max_score, level, class, 
+         description, section_scores, section_levels, highest_section,
+         personal_recommendations, organizational_recommendations, 
+         answers, created_at
+       FROM assessments 
+       ORDER BY created_at DESC 
+       LIMIT $1 OFFSET $2`,
+      [limit, offset]
+    );
+    
+    const countResult = await pool.query('SELECT COUNT(*) FROM assessments');
     
     res.json({ 
       success: true, 
@@ -166,8 +166,11 @@ app.get('/api/assessments/all', validateAdminAccess, async (req, res) => {
       totalPages: Math.ceil(parseInt(countResult.rows[0].count) / limit)
     });
   } catch (err) {
-    console.error('Failed to fetch assessments:', err);
-    res.status(500).json({ success: false, message: 'Failed to fetch assessment data' });
+    console.error('Failed to fetch all assessments:', err);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to fetch assessment data' 
+    });
   }
 });
 // 3. Get Aggregate Data (For Admin/Overall Insights - e.g., "Is workload the biggest issue?")
