@@ -1348,54 +1348,59 @@ function exportAggregateReport() {
 
 // function to validate token from URL
 async function validateInvitationToken() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get('token');
-  
-  if (!token) {
-    currentUserRole = 'participant';
-    isTokenValidated = false;
-    tokenValidationStatus = 'missing';
-    applyRoleBasedUI();
-    blockAssessmentAccess('A valid assessment token is required to proceed.');
-    return;
-  }
-  
-  // If token changed, reset session to ensure fresh start and clean history
-  if (token !== currentInvitationToken) {
-    localStorage.removeItem('stressDetectSessionId');
-    currentInvitationToken = null;
-  }
-  
-  currentInvitationToken = token;
-  
-  try {
-    const response = await fetch(`/api/validate-token/${token}`);
-    const data = await response.json();
-    
-    if (data.success) {
-      currentUserRole = data.data.user_role;
-      isTokenValidated = true;
-      tokenValidationStatus = 'valid';
-      
-      // Generate new sessionId for this specific token session
-      const newSessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
-      localStorage.setItem('stressDetectSessionId', newSessionId);
-      currentUser.sessionId = newSessionId;
-      
-      applyRoleBasedUI();
-      showToast('Assessment link validated', 'success');
-    } else {
-      isTokenValidated = false;
-      tokenValidationStatus = data.message?.includes('already been used') ? 'used' : 'invalid';
-      showTokenError(data.message);
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    // If participant token exists clear admin credentials immediately
+    if (token) {
+        localStorage.removeItem('adminToken');
+        adminToken = null;
+        isAdmin = false;
+        currentUserRole = 'participant';
+        console.log('Participant token detected - admin credentials cleared');
     }
-  } catch (err) {
-    console.error('Token validation failed:', err);
-    isTokenValidated = false;
-    tokenValidationStatus = 'error';
-    showToast('Could not validate assessment link', 'error');
-    blockAssessmentAccess('Unable to verify your assessment link. Please check your connection.');
-  }
+
+    if (!token) {
+        currentUserRole = 'participant';
+        isTokenValidated = false;
+        tokenValidationStatus = 'missing';
+        applyRoleBasedUI();
+        blockAssessmentAccess('A valid assessment token is required to proceed.');
+        return;
+    }
+
+    // If token changed, reset session to ensure fresh start and clean history
+    if (token !== currentInvitationToken) {
+        localStorage.removeItem('stressDetectSessionId');
+        currentInvitationToken = null;
+    }
+
+    currentInvitationToken = token;
+    try {
+        const response = await fetch(`/api/validate-token/${token}`);
+        const data = await response.json();
+        if (data.success) {
+            currentUserRole = data.data.user_role;
+            isTokenValidated = true;
+            tokenValidationStatus = 'valid';
+            // Generate new sessionId for this specific token session
+            const newSessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('stressDetectSessionId', newSessionId);
+            currentUser.sessionId = newSessionId;
+            applyRoleBasedUI();
+            showToast('Assessment link validated', 'success');
+        } else {
+            isTokenValidated = false;
+            tokenValidationStatus = data.message?.includes('already been used') ? 'used' : 'invalid';
+            showTokenError(data.message);
+        }
+    } catch (err) {
+        console.error('Token validation failed:', err);
+        isTokenValidated = false;
+        tokenValidationStatus = 'error';
+        showToast('Could not validate assessment link', 'error');
+        blockAssessmentAccess('Unable to verify your assessment link. Please check your connection.');
+    }
 }
 
 function blockAssessmentAccess(message) {
@@ -1507,11 +1512,22 @@ let adminToken = null;
 async function checkAdminAccess() {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('admin_token');
-    
+    const participantToken = urlParams.get('token');
+
+    // If accessing via participant link do not restore admin from storage
+    if (participantToken) {
+        localStorage.removeItem('adminToken');
+        adminToken = null;
+        isAdmin = false;
+        currentUserRole = 'participant';
+        console.log('Participant link detected - admin access skipped');
+        return;
+    }
+
     if (token) {
         const newToken = token.trim();
         const storedToken = localStorage.getItem('adminToken');
-        
+
         // Clear storage if the URL token differs from what is saved
         if (newToken !== storedToken) {
             localStorage.removeItem('adminToken');
@@ -1519,10 +1535,10 @@ async function checkAdminAccess() {
             isAdmin = false;
             currentUserRole = 'participant';
         }
-        
+
         // Hold token in memory only - do NOT save to localStorage yet
         adminToken = newToken;
-        
+
         // Clean URL (remove token from address bar)
         window.history.replaceState({}, document.title, window.location.pathname);
         console.log('Admin token captured from URL, validating...');
@@ -1534,14 +1550,14 @@ async function checkAdminAccess() {
             console.log('Admin token retrieved from storage');
         }
     }
-    
+
     if (adminToken) {
         try {
             // Test against a PROTECTED endpoint that uses validateAdminAccess
             const response = await fetch('/api/assessments/all?limit=1', {
                 headers: { 'x-admin-token': adminToken }
             });
-            
+
             if (response.ok) {
                 // ONLY save to localStorage after successful validation
                 localStorage.setItem('adminToken', adminToken);
@@ -1561,7 +1577,7 @@ async function checkAdminAccess() {
             console.error('Admin check failed:', err);
             showToast('Admin verification failed - check connection', 'error');
         }
-        
+
         // Clear invalid or unverified token from storage and memory
         localStorage.removeItem('adminToken');
         adminToken = null;
@@ -1569,7 +1585,7 @@ async function checkAdminAccess() {
         currentUserRole = 'participant';
         applyRoleBasedUI();
     }
-    
+
     // If not admin, check for participant invitation token
     if (!isAdmin) {
         validateInvitationToken();
