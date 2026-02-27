@@ -1470,11 +1470,10 @@ async function hasCompletedAssessment() {
   }
 }
 
-// Add to global variables section
+//global variables section
 let isAdmin = false;
 let adminToken = null;
 
-// Add this function to check admin access on app load
 async function checkAdminAccess() {
   const urlParams = new URLSearchParams(window.location.search);
   const token = urlParams.get('admin_token');
@@ -1495,8 +1494,8 @@ async function checkAdminAccess() {
   
   if (adminToken) {
     try {
-      // Test the token against a protected endpoint
-      const response = await fetch('/api/assessments/aggregate', {
+      // Test against a PROTECTED endpoint that uses validateAdminAccess
+      const response = await fetch('/api/assessments/all?limit=1', {
         headers: { 'x-admin-token': adminToken }
       });
       
