@@ -1622,7 +1622,7 @@ async function generateTokens() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-admin-token': adminToken
+        'x-admin-token': MASTER_KEY
       },
       body: JSON.stringify({
         role,
