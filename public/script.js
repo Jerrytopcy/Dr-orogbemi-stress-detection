@@ -1517,16 +1517,17 @@ async function checkAdminAccess() {
             localStorage.removeItem('adminToken');
             adminToken = null;
             isAdmin = false;
+            currentUserRole = 'participant';
         }
         
+        // Hold token in memory only - do NOT save to localStorage yet
         adminToken = newToken;
-        localStorage.setItem('adminToken', adminToken);
         
         // Clean URL (remove token from address bar)
         window.history.replaceState({}, document.title, window.location.pathname);
-        console.log('Admin token set from URL');
+        console.log('Admin token captured from URL, validating...');
     } else {
-        // Only check localStorage
+        // Only check localStorage for existing valid session
         adminToken = localStorage.getItem('adminToken');
         if (adminToken) {
             adminToken = adminToken.trim();
@@ -1542,6 +1543,8 @@ async function checkAdminAccess() {
             });
             
             if (response.ok) {
+                // ONLY save to localStorage after successful validation
+                localStorage.setItem('adminToken', adminToken);
                 isAdmin = true;
                 currentUserRole = 'admin';
                 applyRoleBasedUI();
@@ -1556,12 +1559,15 @@ async function checkAdminAccess() {
             }
         } catch (err) {
             console.error('Admin check failed:', err);
+            showToast('Admin verification failed - check connection', 'error');
         }
         
-        // Clear invalid token from storage
+        // Clear invalid or unverified token from storage and memory
         localStorage.removeItem('adminToken');
         adminToken = null;
         isAdmin = false;
+        currentUserRole = 'participant';
+        applyRoleBasedUI();
     }
     
     // If not admin, check for participant invitation token
