@@ -1505,68 +1505,69 @@ let isAdmin = false;
 let adminToken = null;
 
 async function checkAdminAccess() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get('admin_token');
-  
-  if (token) {
-    const newToken = token.trim();
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('admin_token');
     
-    // If token changed, clear old session data to ensure fresh state
-    if (newToken !== adminToken) {
-      localStorage.removeItem('adminToken');
-      adminToken = null;
-      isAdmin = false;
+    if (token) {
+        const newToken = token.trim();
+        const storedToken = localStorage.getItem('adminToken');
+        
+        // Clear storage if the URL token differs from what is saved
+        if (newToken !== storedToken) {
+            localStorage.removeItem('adminToken');
+            adminToken = null;
+            isAdmin = false;
+        }
+        
+        adminToken = newToken;
+        localStorage.setItem('adminToken', adminToken);
+        
+        // Clean URL (remove token from address bar)
+        window.history.replaceState({}, document.title, window.location.pathname);
+        console.log('Admin token set from URL');
+    } else {
+        // Only check localStorage
+        adminToken = localStorage.getItem('adminToken');
+        if (adminToken) {
+            adminToken = adminToken.trim();
+            console.log('Admin token retrieved from storage');
+        }
     }
     
-    adminToken = newToken;
-    localStorage.setItem('adminToken', adminToken);
-    
-    // Clean URL (remove token from address bar)
-    window.history.replaceState({}, document.title, window.location.pathname);
-    console.log('Admin token set from URL');
-  } else {
-    // Only check localStorage
-    adminToken = localStorage.getItem('adminToken');
     if (adminToken) {
-      adminToken = adminToken.trim();
-      console.log('Admin token retrieved from storage');
-    }
-  }
-  
-  if (adminToken) {
-    try {
-      // Test against a PROTECTED endpoint that uses validateAdminAccess
-      const response = await fetch('/api/assessments/all?limit=1', {
-        headers: { 'x-admin-token': adminToken }
-      });
-      
-      if (response.ok) {
-        isAdmin = true;
-        currentUserRole = 'admin';
-        applyRoleBasedUI();
-        applyAdminUI();
-        showToast('Admin mode enabled', 'success');
-        console.log('Admin access confirmed');
-        return;
-      } else {
-        const errorData = await response.json().catch(() => ({}));
-        console.warn('Admin token rejected:', response.status, errorData.message);
-        showToast('Admin access denied - check token', 'warning');
-      }
-    } catch (err) {
-      console.error('Admin check failed:', err);
+        try {
+            // Test against a PROTECTED endpoint that uses validateAdminAccess
+            const response = await fetch('/api/assessments/all?limit=1', {
+                headers: { 'x-admin-token': adminToken }
+            });
+            
+            if (response.ok) {
+                isAdmin = true;
+                currentUserRole = 'admin';
+                applyRoleBasedUI();
+                applyAdminUI();
+                showToast('Admin mode enabled', 'success');
+                console.log('Admin access confirmed');
+                return;
+            } else {
+                const errorData = await response.json().catch(() => ({}));
+                console.warn('Admin token rejected:', response.status, errorData.message);
+                showToast('Admin access denied - check token', 'warning');
+            }
+        } catch (err) {
+            console.error('Admin check failed:', err);
+        }
+        
+        // Clear invalid token from storage
+        localStorage.removeItem('adminToken');
+        adminToken = null;
+        isAdmin = false;
     }
     
-    // Clear invalid token from storage
-    localStorage.removeItem('adminToken');
-    adminToken = null;
-    isAdmin = false;
-  }
-  
-  // If not admin, check for participant invitation token
-  if (!isAdmin) {
-    validateInvitationToken();
-  }
+    // If not admin, check for participant invitation token
+    if (!isAdmin) {
+        validateInvitationToken();
+    }
 }
 
 // Apply admin-specific UI changes
@@ -1890,6 +1891,6 @@ const validateAdminAccess = async (req, res, next) => {
 function closeApp() {
   localStorage.clear();
   sessionStorage.clear();
-
+    window.close()
   window.location.href = "https://www.google.com";
 }
