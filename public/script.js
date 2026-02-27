@@ -1348,44 +1348,54 @@ function exportAggregateReport() {
 
 // function to validate token from URL
 async function validateInvitationToken() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('token');
+  
+  if (!token) {
+    currentUserRole = 'participant';
+    isTokenValidated = false;
+    tokenValidationStatus = 'missing';
+    applyRoleBasedUI();
+    blockAssessmentAccess('A valid assessment token is required to proceed.');
+    return;
+  }
+  
+  // If token changed, reset session to ensure fresh start and clean history
+  if (token !== currentInvitationToken) {
+    localStorage.removeItem('stressDetectSessionId');
+    currentInvitationToken = null;
+  }
+  
+  currentInvitationToken = token;
+  
+  try {
+    const response = await fetch(`/api/validate-token/${token}`);
+    const data = await response.json();
     
-    if (!token) {
-        // No token provided - block assessment access
-        currentUserRole = 'participant';
-        isTokenValidated = false;
-        tokenValidationStatus = 'missing';
-        applyRoleBasedUI();
-        blockAssessmentAccess('A valid assessment token is required to proceed.');
-        return;
+    if (data.success) {
+      currentUserRole = data.data.user_role;
+      isTokenValidated = true;
+      tokenValidationStatus = 'valid';
+      
+      // Generate new sessionId for this specific token session
+      const newSessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('stressDetectSessionId', newSessionId);
+      currentUser.sessionId = newSessionId;
+      
+      applyRoleBasedUI();
+      showToast('Assessment link validated', 'success');
+    } else {
+      isTokenValidated = false;
+      tokenValidationStatus = data.message?.includes('already been used') ? 'used' : 'invalid';
+      showTokenError(data.message);
     }
-    
-    currentInvitationToken = token;
-    
-    try {
-        const response = await fetch(`/api/validate-token/${token}`);
-        const data = await response.json();
-        
-        if (data.success) {
-            currentUserRole = data.data.user_role;
-            isTokenValidated = true;
-            tokenValidationStatus = 'valid';
-            applyRoleBasedUI();
-            showToast('Assessment link validated', 'success');
-        } else {
-            // Token invalid or already used
-            isTokenValidated = false;
-            tokenValidationStatus = data.message?.includes('already been used') ? 'used' : 'invalid';
-            showTokenError(data.message);
-        }
-    } catch (err) {
-        console.error('Token validation failed:', err);
-        isTokenValidated = false;
-        tokenValidationStatus = 'error';
-        showToast('Could not validate assessment link', 'error');
-        blockAssessmentAccess('Unable to verify your assessment link. Please check your connection.');
-    }
+  } catch (err) {
+    console.error('Token validation failed:', err);
+    isTokenValidated = false;
+    tokenValidationStatus = 'error';
+    showToast('Could not validate assessment link', 'error');
+    blockAssessmentAccess('Unable to verify your assessment link. Please check your connection.');
+  }
 }
 
 function blockAssessmentAccess(message) {
@@ -1453,19 +1463,39 @@ function applyRoleBasedUI() {
 }
 
 // Check if user has already completed an assessment for this session
+// Check if user has already completed an assessment for THIS TOKEN
 async function hasCompletedAssessment() {
-  if (!currentUser || !currentUser.sessionId) return false;
+  // If no token is present, fall back to sessionId check (legacy support for local testing)
+  if (!currentInvitationToken) {
+    if (!currentUser || !currentUser.sessionId) return false;
+    try {
+      const response = await fetch(`/api/assessments/user/${currentUser.sessionId}`);
+      const data = await response.json();
+      return data.success && data.data && data.data.length > 0;
+    } catch (err) {
+      console.error('Error checking assessment status:', err);
+      return false;
+    }
+  }
   
+  // Primary check: Is this specific token marked as used?
   try {
-    const response = await fetch(`/api/assessments/user/${currentUser.sessionId}`);
-    const data = await response.json();
+    const response = await fetch(`/api/validate-token/${currentInvitationToken}`);
     
-    if (data.success && data.data && data.data.length > 0) {
+    // 410 Gone means the token is already used
+    if (response.status === 410) {
       return true;
     }
+    
+    // 200 OK means the token is valid and unused
+    if (response.ok) {
+      return false;
+    }
+    
+    // Any other error, assume not completed to allow retry
     return false;
   } catch (err) {
-    console.error('Error checking assessment status:', err);
+    console.error('Error checking token completion:', err);
     return false;
   }
 }
