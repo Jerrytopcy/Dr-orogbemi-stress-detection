@@ -133,7 +133,7 @@ function setupEventListeners() {
 }
 function navigateToAssessment() {
     if (!isTokenValidated) {
-        showModal(
+        showModal.innerHTML(
     'Access Required <i class="fas fa-info-circle" style="color:var(--primary-color);margin-left:6px;"></i>',
     `<div style="line-height:1.7;">
         <div style="background:var(--surface-color);padding:12px 16px;border-radius:6px;border-left:4px solid var(--primary-color);margin:12px 0;">
