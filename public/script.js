@@ -345,10 +345,28 @@ async function startAssessment() {
       // Enforce token requirement
     if (!isTokenValidated || tokenValidationStatus !== 'valid') {
         showModal(
-            'Access Required',
-            'A valid one-time assessment token is required to begin. Please use the link provided by your administrator.',
-            null
-        );
+    'Access Required <i class="fas fa-info-circle" style="color:var(--primary-color);margin-left:6px;"></i>',
+    `<div style="line-height:1.7;">
+        <div style="background:var(--surface-color);padding:12px 16px;border-radius:6px;border-left:4px solid var(--primary-color);margin:12px 0;">
+            <p style="margin:0;font-weight:500;">One-Time Assessment Link</p>
+            <p style="margin:4px 0 0 0;color:var(--text-secondary);font-size:0.95rem;">
+                This assessment requires a valid invitation link. Each link can only be used once.
+            </p>
+        </div>
+        <p style="margin:16px 0 8px 0;"><strong>Next steps:</strong></p>
+        <ul style="margin:0;padding-left:20px;color:var(--text-secondary);">
+            <li style="margin-bottom:6px;">Contact your administrator to request an assessment link</li>
+            <li>Use the unique URL provided to begin your assessment</li>
+        </ul>
+        <div style="background:#f0f9ff;padding:10px 12px;border-radius:6px;border:1px solid #bae6fd;margin-top:16px;">
+            <p style="margin:0;font-size:0.9rem;color:#0369a1;">
+                <i class="fas fa-shield-alt" style="margin-right:6px;"></i>
+                <strong>Note:</strong> Admin users can generate new links from the History section.
+            </p>
+        </div>
+    </div>`,
+    null
+);
         return;
     }
   // Check if user has already completed an assessment
@@ -1151,7 +1169,7 @@ ${message}`)) {
     return;
   }
   document.getElementById("modal-title").textContent = title;
-  document.getElementById("modal-message").textContent = message;
+  document.getElementById("modal-message").innerHTML = message;
   document.getElementById("modal").classList.add("active");
   const btn = document.getElementById("modal-confirm");
   btn.onclick = () => { closeModal(); if (onConfirm) onConfirm(); };
