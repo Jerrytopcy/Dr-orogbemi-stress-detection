@@ -134,7 +134,7 @@ function setupEventListeners() {
 function navigateToAssessment() {
     if (!isTokenValidated) {
         showModal(
-    `Access Required <i class="fas fa-info-circle" style="color:var(--primary-color);margin-left:6px;"></i>`,
+    'Access Required <i class="fas fa-info-circle" style="color:var(--primary-color);margin-left:6px;"></i>',
     `<div style="line-height:1.7;">
         <div style="background:var(--surface-color);padding:12px 16px;border-radius:6px;border-left:4px solid var(--primary-color);margin:12px 0;">
             <p style="margin:0;font-weight:500;">One-Time Assessment Link</p>
@@ -1168,7 +1168,7 @@ ${message}`)) {
     }
     return;
   }
-  document.getElementById("modal-title").textContent = title;
+  document.getElementById("modal-title").innerHTML = title;
   document.getElementById("modal-message").innerHTML = message;
   document.getElementById("modal").classList.add("active");
   const btn = document.getElementById("modal-confirm");
