@@ -274,35 +274,7 @@ app.get('/api/validate-token/:token', async (req, res) => {
   }
 });
 
-// Generate new invitation tokens (protect this endpoint in production)
-app.post('/api/admin/generate-tokens', async (req, res) => {
-  const { count = 1, role = 'participant' } = req.body;
-  
-  // Simple auth check - replace with proper authentication
-const adminToken = req.headers['x-admin-token'];
-if (adminToken !== process.env.ADMIN_SECRET_KEY) {
-    return res.status(403).json({ success: false, message: 'Unauthorized' });
-  }
-  
-  try {
-    const tokens = [];
-    for (let i = 0; i < count; i++) {
-      const token = 'tok_' + Math.random().toString(36).substr(2, 16) + Date.now().toString(36);
-      const result = await pool.query(
-        `INSERT INTO invitation_tokens (token, user_role) VALUES ($1, $2) RETURNING *`,
-        [token, role]
-      );
-      tokens.push(result.rows[0]);
-    }
-    
-    res.json({ success: true, data: tokens });
-  } catch (err) {
-    console.error('Token generation error:', err);
-    res.status(500).json({ success: false, message: 'Failed to generate tokens' });
-  }
-});
 
-// Add after your existing routes, before app.listen()
 
 // Generate one-time assessment tokens (Admin only)
 app.post('/api/admin/generate-token', validateAdminAccess, async (req, res) => {
