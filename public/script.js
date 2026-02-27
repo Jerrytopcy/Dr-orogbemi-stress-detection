@@ -1889,8 +1889,8 @@ const validateAdminAccess = async (req, res, next) => {
 };
 
 function closeApp() {
-  localStorage.clear();
-  sessionStorage.clear();
+  // localStorage.clear();
+  // sessionStorage.clear();
 
   window.location.href = "https://www.google.com";
 }
