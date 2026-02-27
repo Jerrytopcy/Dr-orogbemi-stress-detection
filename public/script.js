@@ -132,15 +132,98 @@ function setupEventListeners() {
   if (submitBtn) submitBtn.addEventListener("click", submitAssessment);
 }
 function navigateToAssessment() {
-    if (!isTokenValidated) {
-        showModal(
-            'Token Required',
-            'This assessment requires a valid one-time access link. Please contact your administrator for access.',
-            null
-        );
+    // Admin users bypass token check and go directly to history for link management
+    if (currentUserRole === 'admin') {
+        showToast('Admin access granted - generate participant links from History', 'success');
+        showPage('history');
+        // Ensure admin UI elements are rendered
+        setTimeout(() => {
+            applyAdminUI();
+        }, 300);
         return;
     }
+
+    // Participant flow - require validated one-time token
+    if (!isTokenValidated || tokenValidationStatus !== 'valid') {
+        showAccessRequiredModal();
+        return;
+    }
+
+    // Validated participant proceeds to assessment dashboard
     showPage('dashboard');
+    setTimeout(() => {
+        showEthicalModal();
+    }, 500);
+}
+
+// Enhanced modal with info icon and styled messaging
+function showAccessRequiredModal() {
+    const modalHtml = `
+        <div class="modal-content" style="max-width:520px;">
+            <div class="modal-header" style="background:linear-gradient(135deg, var(--primary-color), var(--primary-dark)); color:white; padding:18px 24px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <i class="fas fa-info-circle" style="font-size:1.4rem;"></i>
+                    <h3 style="margin:0; font-size:1.3rem;">Access Required</h3>
+                </div>
+                <button class="modal-close" onclick="closeModal()" style="color:white; opacity:0.9; background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            <div class="modal-body" style="padding:24px; line-height:1.7;">
+                <div style="background:var(--surface-color); padding:16px; border-radius:8px; border-left:4px solid var(--warning-color); margin-bottom:16px;">
+                    <p style="margin:0 0 8px 0; font-weight:600; color:var(--text-primary);">
+                        <i class="fas fa-link" style="margin-right:6px;"></i>One-Time Assessment Link
+                    </p>
+                    <p style="margin:0; color:var(--text-secondary); font-size:0.95rem;">
+                        This assessment requires a valid invitation link. Each link can only be used once for security and data integrity.
+                    </p>
+                </div>
+                
+                <div style="margin:20px 0;">
+                    <p style="margin:0 0 12px 0; color:var(--text-primary);">
+                        <strong>Next steps:</strong>
+                    </p>
+                    <ul style="margin:0; padding-left:20px; color:var(--text-secondary);">
+                        <li style="margin-bottom:8px;">Contact your administrator to request an assessment link</li>
+                        <li style="margin-bottom:8px;">Use the unique URL provided to begin your assessment</li>
+                        <li>Complete all 50 questions in a single session for accurate results</li>
+                    </ul>
+                </div>
+                
+                <div style="background:#f0f9ff; padding:12px; border-radius:6px; border:1px solid #bae6fd; margin-top:16px;">
+                    <p style="margin:0; font-size:0.9rem; color:#0369a1;">
+                        <i class="fas fa-shield-alt" style="margin-right:6px;"></i>
+                        <strong>Note:</strong> Admin users can generate new links from the History section.
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding:16px 24px; border-top:1px solid var(--border-color); display:flex; gap:12px; justify-content:flex-end;">
+                <button class="btn btn-secondary" onclick="closeModal()" style="padding:10px 20px;">
+                    Close
+                </button>
+                <button class="btn btn-primary" onclick="contactAdmin()" style="padding:10px 20px; display:flex; align-items:center; gap:8px;">
+                    <i class="fas fa-envelope"></i>
+                    Contact Admin
+                </button>
+            </div>
+        </div>
+    `;
+    
+    const modal = document.getElementById('modal');
+    modal.innerHTML = modalHtml;
+    modal.classList.add('active');
+}
+
+// Optional helper - opens email or shows admin contact info
+function contactAdmin() {
+    // Customize this based on your deployment
+    const adminEmail = 'admin@stressdetect.local';
+    const subject = 'Request for Stress Assessment Access Link';
+    const body = 'Hello, I would like to request a one-time access link for the Academic Stress Assessment.';
+    
+    // Try to open email client
+    window.location.href = `mailto:${adminEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    
+    closeModal();
+    showToast('Email client opened - please complete your request', 'info', 4000);
 }
 
 // Page Navigation
