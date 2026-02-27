@@ -1508,29 +1508,28 @@ async function checkAdminAccess() {
   const urlParams = new URLSearchParams(window.location.search);
   const token = urlParams.get('admin_token');
   
-  // Check if token is present in URL
   if (token) {
     const newToken = token.trim();
     
     // If token changed, clear old session data to ensure fresh state
     if (newToken !== adminToken) {
-      sessionStorage.removeItem('adminToken');
+      localStorage.removeItem('adminToken');
       adminToken = null;
       isAdmin = false;
     }
     
     adminToken = newToken;
-    sessionStorage.setItem('adminToken', adminToken);
+    localStorage.setItem('adminToken', adminToken);
     
     // Clean URL (remove token from address bar)
     window.history.replaceState({}, document.title, window.location.pathname);
     console.log('Admin token set from URL');
   } else {
-    // Only check sessionStorage (removed localStorage)
-    adminToken = sessionStorage.getItem('adminToken');
+    // Only check localStorage
+    adminToken = localStorage.getItem('adminToken');
     if (adminToken) {
       adminToken = adminToken.trim();
-      console.log('Admin token retrieved from session');
+      console.log('Admin token retrieved from storage');
     }
   }
   
@@ -1558,8 +1557,8 @@ async function checkAdminAccess() {
       console.error('Admin check failed:', err);
     }
     
-    // Clear invalid token from session
-    sessionStorage.removeItem('adminToken');
+    // Clear invalid token from storage
+    localStorage.removeItem('adminToken');
     adminToken = null;
     isAdmin = false;
   }
@@ -1889,8 +1888,8 @@ const validateAdminAccess = async (req, res, next) => {
 };
 
 function closeApp() {
-  // localStorage.clear();
-  // sessionStorage.clear();
+  localStorage.clear();
+  sessionStorage.clear();
 
   window.location.href = "https://www.google.com";
 }
