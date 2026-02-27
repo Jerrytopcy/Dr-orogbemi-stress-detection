@@ -1431,7 +1431,7 @@ function showTokenError(message) {
         <p style="font-size: 0.9rem; color: var(--danger-color); background-color: white; padding:.5em;">
           Each assessment link can only be used once for security and data integrity.
         </p>
-        <button class="btn btn-primary" onclick="window.close()" style="margin-top: 50px;">
+        <button class="btn btn-primary" onclick="closeApp()" style="margin-top: 50px;">
           <i class="fas fa-sign-out-alt"></i> Exit Application
         </button>
       </div>
@@ -1508,17 +1508,29 @@ async function checkAdminAccess() {
   const urlParams = new URLSearchParams(window.location.search);
   const token = urlParams.get('admin_token');
   
+  // Check if token is present in URL
   if (token) {
-    adminToken = token.trim();
+    const newToken = token.trim();
+    
+    // If token changed, clear old session data to ensure fresh state
+    if (newToken !== adminToken) {
+      sessionStorage.removeItem('adminToken');
+      adminToken = null;
+      isAdmin = false;
+    }
+    
+    adminToken = newToken;
     sessionStorage.setItem('adminToken', adminToken);
-    localStorage.setItem('adminToken', adminToken);
+    
+    // Clean URL (remove token from address bar)
     window.history.replaceState({}, document.title, window.location.pathname);
     console.log('Admin token set from URL');
   } else {
-    adminToken = sessionStorage.getItem('adminToken') || localStorage.getItem('adminToken');
+    // Only check sessionStorage (removed localStorage)
+    adminToken = sessionStorage.getItem('adminToken');
     if (adminToken) {
       adminToken = adminToken.trim();
-      console.log('Admin token retrieved from storage');
+      console.log('Admin token retrieved from session');
     }
   }
   
@@ -1545,12 +1557,14 @@ async function checkAdminAccess() {
     } catch (err) {
       console.error('Admin check failed:', err);
     }
-    // Clear invalid token
+    
+    // Clear invalid token from session
     sessionStorage.removeItem('adminToken');
-    localStorage.removeItem('adminToken');
     adminToken = null;
+    isAdmin = false;
   }
   
+  // If not admin, check for participant invitation token
   if (!isAdmin) {
     validateInvitationToken();
   }
@@ -1873,3 +1887,10 @@ const validateAdminAccess = async (req, res, next) => {
   
   return res.status(403).json({ success: false, message: 'Unauthorized' });
 };
+
+function closeApp() {
+  localStorage.clear();
+  sessionStorage.clear();
+
+  window.location.href = "https://www.google.com";
+}
