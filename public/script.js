@@ -1622,7 +1622,7 @@ async function generateTokens() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-admin-token': MASTER_KEY
+        'x-admin-token': adminToken
       },
       body: JSON.stringify({
         role,
@@ -1792,41 +1792,54 @@ const validateAdminAccess = async (req, res, next) => {
   const adminToken = req.headers['x-admin-token'] || req.query.admin_token;
   const masterKey = process.env.ADMIN_SECRET_KEY;
   
-  console.log('[AdminCheck] Path:', req.path, 'TokenProvided:', !!adminToken);
+  console.log('[AdminCheck] Path:', req.path);
+  console.log('[AdminCheck] Token from header:', req.headers['x-admin-token'] ? 'present' : 'missing');
+  console.log('[AdminCheck] Token from query:', req.query.admin_token ? 'present' : 'missing');
+  console.log('[AdminCheck] Token value (first 10):', adminToken ? adminToken.substring(0, 10) + '...' : 'none');
   
-  // Require a token
   if (!adminToken) {
-    console.warn('[AdminCheck] No token provided');
+    console.warn('[AdminCheck] Rejected: no token provided');
     return res.status(403).json({ success: false, message: 'Unauthorized' });
   }
   
-  // Fast path: master key match
   if (masterKey && adminToken === masterKey) {
-    console.log('[AdminCheck] Access granted via master key');
+    console.log('[AdminCheck] Granted: master key match');
     return next();
   }
   
-  // Secondary path: check generated tokens in database
   try {
     const tokenCheck = await pool.query(
       `SELECT id, token, user_role, is_used, expires_at
        FROM invitation_tokens
-       WHERE token = $1
-       AND user_role = 'admin'
-       AND is_used = FALSE
-       AND (expires_at IS NULL OR expires_at > NOW())`,
+       WHERE token = $1`,
       [adminToken]
     );
     
+    console.log('[AdminCheck] DB query result count:', tokenCheck.rows.length);
     if (tokenCheck.rows.length > 0) {
-      console.log('[AdminCheck] Access granted via generated token:', tokenCheck.rows[0].id);
+      const row = tokenCheck.rows[0];
+      console.log('[AdminCheck] Found token - role:', row.user_role, 'is_used:', row.is_used, 'expires_at:', row.expires_at);
+      
+      if (row.user_role !== 'admin') {
+        console.warn('[AdminCheck] Rejected: role is not admin');
+        return res.status(403).json({ success: false, message: 'Unauthorized' });
+      }
+      if (row.is_used) {
+        console.warn('[AdminCheck] Rejected: token already used');
+        return res.status(403).json({ success: false, message: 'Unauthorized' });
+      }
+      if (row.expires_at && new Date(row.expires_at) < new Date()) {
+        console.warn('[AdminCheck] Rejected: token expired');
+        return res.status(403).json({ success: false, message: 'Unauthorized' });
+      }
+      
+      console.log('[AdminCheck] Granted: valid generated admin token');
       return next();
     }
-    console.log('[AdminCheck] Token not found in database or expired/used');
+    console.warn('[AdminCheck] Rejected: token not found in database');
   } catch (err) {
-    console.error('[AdminCheck] Database query failed:', err.message);
+    console.error('[AdminCheck] Database error:', err.message);
   }
   
-  console.warn('[AdminCheck] Access denied - invalid token');
   return res.status(403).json({ success: false, message: 'Unauthorized' });
 };
