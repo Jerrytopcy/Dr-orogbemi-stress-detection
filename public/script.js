@@ -1792,7 +1792,7 @@ const validateAdminAccess = async (req, res, next) => {
   const adminToken = req.headers['x-admin-token'] || req.query.admin_token;
   const masterKey = process.env.ADMIN_SECRET_KEY;
   
-  console.log('[AdminCheck] Path:', req.path, 'TokenProvided:', !!adminToken, 'TokenLength:', adminToken ? adminToken.length : 0);
+  console.log('[AdminCheck] Path:', req.path, 'TokenProvided:', !!adminToken);
   
   if (!masterKey && !adminToken) {
     console.error('[AdminCheck] No admin key configured');
@@ -1809,11 +1809,11 @@ const validateAdminAccess = async (req, res, next) => {
   if (adminToken) {
     try {
       const tokenCheck = await pool.query(
-        `SELECT id, token, user_role, is_used, expires_at 
-         FROM invitation_tokens 
-         WHERE token = $1 
-         AND user_role = 'admin' 
-         AND is_used = FALSE 
+        `SELECT id, token, user_role, is_used, expires_at
+         FROM invitation_tokens
+         WHERE token = $1
+         AND user_role = 'admin'
+         AND is_used = FALSE
          AND (expires_at IS NULL OR expires_at > NOW())`,
         [adminToken]
       );
