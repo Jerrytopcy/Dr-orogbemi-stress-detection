@@ -1787,45 +1787,45 @@ async function revokeToken(token) {
 }
 
 
-// Replace the simple validateAdminAccess with this version
+
+// Updated admin access validator - checks both master key AND generated tokens
 const validateAdminAccess = async (req, res, next) => {
   const adminToken = req.headers['x-admin-token'] || req.query.admin_token;
   const masterKey = process.env.ADMIN_SECRET_KEY;
   
-  console.log('[AdminCheck] Path:', req.path, 'TokenProvided:', !!adminToken, 'TokenLength:', adminToken ? adminToken.length : 0);
+  console.log('[AdminCheck] Path:', req.path, 'TokenProvided:', !!adminToken);
   
-  if (!masterKey && !adminToken) {
-    console.error('[AdminCheck] No admin key configured');
-    return res.status(500).json({ success: false, message: 'Admin key not configured' });
+  // Require a token
+  if (!adminToken) {
+    console.warn('[AdminCheck] No token provided');
+    return res.status(403).json({ success: false, message: 'Unauthorized' });
   }
   
   // Fast path: master key match
-  if (adminToken && masterKey && adminToken === masterKey) {
+  if (masterKey && adminToken === masterKey) {
     console.log('[AdminCheck] Access granted via master key');
     return next();
   }
   
   // Secondary path: check generated tokens in database
-  if (adminToken) {
-    try {
-      const tokenCheck = await pool.query(
-        `SELECT id, token, user_role, is_used, expires_at 
-         FROM invitation_tokens 
-         WHERE token = $1 
-         AND user_role = 'admin' 
-         AND is_used = FALSE 
-         AND (expires_at IS NULL OR expires_at > NOW())`,
-        [adminToken]
-      );
-      
-      if (tokenCheck.rows.length > 0) {
-        console.log('[AdminCheck] Access granted via generated token:', tokenCheck.rows[0].id);
-        return next();
-      }
-      console.log('[AdminCheck] Token not found in database or expired/used');
-    } catch (err) {
-      console.error('[AdminCheck] Database query failed:', err.message);
+  try {
+    const tokenCheck = await pool.query(
+      `SELECT id, token, user_role, is_used, expires_at
+       FROM invitation_tokens
+       WHERE token = $1
+       AND user_role = 'admin'
+       AND is_used = FALSE
+       AND (expires_at IS NULL OR expires_at > NOW())`,
+      [adminToken]
+    );
+    
+    if (tokenCheck.rows.length > 0) {
+      console.log('[AdminCheck] Access granted via generated token:', tokenCheck.rows[0].id);
+      return next();
     }
+    console.log('[AdminCheck] Token not found in database or expired/used');
+  } catch (err) {
+    console.error('[AdminCheck] Database query failed:', err.message);
   }
   
   console.warn('[AdminCheck] Access denied - invalid token');
