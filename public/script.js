@@ -286,7 +286,7 @@ async function startAssessmentFromModal() {
     } else {
       console.log('assessment-section not found');
     }
-  }, 300);
+  }, 600);
 }
 
 function closeModal() {
