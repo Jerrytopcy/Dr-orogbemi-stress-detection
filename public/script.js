@@ -1029,7 +1029,14 @@ function renderHistoryList(container, userResults, isGlobalView = false) {
   container.innerHTML = userResults.map((result) => `
     <div class="history-item">
       <div class="history-info">
-        <h4>${isGlobalView ? 'Assessment' : 'Your Assessment'} - ${new Date(result.date).toLocaleDateString()}</h4>
+        <h4>${isGlobalView ? 'Assessment' : 'Your Assessment'} - ${new Date(result.date).toLocaleString('en-US', { 
+          day: '2-digit', 
+          month: 'short', 
+          year: 'numeric', 
+          hour: '2-digit', 
+          minute: '2-digit',
+          hour12: true
+        })}</h4>
         ${isGlobalView ? `<p style="font-size:0.8rem; color:var(--text-secondary);">Session: ${result.sessionId}</p>` : ''}
         ${isGlobalView ? `<p style="font-size:0.8rem; color:var(--text-secondary);">User: ${result.userId === 'anonymous' ? 'Anonymous' : result.userId}</p>` : ''}
         <p>${result.description}</p>
