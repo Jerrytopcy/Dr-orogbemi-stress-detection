@@ -1371,7 +1371,7 @@ function renderAggregateCharts(data) {
     }
     
     renderBarChart(data.sectionAverages);
-    renderPieChart(data.highestSectionDistribution, data.totalAssessments);
+    renderPieChart(data.stressLevelDistribution, data.totalAssessments);
     renderScatterChart(data.rawScores || []);
 }
 
@@ -1561,18 +1561,24 @@ if (rawScores && rawScores.length > 0) {
             }]
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return `Score: ${context.parsed.y}`;
-                        }
-                    }
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: { display: false },
+        tooltip: {
+            enabled: true,
+            callbacks: {
+                title: function(context) {
+                    const point = context[0].raw;
+                    return `Assessment ${point.x}`;
+                },
+                label: function(context) {
+                    const point = context.raw;
+                    return `Stress Score: ${point.y}`;
                 }
-            },
+            }
+        }
+    },
             scales: {
                 x: {
                     type: 'linear',
