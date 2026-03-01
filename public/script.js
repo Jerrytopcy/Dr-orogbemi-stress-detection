@@ -557,7 +557,7 @@ function submitAssessment() {
       }
     });
     
-    // [Rest of your scoring logic remains the same...]
+    
     let overallStressLevel, overallStressDescription, overallStressClass;
     if (totalScore <= 24) {
       overallStressLevel = "Low Stress";
@@ -1307,6 +1307,10 @@ function displayAggregateResults(data) {
     
     // Generate section bars
     generateSectionBars(sectionAverages);
+    // Auto-scroll to results section after a brief delay for rendering
+    setTimeout(() => {
+        results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
 }
 
 function generateSectionBars(sectionAverages) {
@@ -1353,14 +1357,7 @@ function generateSectionBars(sectionAverages) {
 }
 
 function getShortSectionName(fullName) {
-    const mapping = {
-        'Workforce and Workload': 'Workforce',
-        'Skills and Task Management': 'Skills',
-        'Facilities and Infrastructure': 'Facilities',
-        'Mental and Physical Health': 'Health',
-        'Organizational Culture and Leadership': 'Culture'
-    };
-    return mapping[fullName] || fullName;
+    return fullName;
 }
 
 function getStressLevel(score) {

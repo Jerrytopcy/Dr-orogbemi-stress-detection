@@ -6,7 +6,7 @@
   --warning-color: #f59e0b;
   --danger-color: #ef4444;
   --background-color: #ffffff;
-  --purple-color:#f106f1;
+  --orange-color:#f16e31;
   --surface-color: #f8fafc;
   --text-primary: #1e293b;
   --text-secondary: #64748b;
@@ -2333,7 +2333,7 @@ input:checked + .toggle-slider:before {
 
 .section-bar-fill.low { background: var(--success-color); }
 .section-bar-fill.moderate { background: var(--warning-color); }
-.section-bar-fill.abnormal { background: var(--purple-color); }
+.section-bar-fill.abnormal { background: var(--orange-color); }
 .section-bar-fill.high { background: var(--danger-color); }
 .section-bar-fill.high-risk { background: #781414; }
 

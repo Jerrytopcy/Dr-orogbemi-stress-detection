@@ -221,8 +221,16 @@ app.get('/api/assessments/aggregate', async (req, res) => {
     }
 
     // Find the most challenging section overall
-    let mostChallenging = Object.keys(highestSectionCounts).reduce((a, b) => 
-      highestSectionCounts[a] > highestSectionCounts[b] ? a : b, "None");
+    // Find the most challenging section based on highest average score
+let mostChallenging = "None";
+let maxAvg = -1;
+for (const [section, avg] of Object.entries(sectionAverages)) {
+  const avgNum = parseFloat(avg);
+  if (avgNum > maxAvg) {
+    maxAvg = avgNum;
+    mostChallenging = section;
+  }
+}
 
     res.json({
       success: true,
