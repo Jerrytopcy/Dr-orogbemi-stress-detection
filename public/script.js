@@ -1465,18 +1465,18 @@ function renderPieChart(distribution, total) {
     
     // Map distribution to stress levels
     const levelData = {
-        'Low': 0,
-        'Moderate': 0,
-        'Abnormal': 0,
-        'High': 0,
-        'High Risk': 0
-    };
+    'Low': distribution.low || 0,
+    'Moderate': distribution.moderate || 0,
+    'Abnormal': distribution.abnormal || 0,
+    'High': distribution.high || 0,
+    'High Risk': distribution['high-risk'] || 0
+};
     
     // If distribution is by section, convert to level distribution
     // This assumes your backend can provide level distribution
     // Fallback: calculate from section averages if needed
     const levels = Object.keys(levelData);
-    const values = levels.map(level => levelData[level] || Math.floor(total / levels.length));
+    const values = levels.map(level => levelData[level]);
     
     aggregatePieChart = new Chart(ctx, {
         type: 'doughnut',
@@ -1537,7 +1537,16 @@ function renderScatterChart(rawScores) {
     
     // Generate sample data if rawScores not provided
     // In production, fetch actual score distribution from backend
-    const dataPoints = rawScores.length > 0 ? rawScores : generateSampleScatterData();
+    let dataPoints = [];
+
+if (rawScores && rawScores.length > 0) {
+    dataPoints = rawScores.map((score, index) => ({
+        x: index + 1,
+        y: score
+    }));
+} else {
+    dataPoints = generateSampleScatterData();
+}
     
     aggregateScatterChart = new Chart(ctx, {
         type: 'scatter',

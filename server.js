@@ -212,7 +212,7 @@ app.get('/api/assessments/aggregate', async (req, res) => {
     let rawScores = [];
 
     dataRes.rows.forEach(row => {
-      // CRITICAL FIX: Parse JSON fields safely
+      
       const scores = row.section_scores 
         ? (typeof row.section_scores === 'string' ? JSON.parse(row.section_scores) : row.section_scores)
         : {};
