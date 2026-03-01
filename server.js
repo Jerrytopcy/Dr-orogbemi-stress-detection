@@ -176,17 +176,18 @@ app.get('/api/assessments/all', validateAdminAccess, async (req, res) => {
 // 3. Get Aggregate Data (For Admin/Overall Insights - e.g., "Is workload the biggest issue?")
 app.get('/api/assessments/aggregate', async (req, res) => {
   try {
-    // Get total count
+    // 1️⃣ Total assessments count
     const countRes = await pool.query('SELECT COUNT(*) FROM assessments');
-    
-    // Get average scores by section (to find the most challenging part)
-    // We need to extract JSONB values. This is a simplified aggregation.
-    // For complex JSONB aggregation in Postgres, we often do this in JS after fetching raw data 
-    // or use jsonb_each_text. Here we fetch recent 1000 for calculation to keep SQL simple.
+
+    // 2️⃣ Get latest 1000 records for aggregation
     const dataRes = await pool.query(
-      `SELECT section_scores, highest_section, class FROM assessments ORDER BY created_at DESC LIMIT 1000`
+      `SELECT section_scores, highest_section, class, score 
+       FROM assessments 
+       ORDER BY created_at DESC 
+       LIMIT 1000`
     );
 
+    // 3️⃣ Initialize section trackers
     let sectionTotals = {
       "Workforce and Workload": 0,
       "Skills and Task Management": 0,
@@ -194,11 +195,31 @@ app.get('/api/assessments/aggregate', async (req, res) => {
       "Mental and Physical Health": 0,
       "Organizational Culture and Leadership": 0
     };
+
     let sectionCounts = { ...sectionTotals };
     let highestSectionCounts = {};
 
+    // 4️⃣ Stress level distribution
+    let stressLevelDistribution = {
+      low: 0,
+      moderate: 0,
+      abnormal: 0,
+      high: 0,
+      "high-risk": 0
+    };
+
+    // 5️⃣ Raw scores (for scatter plot)
+    let rawScores = [];
+
     dataRes.rows.forEach(row => {
       const scores = row.section_scores;
+
+      // Collect raw scores
+      if (row.score !== null && row.score !== undefined) {
+        rawScores.push(row.score);
+      }
+
+      // Aggregate section scores
       if (scores) {
         for (const [section, score] of Object.entries(scores)) {
           if (sectionTotals[section] !== undefined) {
@@ -207,42 +228,57 @@ app.get('/api/assessments/aggregate', async (req, res) => {
           }
         }
       }
+
+      // Count highest section
       if (row.highest_section) {
-        highestSectionCounts[row.highest_section] = (highestSectionCounts[row.highest_section] || 0) + 1;
+        highestSectionCounts[row.highest_section] =
+          (highestSectionCounts[row.highest_section] || 0) + 1;
+      }
+
+      // Count stress class distribution
+      if (row.class && stressLevelDistribution[row.class] !== undefined) {
+        stressLevelDistribution[row.class] += 1;
       }
     });
 
-    // Calculate averages
+    // 6️⃣ Calculate section averages
     const sectionAverages = {};
     for (const section in sectionTotals) {
-      sectionAverages[section] = sectionCounts[section] > 0 
-        ? (sectionTotals[section] / sectionCounts[section]).toFixed(2) 
-        : 0;
+      sectionAverages[section] =
+        sectionCounts[section] > 0
+          ? (sectionTotals[section] / sectionCounts[section]).toFixed(2)
+          : 0;
     }
 
-    // Find the most challenging section overall
-    // Find the most challenging section based on highest average score
-let mostChallenging = "None";
-let maxAvg = -1;
-for (const [section, avg] of Object.entries(sectionAverages)) {
-  const avgNum = parseFloat(avg);
-  if (avgNum > maxAvg) {
-    maxAvg = avgNum;
-    mostChallenging = section;
-  }
-}
+    // 7️⃣ Find most challenging section
+    let mostChallenging = "None";
+    let maxAvg = -1;
 
+    for (const [section, avg] of Object.entries(sectionAverages)) {
+      const avgNum = parseFloat(avg);
+      if (avgNum > maxAvg) {
+        maxAvg = avgNum;
+        mostChallenging = section;
+      }
+    }
+
+    // 8️⃣ Send final response
     res.json({
       success: true,
       totalAssessments: countRes.rows[0].count,
       sectionAverages,
       mostChallengingSection: mostChallenging,
-      highestSectionDistribution: highestSectionCounts
+      highestSectionDistribution: highestSectionCounts,
+      rawScores: rawScores,
+      stressLevelDistribution: stressLevelDistribution
     });
 
   } catch (err) {
     console.error('Aggregate error:', err);
-    res.status(500).json({ success: false, message: 'Failed to fetch aggregate data' });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch aggregate data'
+    });
   }
 });
 

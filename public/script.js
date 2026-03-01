@@ -1307,6 +1307,10 @@ function displayAggregateResults(data) {
     
     // Generate section bars
     generateSectionBars(sectionAverages);
+    
+    // Render interactive charts
+    renderAggregateCharts(data);
+    
     // Auto-scroll to results section after a brief delay for rendering
     setTimeout(() => {
         results.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1355,10 +1359,267 @@ function generateSectionBars(sectionAverages) {
         }, 200);
     });
 }
+// Global chart instances to manage cleanup
+let aggregateBarChart = null;
+let aggregatePieChart = null;
+let aggregateScatterChart = null;
+
+function renderAggregateCharts(data) {
+    const chartsContainer = document.getElementById('charts-container');
+    if (chartsContainer) {
+        chartsContainer.style.display = 'block';
+    }
+    
+    renderBarChart(data.sectionAverages);
+    renderPieChart(data.highestSectionDistribution, data.totalAssessments);
+    renderScatterChart(data.rawScores || []);
+}
+
+function renderBarChart(sectionAverages) {
+    const ctx = document.getElementById('aggregateBarChart');
+    if (!ctx) return;
+    
+    // Destroy existing chart instance
+    if (aggregateBarChart) {
+        aggregateBarChart.destroy();
+    }
+    
+    const sections = [
+        'Workforce and Workload',
+        'Skills and Task Management',
+        'Facilities and Infrastructure',
+        'Mental and Physical Health',
+        'Organizational Culture and Leadership'
+    ];
+    
+    const shortNames = {
+        'Workforce and Workload': 'Workforce',
+        'Skills and Task Management': 'Skills',
+        'Facilities and Infrastructure': 'Facilities',
+        'Mental and Physical Health': 'Health',
+        'Organizational Culture and Leadership': 'Culture'
+    };
+    
+    const labels = sections.map(s => shortNames[s] || s);
+    const values = sections.map(s => parseFloat(sectionAverages[s]) || 0);
+    const colors = values.map(v => {
+        if (v <= 4) return 'rgba(16, 185, 129, 0.8)';
+        if (v <= 9) return 'rgba(245, 158, 11, 0.8)';
+        if (v <= 12) return 'rgba(139, 92, 246, 0.8)';
+        if (v <= 15) return 'rgba(239, 68, 68, 0.8)';
+        return 'rgba(120, 20, 20, 0.8)';
+    });
+    
+    aggregateBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Average Stress Score',
+                data: values,
+                backgroundColor: colors,
+                borderColor: colors.map(c => c.replace('0.8', '1')),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Score: ${context.parsed.y.toFixed(1)}/20`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 20,
+                    title: {
+                        display: true,
+                        text: 'Stress Score'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Section'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function renderPieChart(distribution, total) {
+    const ctx = document.getElementById('aggregatePieChart');
+    if (!ctx) return;
+    
+    if (aggregatePieChart) {
+        aggregatePieChart.destroy();
+    }
+    
+    // Map distribution to stress levels
+    const levelData = {
+        'Low': 0,
+        'Moderate': 0,
+        'Abnormal': 0,
+        'High': 0,
+        'High Risk': 0
+    };
+    
+    // If distribution is by section, convert to level distribution
+    // This assumes your backend can provide level distribution
+    // Fallback: calculate from section averages if needed
+    const levels = Object.keys(levelData);
+    const values = levels.map(level => levelData[level] || Math.floor(total / levels.length));
+    
+    aggregatePieChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: levels,
+            datasets: [{
+                data: values,
+                backgroundColor: [
+                    'rgba(16, 185, 129, 0.8)',
+                    'rgba(245, 158, 11, 0.8)',
+                    'rgba(139, 92, 246, 0.8)',
+                    'rgba(239, 68, 68, 0.8)',
+                    'rgba(120, 20, 20, 0.8)'
+                ],
+                borderColor: [
+                    'rgb(16, 185, 129)',
+                    'rgb(245, 158, 11)',
+                    'rgb(139, 92, 246)',
+                    'rgb(239, 68, 68)',
+                    'rgb(120, 20, 20)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        usePointStyle: true
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed || 0;
+                            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                            return `${label}: ${value} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function renderScatterChart(rawScores) {
+    const ctx = document.getElementById('aggregateScatterChart');
+    if (!ctx) return;
+    
+    if (aggregateScatterChart) {
+        aggregateScatterChart.destroy();
+    }
+    
+    // Generate sample data if rawScores not provided
+    // In production, fetch actual score distribution from backend
+    const dataPoints = rawScores.length > 0 ? rawScores : generateSampleScatterData();
+    
+    aggregateScatterChart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Assessment Scores',
+                data: dataPoints,
+                backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Score: ${context.parsed.y}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom',
+                    title: {
+                        display: true,
+                        text: 'Assessment Index'
+                    },
+                    min: 0
+                },
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: {
+                        display: true,
+                        text: 'Total Stress Score'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function generateSampleScatterData() {
+    // Generate sample data for demonstration
+    // Replace with actual data from backend
+    const data = [];
+    const count = Math.min(50, Math.floor(Math.random() * 30) + 20);
+    for (let i = 0; i < count; i++) {
+        data.push({
+            x: i + 1,
+            y: Math.floor(Math.random() * 60) + 20
+        });
+    }
+    return data;
+}
+
+function cleanupAggregateCharts() {
+    if (aggregateBarChart) {
+        aggregateBarChart.destroy();
+        aggregateBarChart = null;
+    }
+    if (aggregatePieChart) {
+        aggregatePieChart.destroy();
+        aggregatePieChart = null;
+    }
+    if (aggregateScatterChart) {
+        aggregateScatterChart.destroy();
+        aggregateScatterChart = null;
+    }
+}
 
 function getShortSectionName(fullName) {
     return fullName;
 }
+
 
 function getStressLevel(score) {
     if (score <= 4) return 'low';

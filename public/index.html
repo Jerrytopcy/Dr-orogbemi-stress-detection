@@ -312,7 +312,7 @@
                 <!-- Aggregate Analysis Section -->
 <div class="aggregate-section" id="aggregate-section" style="display: none;">
     <div class="aggregate-header">
-        <h2>Organizational Stress Analysis</h2>
+        <h2>Overall Stress Analysis</h2>
         <p>Aggregate insights from all completed assessments</p>
         <button class="btn btn-primary" id="compute-aggregate-btn" onclick="computeAggregateAnalysis()">
             <i class="fas fa-calculator"></i> Compute Aggregate Data
@@ -349,7 +349,7 @@
                 <div class="summary-value" id="total-assessments-agg">0</div>
             </div>
             <div class="summary-card highlight">
-                <h4>Most Stressed Section</h4>
+                <h4>Most Stressed root</h4>
                 <div class="summary-value" id="most-stressed-section">-</div>
             </div>
             <div class="summary-card">
@@ -363,6 +363,29 @@
             <div class="section-bars" id="section-bars-container">
                 <!-- Bars populated by JavaScript -->
             </div>
+            <!-- Chart Visualizations -->
+            <div class="charts-container" id="charts-container" style="display: none;">
+                <div class="chart-grid">
+                    <!-- Bar Chart: Section Comparison -->
+                    <div class="chart-card">
+                        <h4>Section Stress Comparison</h4>
+                        <canvas id="aggregateBarChart"></canvas>
+                    </div>
+                    
+                    <!-- Doughnut Chart: Stress Level Distribution -->
+                    <div class="chart-card">
+                        <h4>Overall Stress Distribution</h4>
+                        <canvas id="aggregatePieChart"></canvas>
+                    </div>
+                    
+                    <!-- Scatter Plot: Score Distribution (if data available) -->
+                    <div class="chart-card full-width">
+                        <h4>Assessment Score Distribution</h4>
+                        <canvas id="aggregateScatterChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
         </div>
         
         <div class="computation-details">
