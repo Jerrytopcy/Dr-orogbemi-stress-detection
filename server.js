@@ -181,7 +181,7 @@ app.get('/api/assessments/aggregate', async (req, res) => {
 
     // 2️⃣ Get latest 1000 records for aggregation
     const dataRes = await pool.query(
-      `SELECT section_scores, highest_section, class, score 
+      `SELECT section_scores, section_levels, highest_section, class, score, created_at
        FROM assessments 
        ORDER BY created_at DESC 
        LIMIT 1000`
@@ -212,17 +212,24 @@ app.get('/api/assessments/aggregate', async (req, res) => {
     let rawScores = [];
 
     dataRes.rows.forEach(row => {
-      const scores = row.section_scores;
+      // CRITICAL FIX: Parse JSON fields safely
+      const scores = row.section_scores 
+        ? (typeof row.section_scores === 'string' ? JSON.parse(row.section_scores) : row.section_scores)
+        : {};
+      
+      const levels = row.section_levels
+        ? (typeof row.section_levels === 'string' ? JSON.parse(row.section_levels) : row.section_levels)
+        : {};
 
       // Collect raw scores
       if (row.score !== null && row.score !== undefined) {
         rawScores.push(row.score);
       }
 
-      // Aggregate section scores
-      if (scores) {
+      // Aggregate section scores - now works with parsed object
+      if (scores && typeof scores === 'object') {
         for (const [section, score] of Object.entries(scores)) {
-          if (sectionTotals[section] !== undefined) {
+          if (sectionTotals[section] !== undefined && typeof score === 'number') {
             sectionTotals[section] += score;
             sectionCounts[section] += 1;
           }
@@ -235,9 +242,10 @@ app.get('/api/assessments/aggregate', async (req, res) => {
           (highestSectionCounts[row.highest_section] || 0) + 1;
       }
 
-      // Count stress class distribution
-      if (row.class && stressLevelDistribution[row.class] !== undefined) {
-        stressLevelDistribution[row.class] += 1;
+      // Count stress class distribution - ensure class field is read correctly
+      const stressClass = row.class || row.stress_class;
+      if (stressClass && stressLevelDistribution[stressClass] !== undefined) {
+        stressLevelDistribution[stressClass] += 1;
       }
     });
 
@@ -246,7 +254,7 @@ app.get('/api/assessments/aggregate', async (req, res) => {
     for (const section in sectionTotals) {
       sectionAverages[section] =
         sectionCounts[section] > 0
-          ? (sectionTotals[section] / sectionCounts[section]).toFixed(2)
+          ? parseFloat((sectionTotals[section] / sectionCounts[section]).toFixed(2))
           : 0;
     }
 
@@ -265,7 +273,7 @@ app.get('/api/assessments/aggregate', async (req, res) => {
     // 8️⃣ Send final response
     res.json({
       success: true,
-      totalAssessments: countRes.rows[0].count,
+      totalAssessments: parseInt(countRes.rows[0].count),
       sectionAverages,
       mostChallengingSection: mostChallenging,
       highestSectionDistribution: highestSectionCounts,
