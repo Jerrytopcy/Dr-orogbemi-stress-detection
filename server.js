@@ -35,29 +35,50 @@ app.use((req, res, next) => {
   };
   next();
 });
-// Add this helper function near the top of server.js, after pool initialization
-const validateAdminAccess = (req, res, next) => {
-  const adminToken = req.headers['x-admin-token'] || req.query.admin_token;
-  const validToken = process.env.ADMIN_SECRET_KEY;
-  
-  if (!validToken) {
-    return res.status(500).json({ success: false, message: 'Admin key not configured' });
-  }
-  
-  if (adminToken !== validToken) {
-    return res.status(403).json({ success: false, message: 'Unauthorized' });
-  }
-  
-  next();
-};
-
-
 // Database Connection
 // Railway automatically provides DATABASE_URL environment variable
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
+
+// Add this helper function near the top of server.js, after pool initialization
+const validateAdminAccess = async (req, res, next) => {
+  const adminToken = req.headers['x-admin-token'] || req.query.admin_token;
+  const validToken = process.env.ADMIN_SECRET_KEY;
+  
+  if (!adminToken) {
+    return res.status(401).json({ success: false, message: 'Admin token missing' });
+  }
+  
+  // 1. Check environment variable token
+  if (validToken && adminToken === validToken) {
+    return next();
+  }
+  
+  // 2. Check generated tokens in database
+  try {
+    const result = await pool.query(
+      "SELECT * FROM invitation_tokens WHERE token = $1 AND user_role = 'admin'",
+      [adminToken]
+    );
+    
+    if (result.rows.length > 0) {
+      const tokenData = result.rows[0];
+      
+      // Check expiration
+      if (tokenData.expires_at && new Date(tokenData.expires_at) < new Date()) {
+        return res.status(403).json({ success: false, message: 'Admin token expired' });
+      }
+      
+      return next();
+    }
+  } catch (err) {
+    console.error('Error validating DB admin token:', err);
+  }
+  
+  return res.status(403).json({ success: false, message: 'Unauthorized' });
+};
 
 // Updated POST /api/assessments endpoint
 app.post('/api/assessments', async (req, res) => {

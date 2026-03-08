@@ -1699,6 +1699,14 @@ async function validateInvitationToken() {
             currentUserRole = data.data.user_role;
             isTokenValidated = true;
             tokenValidationStatus = 'valid';
+            
+            if (currentUserRole === 'admin') {
+                isAdmin = true;
+                adminToken = token;
+                localStorage.setItem('adminToken', token);
+                console.log('Admin token activated from invitation');
+            }
+            
             // Generate new sessionId for this specific token session
             const newSessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
             localStorage.setItem('stressDetectSessionId', newSessionId);
