@@ -1006,6 +1006,9 @@ function loadHistory() {
   organizationalRecommendations: typeof row.organizational_recommendations === 'string' 
     ? JSON.parse(row.organizational_recommendations) 
     : row.organizational_recommendations,
+  answers: typeof row.answers === 'string' 
+    ? JSON.parse(row.answers) 
+    : row.answers || {},
   sessionId: row.session_id || row.sessionId,
   userId: row.user_id || row.userId,
   isGlobalView: isGlobalView
@@ -1047,7 +1050,7 @@ function renderHistoryList(container, userResults, isGlobalView = false) {
       </div>
       <div class="history-actions">
         <button class="btn btn-small btn-secondary" onclick='viewReportFromObj(${JSON.stringify(result).replace(/'/g, "&#39;")})'>View Report</button>
-        ${isGlobalView ? `<button class="btn btn-small btn-primary" onclick="downloadPDFReport('${result.id}')">Download PDF</button>` : ''}
+        ${isGlobalView ? `<button class="btn btn-small btn-primary" onclick='downloadPDFReport(${JSON.stringify(result).replace(/'/g, "&#39;")})'>Download PDF</button>` : ''}
       </div>
     </div>
   `).join("");
@@ -1197,10 +1200,147 @@ function showToast(message, type = "info", duration = 3000) {
 }
 
 // PDF Generation
-function downloadPDFReport(resultId) {
-  // In a DB-only system, this should ideally fetch the specific report from API
-  // For this implementation, we rely on the result object passed from history
-  showToast("Report generation requires active session data.", "warning");
+function downloadPDFReport(result) {
+  if (!result || !result.sessionId) {
+    showToast("Report data is unavailable.", "error");
+    return;
+  }
+  showToast("Generating PDF report...", "info");
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    // Header background
+    doc.setFillColor(59, 130, 246);
+    doc.rect(0, 0, 210, 25, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("Job Stress Assessment Report", 105, 16, null, null, "center");
+    
+    // Reset Color
+    doc.setTextColor(40, 40, 40);
+    
+    // Details Section
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    const dateStr = new Date(result.date).toLocaleString('en-US');
+    doc.text(`Date & Time: ${dateStr}`, 14, 35);
+    doc.text(`Session ID: ${result.sessionId}`, 14, 41);
+    
+    if (result.userId && result.userId !== 'anonymous') {
+      doc.text(`User ID: ${result.userId}`, 14, 47);
+    }
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text(`Overall Stress Score: ${result.score}/${result.maxScore}`, 14, 57);
+    
+    let levelColor = [16, 185, 129];
+    if (result.class === 'moderate') levelColor = [245, 158, 11];
+    else if (result.class === 'abnormal') levelColor = [139, 92, 246];
+    else if (result.class === 'high') levelColor = [239, 68, 68];
+    else if (result.class === 'high-risk') levelColor = [120, 20, 20];
+    
+    doc.setTextColor(...levelColor);
+    doc.text(`Level: ${result.level}`, 14, 65);
+    
+    doc.setTextColor(60, 60, 60);
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "italic");
+    const descLines = doc.splitTextToSize(result.description, 180);
+    doc.text(descLines, 14, 73);
+    
+    let currentY = 73 + (descLines.length * 6) + 5;
+    
+    // Sections Table
+    const sectionBody = [];
+    if (result.sectionLevels) {
+      for (const [section, data] of Object.entries(result.sectionLevels)) {
+        sectionBody.push([section, `${data.score}/20`, data.level]);
+      }
+    }
+    
+    doc.autoTable({
+      startY: currentY,
+      head: [['Section', 'Score', 'Stress Level']],
+      body: sectionBody,
+      theme: 'grid',
+      headStyles: { fillColor: [59, 130, 246], textColor: [255, 255, 255] },
+      styles: { fontSize: 10, cellPadding: 3 }
+    });
+    
+    currentY = doc.lastAutoTable.finalY + 10;
+    
+    // Recommendations
+    if (result.personalRecommendations && result.personalRecommendations.length > 0) {
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(12);
+      doc.text("Personal Recommendations:", 14, currentY);
+      currentY += 6;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      result.personalRecommendations.forEach(rec => {
+         const recLines = doc.splitTextToSize(`• ${rec}`, 180);
+         doc.text(recLines, 14, currentY);
+         currentY += (recLines.length * 5);
+      });
+      currentY += 5;
+    }
+    
+    if (result.organizationalRecommendations && result.organizationalRecommendations.length > 0) {
+      if (currentY > 260) { doc.addPage(); currentY = 20; }
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(12);
+      doc.text("Organizational Recommendations:", 14, currentY);
+      currentY += 6;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      result.organizationalRecommendations.forEach(rec => {
+         const recLines = doc.splitTextToSize(`• ${rec}`, 180);
+         doc.text(recLines, 14, currentY);
+         currentY += (recLines.length * 5);
+      });
+      currentY += 10;
+    }
+    
+    // Answers Table
+    if (result.answers && Object.keys(result.answers).length > 0) {
+      doc.addPage();
+      currentY = 20;
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(14);
+      doc.text("Full Assessment Responses", 105, currentY, null, null, "center");
+      currentY += 10;
+
+      const answersBody = [];
+      for (const qId of Object.keys(result.answers)) {
+          const ans = result.answers[qId];
+          answersBody.push([`${qId}`, ans.question, ans.answer, ans.value]);
+      }
+      doc.autoTable({
+          startY: currentY,
+          head: [['#', 'Question', 'Your Response', 'Score']],
+          body: answersBody,
+          theme: 'striped',
+          headStyles: { fillColor: [75, 85, 99], textColor: [255, 255, 255] },
+          styles: { fontSize: 9, cellPadding: 2, overflow: 'linebreak' },
+          columnStyles: {
+            0: { cellWidth: 10, halign: 'center' },
+            1: { cellWidth: 110 },
+            2: { cellWidth: 45 },
+            3: { cellWidth: 15, halign: 'center' }
+          }
+      });
+    }
+
+    doc.save(`Stress_Report_${result.sessionId}_${new Date().getTime()}.pdf`);
+    showToast("PDF report generated successfully!", "success");
+
+  } catch (err) {
+    console.error("PDF Generation error", err);
+    showToast("Failed to generate PDF.", "error");
+  }
 }
 
 function viewReportFromObj(result) {
@@ -1656,9 +1796,93 @@ function hideAggregateResults() {
     results.style.display = 'none';
 }
 
-function exportAggregateReport() {
-    showToast('Report export feature coming soon', 'info');
-    // Future: Implement PDF generation using jsPDF with aggregate data
+async function exportAggregateReport() {
+    showToast('Generating Aggregate PDF...', 'info');
+    try {
+        const response = await fetch('/api/assessments/aggregate');
+        const data = await response.json();
+        if (!data.success) throw new Error('Data fetch failed');
+        
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // Header
+        doc.setFillColor(16, 185, 129); // Greenish header for aggregate
+        doc.rect(0, 0, 210, 25, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(18);
+        doc.text("Aggregate Stress Analysis Report", 105, 16, null, null, "center");
+        
+        doc.setTextColor(40, 40, 40);
+        
+        // Summary
+        doc.setFontSize(14);
+        doc.text("Executive Summary", 14, 35);
+        
+        doc.setFontSize(11);
+        doc.setFont("helvetica", "normal");
+        doc.text(`Total Assessments: ${data.totalAssessments}`, 14, 45);
+        doc.text(`Most Challenging Area: ${data.mostChallengingSection}`, 14, 52);
+        
+        // Calculate average
+        const avgValues = Object.values(data.sectionAverages).map(v => parseFloat(v));
+        const overallAvg = avgValues.length > 0 ? (avgValues.reduce((a, b) => a + b, 0) / avgValues.length).toFixed(1) : 0;
+        doc.text(`Average Section Score: ${overallAvg}/20`, 14, 59);
+
+        let currentY = 70;
+        
+        // Sections Table
+        const sectionBody = [];
+        for (const [section, score] of Object.entries(data.sectionAverages)) {
+          sectionBody.push([section, `${parseFloat(score).toFixed(1)}/20`]);
+        }
+        
+        doc.autoTable({
+          startY: currentY,
+          head: [['Section', 'Average Score']],
+          body: sectionBody,
+          theme: 'grid',
+          headStyles: { fillColor: [16, 185, 129], textColor: [255, 255, 255] },
+          styles: { fontSize: 10, cellPadding: 3 }
+        });
+        
+        currentY = doc.lastAutoTable.finalY + 15;
+        
+        // Add charts if available
+        const addChart = (chart, title, yPos) => {
+            if (!chart) return yPos;
+            if (yPos > 180) { doc.addPage(); yPos = 20; }
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(12);
+            doc.text(title, 14, yPos);
+            const imgData = chart.toBase64Image();
+            doc.addImage(imgData, 'PNG', 14, yPos + 5, 180, 90);
+            return yPos + 105;
+        };
+
+        if (typeof aggregateBarChart !== 'undefined' && aggregateBarChart !== null) {
+            currentY = addChart(aggregateBarChart, "Section Stress Comparison", currentY);
+        }
+        
+        if (typeof aggregatePieChart !== 'undefined' && aggregatePieChart !== null) {
+            currentY = addChart(aggregatePieChart, "Overall Stress Distribution", currentY);
+        }
+        
+        if (typeof aggregateScatterChart !== 'undefined' && aggregateScatterChart !== null) {
+            if (currentY > 150) { doc.addPage(); currentY = 20; }
+            doc.setFont("helvetica", "bold");
+            doc.text("Assessment Score Distribution", 14, currentY);
+            doc.addImage(aggregateScatterChart.toBase64Image(), 'PNG', 14, currentY + 5, 180, 90);
+        }
+
+        doc.save(`Aggregate_Stress_Report_${new Date().toISOString().split('T')[0]}.pdf`);
+        showToast('Report downloaded successfully!', 'success');
+        
+    } catch (err) {
+        console.error("Aggregate Export Error:", err);
+        showToast('Failed to export aggregate report.', 'error');
+    }
 }
 
 
