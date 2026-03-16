@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
@@ -40,8 +42,9 @@
         <div class="hero-section">
             <div class="container">
                 <div class="hero-content">
-                    <h1>Job stress management system for Nigerian universities workers using explainable artificial intelligence models</h1>
-                    <p>Take control of your mental well-being with our scientifically-backed stress assessment tool. Get personalized insights and contribute to organizational wellbeing data.</p>
+                    <h1>University job stress management system</h1>
+                    <p>Take control of your mental well-being with our scientifically-backed stress assessment tool. Get
+                        personalized insights and contribute to organizational wellbeing data.</p>
                     <div class="hero-buttons">
                         <!-- Changed to direct dashboard access -->
                         <button class="btn btn-primary" onclick="navigateToAssessment()">Get Assessed</button>
@@ -52,7 +55,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="features-section">
             <div class="container">
                 <h2>Why Choose Our System?</h2>
@@ -126,7 +129,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Charts Section -->
             <div class="charts-section">
                 <div class="chart-container">
@@ -146,7 +149,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Quick Actions -->
             <div class="quick-actions">
                 <h3>Quick Actions</h3>
@@ -168,7 +171,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Assessment Section -->
             <div class="assessment-section" id="assessment-section" style="display: none;">
                 <div class="assessment-header">
@@ -176,7 +179,7 @@
                     <p>Please answer the following questions based on your academic experience in your organisation.</p>
                     <button class="btn btn-secondary" onclick="hideAssessment()">Cancel Assessment</button>
                 </div>
-                
+
                 <div class="assessment-progress">
                     <div class="progress-bar">
                         <div class="progress-fill" id="assessment-progress-fill"></div>
@@ -185,16 +188,17 @@
                         <span id="current-question">1</span> of <span id="total-questions">15</span>
                     </div>
                 </div>
-                
+
                 <div class="assessment-card" id="assessment-card">
                     <div class="question-content" id="question-content">
                         <!-- Question will be populated by JavaScript -->
                     </div>
-                    
+
                     <div class="assessment-navigation">
-                    <button class="btn btn-secondary" id="prev-btn" disabled>Previous</button>
-                    <button class="btn btn-primary" id="next-btn">Next</button>
-                    <button class="btn btn-primary" id="submit-btn" style="display: none;" type="button">Submit Assessment</button>
+                        <button class="btn btn-secondary" id="prev-btn" disabled>Previous</button>
+                        <button class="btn btn-primary" id="next-btn">Next</button>
+                        <button class="btn btn-primary" id="submit-btn" style="display: none;" type="button">Submit
+                            Assessment</button>
                     </div>
                 </div>
             </div>
@@ -217,82 +221,87 @@
                         </div>
                     </div>
                 </div>
-            <!-- Thank You Message Section -->
-            <div class="thank-you-section" style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfeee 100%); 
+                <!-- Thank You Message Section -->
+                <div class="thank-you-section" style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfeee 100%); 
                                            border-radius: 16px; 
                                            padding: 24px; 
                                            margin: 24px 0;
                                            border: 1px solid #dcfce7;
                                            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
-                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
-                    <div style="background: #10b981; 
+                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                        <div style="background: #10b981; 
                                 width: 48px; 
                                 height: 48px; 
                                 border-radius: 50%; 
                                 display: flex; 
                                 align-items: center; 
                                 justify-content: center;">
-                        <i class="fas fa-shield-alt" style="color: white; font-size: 24px;"></i>
+                            <i class="fas fa-shield-alt" style="color: white; font-size: 24px;"></i>
+                        </div>
+                        <h3 style="color: #065f46; margin: 0; font-size: 20px;">Your Contribution Matters</h3>
                     </div>
-                    <h3 style="color: #065f46; margin: 0; font-size: 20px;">Your Contribution Matters</h3>
-                </div>
-                
-                <p style="font-size: 16px; 
+
+                    <p style="font-size: 16px; 
                           line-height: 1.6; 
                           color: #166534; 
                           margin-bottom: 16px;">
-                    <strong>Thank you for completing your stress assessment!</strong> Your responses have been securely encrypted and stored in our protected database. This information will help identify important organizational stress patterns while maintaining your complete anonymity.
-                </p>
-                
-                <p style="font-size: 16px; 
+                        <strong>Thank you for completing your stress assessment!</strong> Your responses have been
+                        securely encrypted and stored in our protected database. This information will help identify
+                        important organizational stress patterns while maintaining your complete anonymity.
+                    </p>
+
+                    <p style="font-size: 16px; 
                           line-height: 1.6; 
                           color: #166534; 
                           background: #d1fae5; 
                           padding: 12px 16px; 
                           border-radius: 8px; 
                           border-left: 4px solid #047857;">
-                    <i class="fas fa-lock" style="margin-right: 8px;"></i> 
-                    <strong>Your privacy is guaranteed:</strong> No personally identifiable information was collected, and your data is aggregated with others to ensure confidentiality.
-                </p>
-                
-                <p style="font-size: 16px; 
+                        <i class="fas fa-lock" style="margin-right: 8px;"></i>
+                        <strong>Your privacy is guaranteed:</strong> No personally identifiable information was
+                        collected, and your data is aggregated with others to ensure confidentiality.
+                    </p>
+
+                    <p style="font-size: 16px; 
                           line-height: 1.6; 
                           color: #166534; 
                           margin-top: 16px;
                           font-weight: 500;">
-                    You may now safely exit the application knowing your contribution to improving workplace wellbeing has been securely recorded. Your insights help create healthier academic environments for everyone.
-                </p>
-            </div>
+                        You may now safely exit the application knowing your contribution to improving workplace
+                        wellbeing has been securely recorded. Your insights help create healthier academic environments
+                        for everyone.
+                    </p>
+                </div>
                 <!-- Section Scores Display -->
                 <div class="section-breakdown" id="section-scores-display">
-                     <h3>Section Breakdown</h3>
-                     <div class="typing-container" id="section-scores-typed">Loading section scores...</div>
+                    <h3>Section Breakdown</h3>
+                    <div class="typing-container" id="section-scores-typed">Loading section scores...</div>
                 </div>
 
                 <!-- Recommendations Section -->
                 <div class="recommendations-section">
                     <div class="recommendation-block" id="personal-recommendations">
-                         <h3>Personal Recommendations</h3>
-                         <div class="typing-container" id="personal-recs-typed">Loading recommendations...</div>
+                        <h3>Personal Recommendations</h3>
+                        <div class="typing-container" id="personal-recs-typed">Loading recommendations...</div>
                     </div>
 
                     <!-- Organizational Recommendations -->
                     <div class="recommendation-block" id="organizational-recommendations">
-                         <h3>Organizational Recommendations</h3>
-                         <div class="typing-container" id="org-recs-typed">Loading recommendations...</div>
+                        <h3>Organizational Recommendations</h3>
+                        <div class="typing-container" id="org-recs-typed">Loading recommendations...</div>
                     </div>
                 </div>
 
                 <!-- System Performance Charts -->
                 <div class="chart-card">
-                  <h3>System Performance Stress Trend</h3>
-                  <canvas id="resultTrendChart" height="100"></canvas>
+                    <h3>System Performance Stress Trend</h3>
+                    <canvas id="resultTrendChart" height="100"></canvas>
                 </div>
 
                 <div class="results-actions">
                     <button class="btn btn-primary" onclick="closeApp()">
-                 <i class="fas fa-sign-out-alt"></i> Exit Application
-                     </button>
+                        <i class="fas fa-sign-out-alt"></i> Exit Application
+                    </button>
                     <button class="btn btn-secondary" onclick="showPage('history')">View History</button>
                 </div>
             </div>
@@ -309,117 +318,117 @@
             <div class="history-content" id="history-content">
                 <!-- History items will be populated by JavaScript -->
             </div>
-                <!-- Aggregate Analysis Section -->
-<div class="aggregate-section" id="aggregate-section" style="display: none;">
-    <div class="aggregate-header">
-        <h2>Overall Stress Analysis</h2>
-        <p>Aggregate insights from all completed assessments</p>
-        <button class="btn btn-primary" id="compute-aggregate-btn" onclick="computeAggregateAnalysis()">
-            <i class="fas fa-calculator"></i> Compute Aggregate Data
-        </button>
-    </div>
-    
-    <!-- Computation Animation Overlay -->
-    <div class="computation-overlay" id="computation-overlay" style="display: none;">
-        <div class="computation-content">
-            <div class="computation-icon">
-                <i class="fas fa-brain"></i>
-            </div>
-            <h3>Processing Aggregate Data</h3>
-            <div class="computation-steps" id="computation-steps">
-                <div class="step active" data-step="1">Fetching responses</div>
-                <div class="step" data-step="2">Analyzing section scores</div>
-                <div class="step" data-step="3">Calculating stress distributions</div>
-                <div class="step" data-step="4">Generating insights</div>
-            </div>
-            <div class="computation-progress">
-                <div class="progress-track">
-                    <div class="progress-fill" id="computation-progress-fill"></div>
+            <!-- Aggregate Analysis Section -->
+            <div class="aggregate-section" id="aggregate-section" style="display: none;">
+                <div class="aggregate-header">
+                    <h2>Overall Stress Analysis</h2>
+                    <p>Aggregate insights from all completed assessments</p>
+                    <button class="btn btn-primary" id="compute-aggregate-btn" onclick="computeAggregateAnalysis()">
+                        <i class="fas fa-calculator"></i> Compute Aggregate Data
+                    </button>
                 </div>
-                <span id="computation-percentage">0%</span>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Results Display -->
-    <div class="aggregate-results" id="aggregate-results" style="display: none;">
-        <div class="results-summary">
-            <div class="summary-card">
-                <h4>Total Assessments</h4>
-                <div class="summary-value" id="total-assessments-agg">0</div>
-            </div>
-            <div class="summary-card highlight">
-                <h4>Most Stressed root</h4>
-                <div class="summary-value" id="most-stressed-section">-</div>
-            </div>
-            <div class="summary-card">
-                <h4>Average Stress Score</h4>
-                <div class="summary-value" id="avg-stress-score">0</div>
-            </div>
-        </div>
-        
-        <div class="section-analysis">
-            <h3>Section Stress Levels</h3>
-            <div class="section-bars" id="section-bars-container">
-                <!-- Bars populated by JavaScript -->
-            </div>
-            <!-- Chart Visualizations -->
-            <div class="charts-container" id="charts-container" style="display: none;">
-                <div class="chart-grid">
-                    <!-- Bar Chart: Section Comparison -->
-                    <div class="chart-card">
-                        <h4>Section Stress Comparison</h4>
-                        <canvas id="aggregateBarChart"></canvas>
-                    </div>
-                    
-                    <!-- Doughnut Chart: Stress Level Distribution -->
-                    <div class="chart-card">
-                        <h4>Overall Stress Distribution</h4>
-                        <canvas id="aggregatePieChart"></canvas>
-                    </div>
-                    
-                    <!-- Scatter Plot: Score Distribution (if data available) -->
-                    <div class="chart-card full-width">
-                        <h4>Assessment Score Distribution</h4>
-                        <canvas id="aggregateScatterChart"></canvas>
-                    </div>
-                </div>
-            </div>
 
-        </div>
-        
-        <div class="computation-details">
-            <h3>Computation Details</h3>
-            <div class="details-grid">
-                <div class="detail-item">
-                    <span class="detail-label">Data Source:</span>
-                    <span class="detail-value">All submitted assessments</span>
+                <!-- Computation Animation Overlay -->
+                <div class="computation-overlay" id="computation-overlay" style="display: none;">
+                    <div class="computation-content">
+                        <div class="computation-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>Processing Aggregate Data</h3>
+                        <div class="computation-steps" id="computation-steps">
+                            <div class="step active" data-step="1">Fetching responses</div>
+                            <div class="step" data-step="2">Analyzing section scores</div>
+                            <div class="step" data-step="3">Calculating stress distributions</div>
+                            <div class="step" data-step="4">Generating insights</div>
+                        </div>
+                        <div class="computation-progress">
+                            <div class="progress-track">
+                                <div class="progress-fill" id="computation-progress-fill"></div>
+                            </div>
+                            <span id="computation-percentage">0%</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="detail-item">
-                    <span class="detail-label">Calculation Method:</span>
-                    <span class="detail-value">Weighted average of section scores</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Update Frequency:</span>
-                    <span class="detail-value">Real-time on compute</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Privacy:</span>
-                    <span class="detail-value">Aggregated only - no individual data</span>
+
+                <!-- Results Display -->
+                <div class="aggregate-results" id="aggregate-results" style="display: none;">
+                    <div class="results-summary">
+                        <div class="summary-card">
+                            <h4>Total Assessments</h4>
+                            <div class="summary-value" id="total-assessments-agg">0</div>
+                        </div>
+                        <div class="summary-card highlight">
+                            <h4>Most Stressed root</h4>
+                            <div class="summary-value" id="most-stressed-section">-</div>
+                        </div>
+                        <div class="summary-card">
+                            <h4>Average Stress Score</h4>
+                            <div class="summary-value" id="avg-stress-score">0</div>
+                        </div>
+                    </div>
+
+                    <div class="section-analysis">
+                        <h3>Section Stress Levels</h3>
+                        <div class="section-bars" id="section-bars-container">
+                            <!-- Bars populated by JavaScript -->
+                        </div>
+                        <!-- Chart Visualizations -->
+                        <div class="charts-container" id="charts-container" style="display: none;">
+                            <div class="chart-grid">
+                                <!-- Bar Chart: Section Comparison -->
+                                <div class="chart-card">
+                                    <h4>Section Stress Comparison</h4>
+                                    <canvas id="aggregateBarChart"></canvas>
+                                </div>
+
+                                <!-- Doughnut Chart: Stress Level Distribution -->
+                                <div class="chart-card">
+                                    <h4>Overall Stress Distribution</h4>
+                                    <canvas id="aggregatePieChart"></canvas>
+                                </div>
+
+                                <!-- Scatter Plot: Score Distribution (if data available) -->
+                                <div class="chart-card full-width">
+                                    <h4>Assessment Score Distribution</h4>
+                                    <canvas id="aggregateScatterChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="computation-details">
+                        <h3>Computation Details</h3>
+                        <div class="details-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Data Source:</span>
+                                <span class="detail-value">All submitted assessments</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Calculation Method:</span>
+                                <span class="detail-value">Weighted average of section scores</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Update Frequency:</span>
+                                <span class="detail-value">Real-time on compute</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Privacy:</span>
+                                <span class="detail-value">Aggregated only - no individual data</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="aggregate-actions">
+                        <button class="btn btn-secondary" onclick="exportAggregateReport()">
+                            <i class="fas fa-download"></i> Export Report
+                        </button>
+                        <button class="btn btn-secondary" onclick="hideAggregateResults()">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="aggregate-actions">
-            <button class="btn btn-secondary" onclick="exportAggregateReport()">
-                <i class="fas fa-download"></i> Export Report
-            </button>
-            <button class="btn btn-secondary" onclick="hideAggregateResults()">
-                <i class="fas fa-times"></i> Close
-            </button>
-        </div>
-    </div>
-</div>
 
 
         </div>
@@ -440,12 +449,14 @@
                         <span>Dark Mode</span>
                     </div>
                 </div>
-                
+
                 <div class="settings-section">
                     <h3>Data Management</h3>
-                    <p class="setting-description">Clear your local assessment history. This will not affect the central aggregate data if already submitted.</p>
-                    <p style="font-size: smaller; color: gray; margin-top: .4rem;">Due to the public assessment, this button is diabled on purpose</p>
-                    <button class="btn btn-danger" onclick="clearHistory()" disabled >Button disabled</button>
+                    <p class="setting-description">Clear your local assessment history. This will not affect the central
+                        aggregate data if already submitted.</p>
+                    <p style="font-size: smaller; color: gray; margin-top: .4rem;">Due to the public assessment, this
+                        button is diabled on purpose</p>
+                    <button class="btn btn-danger" onclick="clearHistory()" disabled>Button disabled</button>
                 </div>
             </div>
         </div>
@@ -461,7 +472,8 @@
                             <i class="fas fa-graduation-cap"></i>
                             <span>Project Dev</span>
                         </div>
-                        <h1>Job stress management system for Nigerian universities workers using explainable artificial intelligence models</h1>
+                        <h1>Job stress management system for Nigerian universities workers using explainable artificial
+                            intelligence models</h1>
                         <div class="author-info">
                             <div class="author-card">
                                 <div class="author-avatar">
@@ -475,14 +487,16 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="about-sections">
                 <div class="container">
                     <div class="about-section">
                         <h3>Project Overview</h3>
-                        <p>This project represents a comprehensive approach to addressing employee wellbeing in academic institutions. The system utilizes advanced machine learning models to detect and analyze job stress patterns among staff members.</p>
+                        <p>This project represents a comprehensive approach to addressing employee wellbeing in academic
+                            institutions. The system utilizes advanced machine learning models to detect and analyze job
+                            stress patterns among staff members.</p>
                     </div>
-                    
+
                     <div class="about-section">
                         <h3>Technical Features</h3>
                         <div class="features-grid">
@@ -508,7 +522,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="about-section">
                         <h3>Project Objectives</h3>
                         <ul class="objectives-list">
@@ -520,7 +534,7 @@
                             <li>Contribute to the overall wellbeing of academic staff and faculty</li>
                         </ul>
                     </div>
-                    
+
                     <div class="about-section">
                         <h3>Developer Information</h3>
                         <div class="developer-card">
@@ -572,6 +586,7 @@
     </div>
 
     <script src="script.js"></script>
-   
+
 </body>
+
 </html>
