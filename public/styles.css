@@ -2941,3 +2941,14 @@ html {
         height: 200px !important;
     }
 }
+.history-count-badge {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-left: 10px;
+    vertical-align: middle;
+    display: none;
+}

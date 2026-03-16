@@ -1024,6 +1024,12 @@ function loadHistory() {
 }
 
 function renderHistoryList(container, userResults, isGlobalView = false) {
+  const countBadge = document.getElementById('history-count-badge');
+  if (countBadge) {
+    countBadge.textContent = `(${userResults.length})`;
+    countBadge.style.display = 'inline-block';
+  }
+
   if (userResults.length === 0) {
     container.innerHTML = `<div class="empty-state"><h3>No assessments found</h3><p>No assessments have been submitted yet.</p></div>`;
     return;
