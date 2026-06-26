@@ -1624,6 +1624,7 @@ function renderPieChart(distribution, total) {
     const levels = Object.keys(levelData);
     const values = levels.map(level => levelData[level]);
     
+    Chart.register(ChartDataLabels);
     aggregatePieChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -1666,6 +1667,17 @@ function renderPieChart(distribution, total) {
                             const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
                             return `${label}: ${value} (${percentage}%)`;
                         }
+                    }
+                },
+                datalabels: {
+                    color: '#fff',
+                    font: {
+                        weight: 'bold',
+                        size: 14
+                    },
+                    formatter: (value, context) => {
+                        if (value === 0) return '';
+                        return total > 0 ? ((value / total) * 100).toFixed(1) + '%' : '';
                     }
                 }
             }
