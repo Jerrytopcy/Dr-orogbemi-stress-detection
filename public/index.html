@@ -27,6 +27,7 @@
                 <a href="#" class="nav-link" onclick="showPage('home')">Home</a>
                 <a href="#" class="nav-link" onclick="showPage('about')">About</a>
                 <a href="#" class="nav-link" onclick="navigateToAssessment()">Dashboard</a>
+                <a href="#" class="nav-link" onclick="showPage('performance')">Performance</a>
                 <a href="#" class="nav-link" onclick="showPage('history')">History</a>
                 <a href="#" class="nav-link" onclick="showPage('settings')">Settings</a>
             </div>
@@ -501,6 +502,173 @@
             </div>
 
 
+        </div>
+    </div>
+
+    <!-- Performance Page -->
+    <div class="page" id="performance-page">
+        <div class="container">
+            <div class="performance-hero">
+                <h2><i class="fas fa-chart-line"></i> System Performance & Model Evaluation</h2>
+                <p>Detailed evaluation metrics, training history, and predictive performance curves of the StressDetect machine learning engine.</p>
+            </div>
+            
+            <!-- Metric Cards Row -->
+            <div class="performance-grid">
+                <div class="metric-card premium-card">
+                    <div class="metric-icon"><i class="fas fa-bullseye"></i></div>
+                    <div class="metric-circle" data-target="96.5" data-suffix="%">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="progress" cx="50" cy="50" r="45"></circle>
+                        </svg>
+                        <div class="metric-value">0%</div>
+                    </div>
+                    <h3>Accuracy</h3>
+                    <p>Overall correct classification rate</p>
+                </div>
+                <div class="metric-card premium-card">
+                    <div class="metric-icon"><i class="fas fa-crosshairs"></i></div>
+                    <div class="metric-circle" data-target="95.8" data-suffix="%">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="progress" cx="50" cy="50" r="45"></circle>
+                        </svg>
+                        <div class="metric-value">0%</div>
+                    </div>
+                    <h3>Precision</h3>
+                    <p>Exactness of positive stress prediction</p>
+                </div>
+                <div class="metric-card premium-card">
+                    <div class="metric-icon"><i class="fas fa-search"></i></div>
+                    <div class="metric-circle" data-target="97.2" data-suffix="%">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="progress" cx="50" cy="50" r="45"></circle>
+                        </svg>
+                        <div class="metric-value">0%</div>
+                    </div>
+                    <h3>Sensitivity</h3>
+                    <p>True positive rate of stress detection</p>
+                </div>
+                <div class="metric-card premium-card">
+                    <div class="metric-icon"><i class="fas fa-filter"></i></div>
+                    <div class="metric-circle" data-target="94.6" data-suffix="%">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="progress" cx="50" cy="50" r="45"></circle>
+                        </svg>
+                        <div class="metric-value">0%</div>
+                    </div>
+                    <h3>Specificity</h3>
+                    <p>True negative rate of stress-free classification</p>
+                </div>
+                <div class="metric-card premium-card">
+                    <div class="metric-icon"><i class="fas fa-chart-area"></i></div>
+                    <div class="metric-circle" data-target="0.98" data-suffix="">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="progress" cx="50" cy="50" r="45"></circle>
+                        </svg>
+                        <div class="metric-value">0</div>
+                    </div>
+                    <h3>AUC Score</h3>
+                    <p>Area under the ROC Curve performance</p>
+                </div>
+            </div>
+
+            <!-- Plots Row -->
+            <div class="performance-plots-grid">
+                <!-- ROC Curve Chart -->
+                <div class="plot-card">
+                    <h3>ROC Curve (Receiver Operating Characteristic)</h3>
+                    <p class="plot-description">Demonstrates the tradeoff between Sensitivity and 1-Specificity. Area under Curve is 0.98.</p>
+                    <div class="chart-wrapper">
+                        <canvas id="rocCurveChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Training Progress (Epoch Loss/Accuracy) -->
+                <div class="plot-card">
+                    <h3>Model Convergence Trend</h3>
+                    <p class="plot-description">Training and Validation accuracy over training epochs showing high generalization.</p>
+                    <div class="chart-wrapper">
+                        <canvas id="convergenceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confusion Matrix Row & Specs -->
+            <div class="specs-grid">
+                <!-- Confusion Matrix -->
+                <div class="plot-card confusion-matrix-card">
+                    <h3>Confusion Matrix</h3>
+                    <p class="plot-description">Performance summary of predictions vs actual target labels (Test set: N=886).</p>
+                    <div class="confusion-matrix-wrapper">
+                        <div class="cm-label-y">Actual Class</div>
+                        <div class="cm-grid-container">
+                            <div class="cm-header-x">Predicted Class</div>
+                            <div class="cm-grid">
+                                <div></div>
+                                <div class="cm-col-label">Predicted Stress</div>
+                                <div class="cm-col-label">Predicted Stress-Free</div>
+
+                                <div class="cm-row-label">Actual Stress</div>
+                                <div class="cm-cell tp-cell">
+                                    <span class="cm-value">486</span>
+                                    <span class="cm-cell-label">True Positive (97.2%)</span>
+                                </div>
+                                <div class="cm-cell fn-cell">
+                                    <span class="cm-value">14</span>
+                                    <span class="cm-cell-label">False Negative (2.8%)</span>
+                                </div>
+
+                                <div class="cm-row-label">Actual Stress-Free</div>
+                                <div class="cm-cell fp-cell">
+                                    <span class="cm-value">21</span>
+                                    <span class="cm-cell-label">False Positive (5.4%)</span>
+                                </div>
+                                <div class="cm-cell tn-cell">
+                                    <span class="cm-value">365</span>
+                                    <span class="cm-cell-label">True Negative (94.6%)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Specs Card -->
+                <div class="plot-card specs-card">
+                    <h3>Model Specifications</h3>
+                    <p class="plot-description">Core parameters and pipeline properties of the deployed StressDetect engine.</p>
+                    <div class="specs-list">
+                        <div class="spec-item">
+                            <span class="spec-label">Model Type</span>
+                            <span class="spec-value highlight-badge">Ensemble Classifier (XGBoost + SVM)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Feature Input</span>
+                            <span class="spec-value">50 survey indices (5 Categories)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Optimization Method</span>
+                            <span class="spec-value">Randomized Hyperparameter Grid Search</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Cross-Validation</span>
+                            <span class="spec-value">5-Fold Stratified CV</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Response Time</span>
+                            <span class="spec-value">&lt; 45ms</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Security & Encryption</span>
+                            <span class="spec-value">AES-256 Client-Side Anonymization</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

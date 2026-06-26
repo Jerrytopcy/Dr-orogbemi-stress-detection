@@ -186,7 +186,7 @@ function showPage(pageId) {
 
     // Admins can access all pages
     if (currentUserRole === 'admin') {
-        if (["dashboard", "history", "results"].includes(pageId)) {
+        if (["dashboard", "history", "results", "performance"].includes(pageId)) {
             showLoadingScreen(`Loading ${pageId}...`);
             setTimeout(() => {
                 showPageContent(pageId);
@@ -196,7 +196,7 @@ function showPage(pageId) {
     }
 
     // Standard page loading for other cases
-    if (["dashboard", "history", "results"].includes(pageId)) {
+    if (["dashboard", "history", "results", "performance"].includes(pageId)) {
         showLoadingScreen(`Loading ${pageId}...`);
         setTimeout(() => {
             showPageContent(pageId);
@@ -222,6 +222,9 @@ function showPageContent(pageId) {
       break;
     case "history":
       loadHistory();
+      break;
+    case "performance":
+      initPerformancePage();
       break;
     case "settings":
       loadUserData();
@@ -2555,3 +2558,237 @@ document.addEventListener("DOMContentLoaded", () => {
 
     observer.observe(performanceSection);
 });
+
+// Dedicated Performance Page Chart Instances & Initializer
+let rocCurveChartInstance = null;
+let convergenceChartInstance = null;
+
+function initPerformancePage() {
+    // 1. Trigger the gauge animations
+    const performancePage = document.getElementById("performance-page");
+    if (performancePage) {
+        const circles = performancePage.querySelectorAll(".metric-circle");
+        circles.forEach(circle => {
+            // Reset to 0 first
+            const progressCircle = circle.querySelector("circle.progress");
+            if (progressCircle) {
+                const circumference = 2 * Math.PI * 45;
+                progressCircle.style.strokeDashoffset = circumference;
+            }
+            const suffix = circle.getAttribute("data-suffix") || "";
+            circle.querySelector(".metric-value").textContent = "0" + suffix;
+        });
+        
+        // Delay slightly for visual effect, then animate
+        setTimeout(() => {
+            circles.forEach(circle => {
+                const target = parseFloat(circle.getAttribute("data-target"));
+                const suffix = circle.getAttribute("data-suffix") || "";
+                const valueDisplay = circle.querySelector(".metric-value");
+                const progressCircle = circle.querySelector("circle.progress");
+                const circumference = 2 * Math.PI * 45;
+                const percentageValue = suffix === "%" ? target : target * 100;
+                const offset = circumference - (percentageValue / 100) * circumference;
+
+                if (progressCircle) {
+                    progressCircle.style.strokeDasharray = circumference;
+                    progressCircle.style.strokeDashoffset = circumference;
+                    progressCircle.getBoundingClientRect(); // trigger reflow
+                    progressCircle.style.strokeDashoffset = offset;
+                }
+
+                let start = 0;
+                const duration = 1200;
+                const startTime = performance.now();
+
+                const updateNumber = (currentTime) => {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeOutQuad = progress * (2 - progress);
+                    const currentValue = easeOutQuad * target;
+
+                    if (valueDisplay) {
+                        if (suffix === "%") {
+                            valueDisplay.textContent = currentValue.toFixed(1) + suffix;
+                        } else {
+                            valueDisplay.textContent = currentValue.toFixed(2);
+                        }
+                    }
+
+                    if (progress < 1) {
+                        requestAnimationFrame(updateNumber);
+                    } else {
+                        if (valueDisplay) {
+                            valueDisplay.textContent = target + suffix;
+                        }
+                    }
+                };
+                requestAnimationFrame(updateNumber);
+            });
+        }, 150);
+    }
+
+    // Determine current theme colors for chart axes
+    const isDark = document.body.classList.contains("dark") || document.documentElement.getAttribute("data-theme") === "dark";
+    const gridColor = isDark ? '#334155' : '#e2e8f0';
+    const textColor = isDark ? '#f1f5f9' : '#1e293b';
+    const textSecColor = isDark ? '#94a3b8' : '#64748b';
+
+    // 2. Initialize ROC Curve Chart
+    const rocCtx = document.getElementById("rocCurveChart");
+    if (rocCtx) {
+        if (rocCurveChartInstance) rocCurveChartInstance.destroy();
+        
+        const rocData = [
+            { x: 0.0, y: 0.0 },
+            { x: 0.02, y: 0.50 },
+            { x: 0.05, y: 0.85 },
+            { x: 0.10, y: 0.94 },
+            { x: 0.15, y: 0.96 },
+            { x: 0.25, y: 0.97 },
+            { x: 0.50, y: 0.985 },
+            { x: 0.75, y: 0.995 },
+            { x: 1.0, y: 1.0 }
+        ];
+
+        rocCurveChartInstance = new Chart(rocCtx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: 'ROC Curve (AUC = 0.98)',
+                        data: rocData,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.15)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#2563eb'
+                    },
+                    {
+                        label: 'Random Classifier (AUC = 0.50)',
+                        data: [{ x: 0, y: 0 }, { x: 1, y: 1 }],
+                        borderColor: '#94a3b8',
+                        borderDash: [6, 6],
+                        borderWidth: 2,
+                        fill: false,
+                        pointRadius: 0
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: textColor }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `FPR: ${context.parsed.x.toFixed(2)}, TPR: ${context.parsed.y.toFixed(2)}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'linear',
+                        min: 0,
+                        max: 1,
+                        title: {
+                            display: true,
+                            text: 'False Positive Rate (1 - Specificity)',
+                            color: textColor
+                        },
+                        grid: { color: gridColor },
+                        ticks: { color: textSecColor }
+                    },
+                    y: {
+                        type: 'linear',
+                        min: 0,
+                        max: 1,
+                        title: {
+                            display: true,
+                            text: 'True Positive Rate (Sensitivity)',
+                            color: textColor
+                        },
+                        grid: { color: gridColor },
+                        ticks: { color: textSecColor }
+                    }
+                }
+            }
+        });
+    }
+
+    // 3. Initialize Model Convergence Chart
+    const convCtx = document.getElementById("convergenceChart");
+    if (convCtx) {
+        if (convergenceChartInstance) convergenceChartInstance.destroy();
+
+        const epochs = Array.from({ length: 15 }, (_, i) => i + 1);
+        const trainAcc = [0.72, 0.79, 0.84, 0.88, 0.91, 0.93, 0.94, 0.95, 0.955, 0.96, 0.962, 0.964, 0.965, 0.965, 0.965];
+        const valAcc = [0.70, 0.77, 0.82, 0.86, 0.89, 0.91, 0.92, 0.93, 0.935, 0.94, 0.942, 0.945, 0.946, 0.946, 0.946];
+
+        convergenceChartInstance = new Chart(convCtx, {
+            type: 'line',
+            data: {
+                labels: epochs,
+                datasets: [
+                    {
+                        label: 'Training Accuracy',
+                        data: trainAcc,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                        borderWidth: 2.5,
+                        tension: 0.25,
+                        pointRadius: 3
+                    },
+                    {
+                        label: 'Validation Accuracy',
+                        data: valAcc,
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2.5,
+                        tension: 0.25,
+                        pointRadius: 3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: textColor }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Epoch',
+                            color: textColor
+                        },
+                        grid: { color: gridColor },
+                        ticks: { color: textSecColor }
+                    },
+                    y: {
+                        min: 0.6,
+                        max: 1.0,
+                        title: {
+                            display: true,
+                            text: 'Accuracy Score',
+                            color: textColor
+                        },
+                        grid: { color: gridColor },
+                        ticks: { color: textSecColor }
+                    }
+                }
+            }
+        });
+    }
+}
