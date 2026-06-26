@@ -9,61 +9,61 @@ let tokenValidationStatus = 'pending';
 // Academic Stress Survey Questions
 // Total questions: 50 - distributed across 5 sections of 10 questions each.
 const academicStressQuestions = [
-// === SECTION 1: Workforce and Workload ===
-{ id: 1, question: "I feel that the number of staff in my department is insufficient for the workload.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 2, question: "I frequently handle more responsibilities than I can comfortably manage.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 3, question: "I often work beyond official hours to complete tasks.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 4, question: "I feel pressured to meet unrealistic deadlines.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 5, question: "I experience work overload during most weeks.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 6, question: "I struggle to balance teaching, research and administrative duties.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 7, question: "I feel that my workload affects my personal life.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 8, question: "I am assigned urgent tasks without adequate notice.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 9, question: "I feel that task distribution in my department is unfair.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 10, question: "I feel exhausted due to the volume of work assigned to me.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-// === SECTION 2: Skills and Task Management ===
-{ id: 11, question: "I feel adequately prepared for the tasks assigned to me.", category: "Skills and Task Management", options: [{ value: 2, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 0, text: "Very often" }] },
-{ id: 12, question: "I experience stress when handling unfamiliar responsibilities.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 13, question: "I receive unclear instructions regarding assigned duties.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 14, question: "I am expected to perform tasks outside my area of expertise.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 15, question: "I lack sufficient professional development opportunities.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 16, question: "I feel uncertain about performance expectations.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 17, question: "I experience difficulty prioritizing assigned duties.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 18, question: "I receive conflicting instructions from supervisors.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 19, question: "I feel unsupported when facing technical challenges.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 20, question: "I worry about making mistakes due to insufficient guidance.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-// === SECTION 3: Facilities and Infrastructure ===
-{ id: 21, question: "Inadequate office space affects my productivity.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 22, question: "Lack of functional equipment increases my stress.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 23, question: "Poor internet connectivity disrupts my work.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 24, question: "I experience delays due to insufficient laboratory or teaching facilities.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 25, question: "Administrative processes slow down my work.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 26, question: "I lack access to necessary teaching materials.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 27, question: "I experience stress due to unreliable power supply.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 28, question: "I feel that institutional systems are inefficient.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 29, question: "I struggle with outdated work tools or software.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 30, question: "Infrastructure limitations affect my job performance.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-// === SECTION 4: Mental and Physical Health ===
-{ id: 31, question: "I feel emotionally exhausted because of my job.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 32, question: "I feel anxious about work-related responsibilities.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 33, question: "I have difficulty sleeping due to work stress.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 34, question: "I experience frequent headaches related to work.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 35, question: "I feel mentally drained at the end of most days.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 36, question: "I experience physical fatigue because of my workload.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 37, question: "I have difficulty concentrating due to stress.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 38, question: "I feel irritable at work.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 39, question: "I feel overwhelmed by my responsibilities.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 40, question: "My job negatively affects my overall wellbeing.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-// === SECTION 5: Organizational Culture and Leadership ===
-{ id: 41, question: "Leadership communicates expectations clearly.", category: "Organizational Culture and Leadership", options: [{ value: 2, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 0, text: "Very often" }] },
-{ id: 42, question: "I feel supported by management.", category: "Organizational Culture and Leadership", options: [{ value: 2, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 0, text: "Very often" }] },
-{ id: 43, question: "I feel valued for my contributions.", category: "Organizational Culture and Leadership", options: [{ value: 2, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 0, text: "Very often" }] },
-{ id: 44, question: "I fear negative consequences for expressing concerns.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 45, question: "I feel excluded from important decisions.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 46, question: "I experience stress due to poor communication from leadership.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 47, question: "I feel that policies are inconsistently applied.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 48, question: "I feel that leadership decisions increase staff stress.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 49, question: "I lack trust in institutional leadership.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
-{ id: 50, question: "I feel that the work environment lacks transparency.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] }
+  // === SECTION 1: Workforce and Workload ===
+  { id: 1, question: "I feel that the number of staff in my department is insufficient for the workload.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 2, question: "I frequently handle more responsibilities than I can comfortably manage.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 3, question: "I often work beyond official hours to complete tasks.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 4, question: "I feel pressured to meet unrealistic deadlines.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 5, question: "I experience work overload during most weeks.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 6, question: "I struggle to balance teaching, research and administrative duties.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 7, question: "I feel that my workload affects my personal life.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 8, question: "I am assigned urgent tasks without adequate notice.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 9, question: "I feel that task distribution in my department is unfair.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 10, question: "I feel exhausted due to the volume of work assigned to me.", category: "Workforce and Workload", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  // === SECTION 2: Skills and Task Management ===
+  { id: 11, question: "I feel adequately prepared for the tasks assigned to me.", category: "Skills and Task Management", options: [{ value: 2, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 0, text: "Very often" }] },
+  { id: 12, question: "I experience stress when handling unfamiliar responsibilities.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 13, question: "I receive unclear instructions regarding assigned duties.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 14, question: "I am expected to perform tasks outside my area of expertise.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 15, question: "I lack sufficient professional development opportunities.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 16, question: "I feel uncertain about performance expectations.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 17, question: "I experience difficulty prioritizing assigned duties.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 18, question: "I receive conflicting instructions from supervisors.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 19, question: "I feel unsupported when facing technical challenges.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 20, question: "I worry about making mistakes due to insufficient guidance.", category: "Skills and Task Management", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  // === SECTION 3: Facilities and Infrastructure ===
+  { id: 21, question: "Inadequate office space affects my productivity.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 22, question: "Lack of functional equipment increases my stress.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 23, question: "Poor internet connectivity disrupts my work.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 24, question: "I experience delays due to insufficient laboratory or teaching facilities.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 25, question: "Administrative processes slow down my work.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 26, question: "I lack access to necessary teaching materials.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 27, question: "I experience stress due to unreliable power supply.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 28, question: "I feel that institutional systems are inefficient.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 29, question: "I struggle with outdated work tools or software.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 30, question: "Infrastructure limitations affect my job performance.", category: "Facilities and Infrastructure", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  // === SECTION 4: Mental and Physical Health ===
+  { id: 31, question: "I feel emotionally exhausted because of my job.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 32, question: "I feel anxious about work-related responsibilities.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 33, question: "I have difficulty sleeping due to work stress.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 34, question: "I experience frequent headaches related to work.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 35, question: "I feel mentally drained at the end of most days.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 36, question: "I experience physical fatigue because of my workload.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 37, question: "I have difficulty concentrating due to stress.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 38, question: "I feel irritable at work.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 39, question: "I feel overwhelmed by my responsibilities.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 40, question: "My job negatively affects my overall wellbeing.", category: "Mental and Physical Health", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  // === SECTION 5: Organizational Culture and Leadership ===
+  { id: 41, question: "Leadership communicates expectations clearly.", category: "Organizational Culture and Leadership", options: [{ value: 2, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 0, text: "Very often" }] },
+  { id: 42, question: "I feel supported by management.", category: "Organizational Culture and Leadership", options: [{ value: 2, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 0, text: "Very often" }] },
+  { id: 43, question: "I feel valued for my contributions.", category: "Organizational Culture and Leadership", options: [{ value: 2, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 0, text: "Very often" }] },
+  { id: 44, question: "I fear negative consequences for expressing concerns.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 45, question: "I feel excluded from important decisions.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 46, question: "I experience stress due to poor communication from leadership.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 47, question: "I feel that policies are inconsistently applied.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 48, question: "I feel that leadership decisions increase staff stress.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 49, question: "I lack trust in institutional leadership.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] },
+  { id: 50, question: "I feel that the work environment lacks transparency.", category: "Organizational Culture and Leadership", options: [{ value: 0, text: "Never" }, { value: 1, text: "Fairly often" }, { value: 2, text: "Very often" }] }
 ];
 // Global variables
 let currentUser = null;
@@ -97,7 +97,7 @@ function initializeApp() {
     sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
     localStorage.setItem('stressDetectSessionId', sessionId);
   }
-  
+
   currentUser = {
     id: "session_user",
     sessionId: sessionId,  // Add sessionId to currentUser
@@ -132,10 +132,10 @@ function setupEventListeners() {
   if (submitBtn) submitBtn.addEventListener("click", submitAssessment);
 }
 function navigateToAssessment() {
-    if (!isTokenValidated) {
-        showModal(
-    `Access Required <i class="fas fa-info-circle" style="color:var(--primary-color);margin-left:6px;"></i>`,
-    `<div style="line-height:1.7;">
+  if (!isTokenValidated) {
+    showModal(
+      `Access Required <i class="fas fa-info-circle" style="color:var(--primary-color);margin-left:6px;"></i>`,
+      `<div style="line-height:1.7;">
         <div style="background:var(--surface-color);padding:12px 16px;border-radius:6px;border-left:4px solid var(--primary-color);margin:12px 0;">
             <p style="margin:0;font-weight:500;">One-Time Assessment Link</p>
             <p style="margin:4px 0 0 0;color:var(--text-secondary);font-size:0.95rem;">
@@ -154,56 +154,56 @@ function navigateToAssessment() {
             </p>
         </div>
     </div>`,
-    null
-);
-        return;
-    }
-    showPage('dashboard');
+      null
+    );
+    return;
+  }
+  showPage('dashboard');
 }
 
 // Page Navigation
 function showPage(pageId) {
-    // Block history and settings for participants without valid token
-    if (!isTokenValidated && currentUserRole === 'participant') {
-        if (pageId === 'dashboard' || pageId === 'history' || pageId === 'settings') {
-            if (pageId === 'dashboard') {
-                blockAssessmentAccess('Please validate your assessment token to begin.');
-            } else {
-                showToast('A valid assessment token is required to access this section.', 'warning');
-                showPage('home');
-                return;
-            }
-        }
+  // Block history and settings for participants without valid token
+  if (!isTokenValidated && currentUserRole === 'participant') {
+    if (pageId === 'dashboard' || pageId === 'history' || pageId === 'settings') {
+      if (pageId === 'dashboard') {
+        blockAssessmentAccess('Please validate your assessment token to begin.');
+      } else {
+        showToast('A valid assessment token is required to access this section.', 'warning');
+        showPage('home');
+        return;
+      }
     }
+  }
 
-    // Block history page for participants with invitation token only
-    if (currentInvitationToken && currentUserRole === 'participant') {
-        if (pageId === 'history' || pageId === 'settings') {
-            showToast('This section is not available for assessment participants', 'warning');
-            return;
-        }
+  // Block history page for participants with invitation token only
+  if (currentInvitationToken && currentUserRole === 'participant') {
+    if (pageId === 'history' || pageId === 'settings') {
+      showToast('This section is not available for assessment participants', 'warning');
+      return;
     }
+  }
 
-    // Admins can access all pages
-    if (currentUserRole === 'admin') {
-        if (["dashboard", "history", "results", "performance"].includes(pageId)) {
-            showLoadingScreen(`Loading ${pageId}...`);
-            setTimeout(() => {
-                showPageContent(pageId);
-            }, 600);
-            return;
-        }
-    }
-
-    // Standard page loading for other cases
+  // Admins can access all pages
+  if (currentUserRole === 'admin') {
     if (["dashboard", "history", "results", "performance"].includes(pageId)) {
-        showLoadingScreen(`Loading ${pageId}...`);
-        setTimeout(() => {
-            showPageContent(pageId);
-        }, 600);
-    } else {
+      showLoadingScreen(`Loading ${pageId}...`);
+      setTimeout(() => {
         showPageContent(pageId);
+      }, 600);
+      return;
     }
+  }
+
+  // Standard page loading for other cases
+  if (["dashboard", "history", "results", "performance"].includes(pageId)) {
+    showLoadingScreen(`Loading ${pageId}...`);
+    setTimeout(() => {
+      showPageContent(pageId);
+    }, 600);
+  } else {
+    showPageContent(pageId);
+  }
 }
 function showPageContent(pageId) {
   const pages = document.querySelectorAll(".page");
@@ -245,7 +245,7 @@ function showEthicalModal() {
       showToast('You have already completed your assessment for this session.', 'info');
       return;
     }
-    
+
     const modalHtml = `
     <div class="modal-content">
       <div class="modal-header">
@@ -275,7 +275,7 @@ function showEthicalModal() {
       </div>
     </div>
     `;
-    
+
     const modal = document.getElementById('modal');
     modal.innerHTML = modalHtml;
     modal.classList.add('active');
@@ -345,11 +345,11 @@ function hideLoadingScreen() {
 
 // Assessment Functions
 async function startAssessment() {
-      // Enforce token requirement
-    if (!isTokenValidated || tokenValidationStatus !== 'valid') {
-        showModal(
-    'Access Required <i class="fas fa-info-circle" style="color:var(--primary-color);margin-left:6px;"></i>',
-    `<div style="line-height:1.7;">
+  // Enforce token requirement
+  if (!isTokenValidated || tokenValidationStatus !== 'valid') {
+    showModal(
+      'Access Required <i class="fas fa-info-circle" style="color:var(--primary-color);margin-left:6px;"></i>',
+      `<div style="line-height:1.7;">
         <div style="background:var(--surface-color);padding:12px 16px;border-radius:6px;border-left:4px solid var(--primary-color);margin:12px 0;">
             <p style="margin:0;font-weight:500;">One-Time Assessment Link</p>
             <p style="margin:4px 0 0 0;color:var(--text-secondary);font-size:0.95rem;">
@@ -368,31 +368,31 @@ async function startAssessment() {
             </p>
         </div>
     </div>`,
-    null
-);
-        return;
-    }
+      null
+    );
+    return;
+  }
   // Check if user has already completed an assessment
   const alreadyCompleted = await hasCompletedAssessment();
-  
+
   if (alreadyCompleted) {
     showToast('You have already completed your assessment for this session. Each participant may submit only one response.', 'info', 5000);
-    
+
     // Optional: Show a modal with more detail
     showModal(
       'Assessment Already Completed',
       'Thank you for your contribution. You have already submitted your stress assessment for this session. Your response has been securely recorded and will contribute to organizational insights while maintaining your anonymity.',
       null
     );
-    
+
     return; // Exit early - do not start a new assessment
   }
-  
+
   // Proceed with normal assessment flow
   currentQuestionIndex = 0;
   assessmentAnswers = {};
   assessmentInProgress = true;
-  
+
   const assessmentSection = document.getElementById('assessment-section');
   if (assessmentSection) {
     assessmentSection.style.display = 'block';
@@ -414,7 +414,7 @@ function showQuestion(index) {
   const question = academicStressQuestions[index];
   const questionContent = document.getElementById("question-content");
   if (!questionContent) return;
-  
+
   const categoryDisplay = {
     "Workforce and Workload": "Workforce & Workload",
     "Skills and Task Management": "Skills & Task Management",
@@ -423,7 +423,7 @@ function showQuestion(index) {
     "Organizational Culture and Leadership": "Culture & Leadership"
   };
   const categoryLabel = categoryDisplay[question.category] || question.category;
-  
+
   questionContent.innerHTML = `
     <div style="font-size:0.9rem; color:#059669; font-weight:500; margin-bottom:10px;">
       Section: ${categoryLabel}
@@ -439,7 +439,7 @@ function showQuestion(index) {
       `).join("")}
     </div>
   `;
-  
+
   if (assessmentAnswers[question.id]) {
     const savedValue = assessmentAnswers[question.id].value;
     const radioButton = questionContent.querySelector(`input[value="${savedValue}"]`);
@@ -449,7 +449,7 @@ function showQuestion(index) {
       optionLabel.classList.add("selected");
     }
   }
-  
+
   updateNavigationButtons();
 }
 
@@ -499,12 +499,12 @@ function updateNavigationButtons() {
   const nextBtn = document.getElementById("next-btn");
   const submitBtn = document.getElementById("submit-btn");
   if (!prevBtn || !nextBtn || !submitBtn) return;
-  
+
   prevBtn.disabled = currentQuestionIndex === 0;
-  
+
   const isLastQuestion = currentQuestionIndex === academicStressQuestions.length - 1;
   const hasAnswer = assessmentAnswers[academicStressQuestions[currentQuestionIndex].id];
-  
+
   if (isLastQuestion) {
     nextBtn.style.display = "none";
     submitBtn.style.display = hasAnswer ? "inline-block" : "none";
@@ -527,18 +527,18 @@ function submitAssessment() {
   // Prevent multiple submissions by disabling the button
   const submitBtn = document.getElementById("submit-btn");
   if (!submitBtn || submitBtn.disabled) return; // Exit if already disabled
-  
+
   // Disable the button and show loading state
   submitBtn.disabled = true;
   submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-  
+
   showLoadingScreen("Processing and saving to secure database...");
-  
+
   // Clear any existing timeout to prevent multiple timeouts
   if (window.submitTimeout) {
     clearTimeout(window.submitTimeout);
   }
-  
+
   // Set a single timeout for the submission process
   window.submitTimeout = setTimeout(() => {
     let totalScore = 0;
@@ -549,18 +549,18 @@ function submitAssessment() {
       "Mental and Physical Health": 0,
       "Organizational Culture and Leadership": 0
     };
-    
+
     Object.values(assessmentAnswers).forEach((answer) => {
-      const originalQuestion = academicStressQuestions.find(q => 
-        q.id === Number(Object.keys(assessmentAnswers).find(key => 
+      const originalQuestion = academicStressQuestions.find(q =>
+        q.id === Number(Object.keys(assessmentAnswers).find(key =>
           assessmentAnswers[key] === answer)));
       if (originalQuestion) {
         totalScore += answer.value;
         sectionScores[originalQuestion.category] += answer.value;
       }
     });
-    
-    
+
+
     let overallStressLevel, overallStressDescription, overallStressClass;
     if (totalScore <= 24) {
       overallStressLevel = "Low Stress";
@@ -583,7 +583,7 @@ function submitAssessment() {
       overallStressDescription = "Critically elevated stress. Professional support strongly recommended.";
       overallStressClass = "high-risk";
     }
-    
+
     const sectionLevels = {};
     let highestSection = "";
     let highestScore = -1;
@@ -594,17 +594,17 @@ function submitAssessment() {
       else if (score <= 12) { level = "Abnormal"; classLabel = "abnormal"; }
       else if (score <= 15) { level = "High"; classLabel = "high"; }
       else { level = "High Risk"; classLabel = "high-risk"; }
-      
+
       sectionLevels[section] = { level, class: classLabel, score };
       if (score > highestScore) {
         highestScore = score;
         highestSection = section;
       }
     }
-    
+
     let personalRecommendations = [overallStressDescription];
     let organizationalRecommendations = [];
-    
+
     if (highestSection === "Mental and Physical Health") {
       personalRecommendations.push("Focus on sleep consistency and stress-reduction practices.");
       organizationalRecommendations.push("Provide confidential counseling access", "Introduce stress management workshops");
@@ -621,7 +621,7 @@ function submitAssessment() {
       personalRecommendations.push("Request training support and clearer guidelines.");
       organizationalRecommendations.push("Provide professional development opportunities");
     }
-    
+
     const result = {
       userId: currentUser.id,
       sessionId: currentUser.sessionId,
@@ -638,53 +638,53 @@ function submitAssessment() {
       highestSection: highestSection,
       personalRecommendations: personalRecommendations,
       organizationalRecommendations: organizationalRecommendations,
-      invitationToken: currentInvitationToken || null 
+      invitationToken: currentInvitationToken || null
     };
-    
+
     // SEND TO SERVER
     fetch('/api/assessments', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(result)
     })
-    .then(response => {
-      if (!response.ok) {
-        return response.json().then(err => {
-          throw new Error(`Server error: ${err.message || 'Unknown error'}`);
-        });
-      }
-      return response.json();
-    })
-    .then(data => {
-      if (data.success) {
-        hideAssessment();
-        const displayResult = { ...result, id: data.data.id };
-        displayResults(displayResult);
-        showPage("results");
-        loadDashboardStats();
-        updateCharts();
-        showToast("Assessment saved securely!", "success");
-      } else {
-        throw new Error('Save failed');
-      }
-    })
-    .catch(err => {
-      console.error("DB Save Error:", err);
-      showToast("Unable to save to server. Please check your connection.", "error");
-      
-      // Re-enable the button on error
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Submit Assessment';
-      }
-    })
-    .finally(() => {
-      // Always re-enable the button after request completes
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Submit Assessment';
-      }
-    });
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(err => {
+            throw new Error(`Server error: ${err.message || 'Unknown error'}`);
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.success) {
+          hideAssessment();
+          const displayResult = { ...result, id: data.data.id };
+          displayResults(displayResult);
+          showPage("results");
+          loadDashboardStats();
+          updateCharts();
+          showToast("Assessment saved securely!", "success");
+        } else {
+          throw new Error('Save failed');
+        }
+      })
+      .catch(err => {
+        console.error("DB Save Error:", err);
+        showToast("Unable to save to server. Please check your connection.", "error");
+
+        // Re-enable the button on error
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = 'Submit Assessment';
+        }
+      })
+      .finally(() => {
+        // Always re-enable the button after request completes
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = 'Submit Assessment';
+        }
+      });
   }, 1500);
 }
 
@@ -703,7 +703,7 @@ function createStressTrendChart(labels, data) {
   const ctx = document.getElementById("stressTrendChart");
   if (!ctx) return;
   if (stressTrendChart) stressTrendChart.destroy();
-  
+
   stressTrendChart = new Chart(ctx, {
     type: "line",
     data: {
@@ -729,16 +729,16 @@ function createStressTrendChart(labels, data) {
 function createStressDistributionChart(dbData) {
   const ctx = document.getElementById("stressDistributionChart");
   if (!ctx) return;
-  
+
   let distribution = { low: 0, moderate: 0, high: 0, abnormal: 0, "high-risk": 0 };
   if (dbData) {
     dbData.forEach((r) => {
       if (distribution[r.class] !== undefined) distribution[r.class]++;
     });
   }
-  
+
   if (stressDistributionChart) stressDistributionChart.destroy();
-  
+
   stressDistributionChart = new Chart(ctx, {
     type: "doughnut",
     data: {
@@ -759,12 +759,12 @@ function createStressDistributionChart(dbData) {
 function createMonthlyOverviewChart(dbData) {
   const ctx = document.getElementById("monthlyOverviewChart");
   if (!ctx) return;
-  
+
   let userResults = [];
   if (dbData) {
     userResults = dbData;
   }
-  
+
   const monthlyData = {};
   userResults.forEach((r) => {
     const month = new Date(r.date).toLocaleDateString("en-US", { year: "numeric", month: "short" });
@@ -772,12 +772,12 @@ function createMonthlyOverviewChart(dbData) {
     monthlyData[month].total += r.score;
     monthlyData[month].count++;
   });
-  
+
   const labels = Object.keys(monthlyData);
   const averages = labels.map((month) => monthlyData[month].total / monthlyData[month].count);
-  
+
   if (monthlyOverviewChart) monthlyOverviewChart.destroy();
-  
+
   monthlyOverviewChart = new Chart(ctx, {
     type: "bar",
     data: {
@@ -801,7 +801,7 @@ function createMonthlyOverviewChart(dbData) {
 
 function updateCharts() {
   if (!currentUser) return;
-  
+
   // Updated to use session-based endpoint with sessionId
   fetch(`/api/assessments/user/${currentUser.sessionId}`)
     .then(res => {
@@ -838,53 +838,53 @@ function displayResults(result) {
   document.getElementById("score-value").textContent = `${result.score}/${result.maxScore}`;
   document.getElementById("stress-level-text").textContent = result.level;
   document.getElementById("stress-level-description").textContent = result.description;
-  
+
   const stressLevelElement = document.getElementById("stress-level-result");
   if (stressLevelElement) stressLevelElement.className = `stress-level ${result.class}`;
-  
+
   const scoreCircle = document.getElementById("score-circle");
   if (scoreCircle) {
     const percentage = (result.score / result.maxScore) * 360;
     scoreCircle.style.background = `conic-gradient(var(--primary-color) ${percentage}deg, var(--border-color) ${percentage}deg)`;
   }
-  
+
   let sectionScoresHtml = "<ul>";
   for (const [section, data] of Object.entries(result.sectionLevels)) {
     sectionScoresHtml += `<li><strong>${section}:</strong> ${data.score}/20 (${data.level})</li>`;
   }
   sectionScoresHtml += "</ul>";
-  
+
   let personalRecsHtml = "<ul>";
   result.personalRecommendations.forEach(rec => { personalRecsHtml += `<li>${rec}</li>`; });
   personalRecsHtml += "</ul>";
-  
+
   let orgRecsHtml = "<ul>";
   result.organizationalRecommendations.forEach(rec => { orgRecsHtml += `<li>${rec}</li>`; });
   orgRecsHtml += "</ul>";
-  
+
   const sectionContainer = document.getElementById("section-scores-typed");
   const personalContainer = document.getElementById("personal-recs-typed");
   const orgContainer = document.getElementById("org-recs-typed");
-  
+
   if (sectionContainer) {
     sectionContainer.style.display = 'block';
     simulateTypingWithHtml(sectionContainer, sectionScoresHtml, 40);
   }
-  
+
   if (personalContainer) {
     setTimeout(() => {
       personalContainer.style.display = 'block';
       simulateTypingWithHtml(personalContainer, personalRecsHtml, 30);
     }, 500);
   }
-  
+
   if (orgContainer) {
     setTimeout(() => {
       orgContainer.style.display = 'block';
       simulateTypingWithHtml(orgContainer, orgRecsHtml, 30);
     }, 1000);
   }
-  
+
   setTimeout(createResultTrendChart, 100);
 }
 
@@ -899,7 +899,7 @@ function simulateTypingWithHtml(container, content, speed = 30) {
 function createResultTrendChart() {
   const ctx = document.getElementById("resultTrendChart");
   if (!ctx) return;
-  
+
   // Updated to use session-based endpoint with sessionId
   fetch(`/api/assessments/user/${currentUser.sessionId}`)
     .then(res => {
@@ -913,17 +913,17 @@ function createResultTrendChart() {
       if (response.success) {
         userResults = response.data.sort((a, b) => new Date(a.date) - new Date(b.date));
       }
-      
+
       const labels = userResults.map(r => new Date(r.date).toLocaleDateString());
       const data = userResults.map(r => r.score);
-      
+
       if (resultTrendChartInstance) resultTrendChartInstance.destroy();
-      
+
       if (data.length === 0) {
         ctx.parentElement.style.display = 'none';
         return;
       }
-      
+
       ctx.parentElement.style.display = 'block';
       resultTrendChartInstance = new Chart(ctx, {
         type: "line",
@@ -956,18 +956,18 @@ function loadHistory() {
   const container = document.getElementById('history-content');
   const aggregateSection = document.getElementById('aggregate-section');
   if (!container) return;
-  
+
   if (aggregateSection) {
     aggregateSection.style.display = currentUserRole === 'admin' ? 'block' : 'none';
   }
-  
+
   let url = `/api/assessments/user/${currentUser.sessionId}`;
   let headers = {};
   let isGlobalView = false;
-  
+
   // Robust admin check
   const isAdminUser = currentUserRole === 'admin' || isAdmin || (adminToken && adminToken.length > 0);
-  
+
   if (isAdminUser) {
     url = '/api/assessments/all';
     if (adminToken) {
@@ -976,7 +976,7 @@ function loadHistory() {
     }
     isGlobalView = true;
   }
-  
+
   fetch(url, { headers })
     .then(async res => {
       if (!res.ok) {
@@ -991,33 +991,33 @@ function loadHistory() {
         container.innerHTML = `<div class="empty-state"><h3>No assessments found</h3><p>No assessments have been submitted yet.</p></div>`;
         return;
       }
-      
-     const assessments = response.data.map(row => ({
-  id: row.id,
-  score: row.score,
-  maxScore: row.max_score || row.maxScore,
-  level: row.level,
-  class: row.class,
-  description: row.description,
-  date: row.created_at || row.createdAt,  // Use created_at only
-  sectionLevels: typeof row.section_levels === 'string' 
-    ? JSON.parse(row.section_levels) 
-    : row.section_levels || row.sectionLevels,
-  personalRecommendations: typeof row.personal_recommendations === 'string' 
-    ? JSON.parse(row.personal_recommendations) 
-    : row.personal_recommendations,
-  organizationalRecommendations: typeof row.organizational_recommendations === 'string' 
-    ? JSON.parse(row.organizational_recommendations) 
-    : row.organizational_recommendations,
-  answers: typeof row.answers === 'string' 
-    ? JSON.parse(row.answers) 
-    : row.answers || {},
-  sessionId: row.session_id || row.sessionId,
-  userId: row.user_id || row.userId,
-  isGlobalView: isGlobalView
-  // Note: Do not reference row.updated_at
-})).sort((a, b) => new Date(b.date) - new Date(a.date));
-      
+
+      const assessments = response.data.map(row => ({
+        id: row.id,
+        score: row.score,
+        maxScore: row.max_score || row.maxScore,
+        level: row.level,
+        class: row.class,
+        description: row.description,
+        date: row.created_at || row.createdAt,  // Use created_at only
+        sectionLevels: typeof row.section_levels === 'string'
+          ? JSON.parse(row.section_levels)
+          : row.section_levels || row.sectionLevels,
+        personalRecommendations: typeof row.personal_recommendations === 'string'
+          ? JSON.parse(row.personal_recommendations)
+          : row.personal_recommendations,
+        organizationalRecommendations: typeof row.organizational_recommendations === 'string'
+          ? JSON.parse(row.organizational_recommendations)
+          : row.organizational_recommendations,
+        answers: typeof row.answers === 'string'
+          ? JSON.parse(row.answers)
+          : row.answers || {},
+        sessionId: row.session_id || row.sessionId,
+        userId: row.user_id || row.userId,
+        isGlobalView: isGlobalView
+        // Note: Do not reference row.updated_at
+      })).sort((a, b) => new Date(b.date) - new Date(a.date));
+
       renderHistoryList(container, assessments, isGlobalView);
     })
     .catch(err => {
@@ -1037,18 +1037,18 @@ function renderHistoryList(container, userResults, isGlobalView = false) {
     container.innerHTML = `<div class="empty-state"><h3>No assessments found</h3><p>No assessments have been submitted yet.</p></div>`;
     return;
   }
-  
+
   container.innerHTML = userResults.map((result) => `
     <div class="history-item">
       <div class="history-info">
-        <h4>${isGlobalView ? 'Assessment' : 'Your Assessment'} - ${new Date(result.date).toLocaleString('en-US', { 
-          day: '2-digit', 
-          month: 'short', 
-          year: 'numeric', 
-          hour: '2-digit', 
-          minute: '2-digit',
-          hour12: true
-        })}</h4>
+        <h4>${isGlobalView ? 'Assessment' : 'Your Assessment'} - ${new Date(result.date).toLocaleString('en-US', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  })}</h4>
         ${isGlobalView ? `<p style="font-size:0.8rem; color:var(--text-secondary);">Session: ${result.sessionId}</p>` : ''}
         ${isGlobalView ? `<p style="font-size:0.8rem; color:var(--text-secondary);">User: ${result.userId === 'anonymous' ? 'Anonymous' : result.userId}</p>` : ''}
         <p>${result.description}</p>
@@ -1072,10 +1072,10 @@ function clearHistory() {
 
 function loadUserData() {
   if (!currentUser) return;
-  
+
   const nameEl = document.getElementById("user-name");
   if (nameEl) nameEl.textContent = `Welcome, ${currentUser.name}`;
-  
+
   const avatars = document.querySelectorAll(".user-avatar");
   avatars.forEach(av => av.innerHTML = '<i class="fas fa-user-circle"></i>');
 }
@@ -1083,27 +1083,27 @@ function loadUserData() {
 // Add this inside loadDashboardStats() after fetching user data
 async function loadDashboardStats() {
   if (!currentUser) return;
-  
+
   try {
     const response = await fetch(`/api/assessments/user/${currentUser.sessionId}`);
     const data = await response.json();
-    
+
     let userResults = [];
     if (data.success) {
       userResults = data.data;
     }
-    
+
     // Update stats display
     const totalEl = document.getElementById('total-assessments');
     const lastLevelEl = document.getElementById('last-stress-level');
     const daysEl = document.getElementById('days-since-last');
-    
+
     if (totalEl) totalEl.textContent = userResults.length;
-    
+
     // Check if assessment already completed and update UI
     const startBtn = document.querySelector('.action-card[onclick="startAssessment()"]');
     const quickStartBtn = document.querySelector('.hero-buttons .btn-primary');
-    
+
     if (userResults.length > 0) {
       // User has completed assessment - disable start buttons
       if (startBtn) {
@@ -1116,13 +1116,13 @@ async function loadDashboardStats() {
           <p>Thank you for your contribution</p>
         `;
       }
-      
+
       if (quickStartBtn) {
         quickStartBtn.disabled = true;
         quickStartBtn.title = 'You have already completed your assessment';
         quickStartBtn.innerHTML = '<i class="fas fa-check"></i> Assessment Submitted';
       }
-      
+
       // Update last result display
       const lastResult = userResults.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
       if (lastLevelEl) lastLevelEl.textContent = lastResult.level;
@@ -1142,18 +1142,18 @@ async function loadDashboardStats() {
           <p>Take a new academic stress assessment</p>
         `;
       }
-      
+
       if (quickStartBtn) {
         quickStartBtn.disabled = false;
         quickStartBtn.title = '';
         quickStartBtn.innerHTML = 'Get Assessed';
         quickStartBtn.onclick = () => showPage('dashboard');
       }
-      
+
       if (lastLevelEl) lastLevelEl.textContent = '-';
       if (daysEl) daysEl.textContent = '-';
     }
-    
+
   } catch (err) {
     console.error('Stats load error', err);
     // Fallback values
@@ -1218,7 +1218,7 @@ function downloadPDFReport(result) {
   try {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    
+
     // Header background
     doc.setFillColor(59, 130, 246);
     doc.rect(0, 0, 210, 25, 'F');
@@ -1226,17 +1226,17 @@ function downloadPDFReport(result) {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
     doc.text("Job Stress Assessment Report", 105, 16, null, null, "center");
-    
+
     // Reset Color
     doc.setTextColor(40, 40, 40);
-    
+
     // Details Section
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     const dateStr = new Date(result.date).toLocaleString('en-US');
     doc.text(`Date & Time: ${dateStr}`, 14, 35);
     doc.text(`Session ID: ${result.sessionId}`, 14, 41);
-    
+
     if (result.userId && result.userId !== 'anonymous') {
       doc.text(`User ID: ${result.userId}`, 14, 47);
     }
@@ -1244,24 +1244,24 @@ function downloadPDFReport(result) {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(14);
     doc.text(`Overall Stress Score: ${result.score}/${result.maxScore}`, 14, 57);
-    
+
     let levelColor = [16, 185, 129];
     if (result.class === 'moderate') levelColor = [245, 158, 11];
     else if (result.class === 'abnormal') levelColor = [139, 92, 246];
     else if (result.class === 'high') levelColor = [239, 68, 68];
     else if (result.class === 'high-risk') levelColor = [120, 20, 20];
-    
+
     doc.setTextColor(...levelColor);
     doc.text(`Level: ${result.level}`, 14, 65);
-    
+
     doc.setTextColor(60, 60, 60);
     doc.setFontSize(11);
     doc.setFont("helvetica", "italic");
     const descLines = doc.splitTextToSize(result.description, 180);
     doc.text(descLines, 14, 73);
-    
+
     let currentY = 73 + (descLines.length * 6) + 5;
-    
+
     // Sections Table
     const sectionBody = [];
     if (result.sectionLevels) {
@@ -1269,7 +1269,7 @@ function downloadPDFReport(result) {
         sectionBody.push([section, `${data.score}/20`, data.level]);
       }
     }
-    
+
     doc.autoTable({
       startY: currentY,
       head: [['Section', 'Score', 'Stress Level']],
@@ -1278,9 +1278,9 @@ function downloadPDFReport(result) {
       headStyles: { fillColor: [59, 130, 246], textColor: [255, 255, 255] },
       styles: { fontSize: 10, cellPadding: 3 }
     });
-    
+
     currentY = doc.lastAutoTable.finalY + 10;
-    
+
     // Recommendations
     if (result.personalRecommendations && result.personalRecommendations.length > 0) {
       doc.setFont("helvetica", "bold");
@@ -1290,13 +1290,13 @@ function downloadPDFReport(result) {
       doc.setFont("helvetica", "normal");
       doc.setFontSize(10);
       result.personalRecommendations.forEach(rec => {
-         const recLines = doc.splitTextToSize(`• ${rec}`, 180);
-         doc.text(recLines, 14, currentY);
-         currentY += (recLines.length * 5);
+        const recLines = doc.splitTextToSize(`• ${rec}`, 180);
+        doc.text(recLines, 14, currentY);
+        currentY += (recLines.length * 5);
       });
       currentY += 5;
     }
-    
+
     if (result.organizationalRecommendations && result.organizationalRecommendations.length > 0) {
       if (currentY > 260) { doc.addPage(); currentY = 20; }
       doc.setFont("helvetica", "bold");
@@ -1306,13 +1306,13 @@ function downloadPDFReport(result) {
       doc.setFont("helvetica", "normal");
       doc.setFontSize(10);
       result.organizationalRecommendations.forEach(rec => {
-         const recLines = doc.splitTextToSize(`• ${rec}`, 180);
-         doc.text(recLines, 14, currentY);
-         currentY += (recLines.length * 5);
+        const recLines = doc.splitTextToSize(`• ${rec}`, 180);
+        doc.text(recLines, 14, currentY);
+        currentY += (recLines.length * 5);
       });
       currentY += 10;
     }
-    
+
     // Answers Table
     if (result.answers && Object.keys(result.answers).length > 0) {
       doc.addPage();
@@ -1324,22 +1324,22 @@ function downloadPDFReport(result) {
 
       const answersBody = [];
       for (const qId of Object.keys(result.answers)) {
-          const ans = result.answers[qId];
-          answersBody.push([`${qId}`, ans.question, ans.answer, ans.value]);
+        const ans = result.answers[qId];
+        answersBody.push([`${qId}`, ans.question, ans.answer, ans.value]);
       }
       doc.autoTable({
-          startY: currentY,
-          head: [['#', 'Question', 'Your Response', 'Score']],
-          body: answersBody,
-          theme: 'striped',
-          headStyles: { fillColor: [75, 85, 99], textColor: [255, 255, 255] },
-          styles: { fontSize: 9, cellPadding: 2, overflow: 'linebreak' },
-          columnStyles: {
-            0: { cellWidth: 10, halign: 'center' },
-            1: { cellWidth: 110 },
-            2: { cellWidth: 45 },
-            3: { cellWidth: 15, halign: 'center' }
-          }
+        startY: currentY,
+        head: [['#', 'Question', 'Your Response', 'Score']],
+        body: answersBody,
+        theme: 'striped',
+        headStyles: { fillColor: [75, 85, 99], textColor: [255, 255, 255] },
+        styles: { fontSize: 9, cellPadding: 2, overflow: 'linebreak' },
+        columnStyles: {
+          0: { cellWidth: 10, halign: 'center' },
+          1: { cellWidth: 110 },
+          2: { cellWidth: 45 },
+          3: { cellWidth: 15, halign: 'center' }
+        }
       });
     }
 
@@ -1359,114 +1359,114 @@ function viewReportFromObj(result) {
 
 // Aggregate Analysis Functions
 function computeAggregateAnalysis() {
-    const overlay = document.getElementById('computation-overlay');
-    const results = document.getElementById('aggregate-results');
-    const computeBtn = document.getElementById('compute-aggregate-btn');
-    
-    // Show overlay and hide results
-    overlay.style.display = 'flex';
-    results.style.display = 'none';
-    computeBtn.disabled = true;
-    
-    // Reset progress
-    document.getElementById('computation-progress-fill').style.width = '0%';
-    document.getElementById('computation-percentage').textContent = '0%';
-    
-    // Reset steps
-    document.querySelectorAll('.step').forEach(step => {
-        step.classList.remove('active');
-        step.style.opacity = '0.5';
-    });
-    
-    // Animate computation steps
-    let progress = 0;
-    let currentStep = 1;
-    const steps = document.querySelectorAll('.step');
-    
-    const stepInterval = setInterval(() => {
-        // Update progress bar
-        progress += Math.random() * 8 + 4;
-        if (progress >= 100) progress = 100;
-        
-        document.getElementById('computation-progress-fill').style.width = progress + '%';
-        document.getElementById('computation-percentage').textContent = Math.round(progress) + '%';
-        
-        // Update active step
-        if (progress >= currentStep * 25 && currentStep <= 4) {
-            steps.forEach(s => s.classList.remove('active'));
-            if (steps[currentStep - 1]) {
-                steps[currentStep - 1].classList.add('active');
-                steps[currentStep - 1].style.opacity = '1';
-            }
-            currentStep++;
-        }
-        
-        if (progress >= 100) {
-            clearInterval(stepInterval);
-            // Fetch actual data after animation
-            fetchAggregateData();
-        }
-    }, 200);
+  const overlay = document.getElementById('computation-overlay');
+  const results = document.getElementById('aggregate-results');
+  const computeBtn = document.getElementById('compute-aggregate-btn');
+
+  // Show overlay and hide results
+  overlay.style.display = 'flex';
+  results.style.display = 'none';
+  computeBtn.disabled = true;
+
+  // Reset progress
+  document.getElementById('computation-progress-fill').style.width = '0%';
+  document.getElementById('computation-percentage').textContent = '0%';
+
+  // Reset steps
+  document.querySelectorAll('.step').forEach(step => {
+    step.classList.remove('active');
+    step.style.opacity = '0.5';
+  });
+
+  // Animate computation steps
+  let progress = 0;
+  let currentStep = 1;
+  const steps = document.querySelectorAll('.step');
+
+  const stepInterval = setInterval(() => {
+    // Update progress bar
+    progress += Math.random() * 8 + 4;
+    if (progress >= 100) progress = 100;
+
+    document.getElementById('computation-progress-fill').style.width = progress + '%';
+    document.getElementById('computation-percentage').textContent = Math.round(progress) + '%';
+
+    // Update active step
+    if (progress >= currentStep * 25 && currentStep <= 4) {
+      steps.forEach(s => s.classList.remove('active'));
+      if (steps[currentStep - 1]) {
+        steps[currentStep - 1].classList.add('active');
+        steps[currentStep - 1].style.opacity = '1';
+      }
+      currentStep++;
+    }
+
+    if (progress >= 100) {
+      clearInterval(stepInterval);
+      // Fetch actual data after animation
+      fetchAggregateData();
+    }
+  }, 200);
 }
 
 function fetchAggregateData() {
-    fetch('/api/assessments/aggregate')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                displayAggregateResults(data);
-            } else {
-                throw new Error('Failed to fetch aggregate data');
-            }
-        })
-        .catch(err => {
-            console.error('Aggregate fetch error:', err);
-            showToast('Unable to load aggregate data. Please try again.', 'error');
-            hideComputationOverlay();
-        });
+  fetch('/api/assessments/aggregate')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.success) {
+        displayAggregateResults(data);
+      } else {
+        throw new Error('Failed to fetch aggregate data');
+      }
+    })
+    .catch(err => {
+      console.error('Aggregate fetch error:', err);
+      showToast('Unable to load aggregate data. Please try again.', 'error');
+      hideComputationOverlay();
+    });
 }
 
 function displayAggregateResults(data) {
-    const overlay = document.getElementById('computation-overlay');
-    const results = document.getElementById('aggregate-results');
-    const computeBtn = document.getElementById('compute-aggregate-btn');
-    
-    // Hide overlay and show results
-    overlay.style.display = 'none';
-    results.style.display = 'block';
-    computeBtn.disabled = false;
-    
-    // Update summary cards
-    document.getElementById('total-assessments-agg').textContent = data.totalAssessments || 0;
-    document.getElementById('most-stressed-section').textContent = 
-        data.mostChallengingSection || 'N/A';
-    
-    // Calculate and display average stress score
-    const sectionAverages = data.sectionAverages || {};
-    const avgValues = Object.values(sectionAverages).map(v => parseFloat(v));
-    const overallAvg = avgValues.length > 0 
-        ? (avgValues.reduce((a, b) => a + b, 0) / avgValues.length).toFixed(1)
-        : 0;
-    document.getElementById('avg-stress-score').textContent = overallAvg;
-    
-    // Generate section bars
-    generateSectionBars(sectionAverages);
-    
-    // Render interactive charts
-    renderAggregateCharts(data);
+  const overlay = document.getElementById('computation-overlay');
+  const results = document.getElementById('aggregate-results');
+  const computeBtn = document.getElementById('compute-aggregate-btn');
 
-    // Render organisational risk recommendation panel
-    renderOrgRiskPanel(data);
-    
-    // Auto-scroll to results section after a brief delay for rendering
-    setTimeout(() => {
-        results.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 150);
+  // Hide overlay and show results
+  overlay.style.display = 'none';
+  results.style.display = 'block';
+  computeBtn.disabled = false;
+
+  // Update summary cards
+  document.getElementById('total-assessments-agg').textContent = data.totalAssessments || 0;
+  document.getElementById('most-stressed-section').textContent =
+    data.mostChallengingSection || 'N/A';
+
+  // Calculate and display average stress score
+  const sectionAverages = data.sectionAverages || {};
+  const avgValues = Object.values(sectionAverages).map(v => parseFloat(v));
+  const overallAvg = avgValues.length > 0
+    ? (avgValues.reduce((a, b) => a + b, 0) / avgValues.length).toFixed(1)
+    : 0;
+  document.getElementById('avg-stress-score').textContent = overallAvg;
+
+  // Generate section bars
+  generateSectionBars(sectionAverages);
+
+  // Render interactive charts
+  renderAggregateCharts(data);
+
+  // Render organisational risk recommendation panel
+  renderOrgRiskPanel(data);
+
+  // Auto-scroll to results section after a brief delay for rendering
+  setTimeout(() => {
+    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 150);
 }
 
 /**
@@ -1475,85 +1475,85 @@ function displayAggregateResults(data) {
  * participants exceeds the 5% threshold.
  */
 function renderOrgRiskPanel(data) {
-    const panel = document.getElementById('org-risk-panel');
-    if (!panel) return;
+  const panel = document.getElementById('org-risk-panel');
+  if (!panel) return;
 
-    const dist = data.stressLevelDistribution || {};
-    const total = data.totalAssessments || 0;
+  const dist = data.stressLevelDistribution || {};
+  const total = data.totalAssessments || 0;
 
-    const counts = {
-        low:       dist.low         || 0,
-        moderate:  dist.moderate    || 0,
-        abnormal:  dist.abnormal    || 0,
-        high:      dist.high        || 0,
-        highRisk:  dist['high-risk'] || 0
-    };
+  const counts = {
+    low: dist.low || 0,
+    moderate: dist.moderate || 0,
+    abnormal: dist.abnormal || 0,
+    high: dist.high || 0,
+    highRisk: dist['high-risk'] || 0
+  };
 
-    // Percentages
-    const pct = key => total > 0 ? ((counts[key] / total) * 100) : 0;
-    const pctAbnormal  = pct('abnormal');
-    const pctHigh      = pct('high');
-    const pctHighRisk  = pct('highRisk');
-    const elevatedPct  = pctAbnormal + pctHigh + pctHighRisk;   // combined elevated
-    const safePct      = pct('low') + pct('moderate');
+  // Percentages
+  const pct = key => total > 0 ? ((counts[key] / total) * 100) : 0;
+  const pctAbnormal = pct('abnormal');
+  const pctHigh = pct('high');
+  const pctHighRisk = pct('highRisk');
+  const elevatedPct = pctAbnormal + pctHigh + pctHighRisk;   // combined elevated
+  const safePct = pct('low') + pct('moderate');
 
-    // Threshold rules
-    const DANGER_THRESHOLD  = 5;   // > 5% elevated → DANGER
-    const WARNING_THRESHOLD = 2;   // > 2% elevated → WARNING
+  // Threshold rules
+  const DANGER_THRESHOLD = 5;   // > 5% elevated → DANGER
+  const WARNING_THRESHOLD = 2;   // > 2% elevated → WARNING
 
-    let state, severityLabel, icon, title, subtitle;
+  let state, severityLabel, icon, title, subtitle;
 
-    if (elevatedPct > DANGER_THRESHOLD) {
-        state         = 'danger';
-        severityLabel = '⚠ Organisational Risk Detected';
-        icon          = 'fas fa-exclamation-triangle';
-        title         = 'Immediate Organisational Action Required';
-        subtitle      = `${elevatedPct.toFixed(1)}% of staff report elevated stress — the organisation is in danger. Intervention in the highlighted areas is critical.`;
-    } else if (elevatedPct > WARNING_THRESHOLD) {
-        state         = 'warning';
-        severityLabel = '⚡ Caution — Elevated Stress Observed';
-        icon          = 'fas fa-radiation';
-        title         = 'Proactive Measures Recommended';
-        subtitle      = `${elevatedPct.toFixed(1)}% of staff show signs of elevated stress. Monitor closely and prepare targeted interventions before stress levels escalate.`;
-    } else {
-        state         = 'safe';
-        severityLabel = '✔ Organisational Health: Satisfactory';
-        icon          = 'fas fa-shield-alt';
-        title         = 'Organisation is Within Safe Stress Limits';
-        subtitle      = `Only ${elevatedPct.toFixed(1)}% of staff report elevated stress levels. Continue current wellness initiatives and periodic monitoring.`;
+  if (elevatedPct > DANGER_THRESHOLD) {
+    state = 'danger';
+    severityLabel = '⚠ Organisational Risk Detected';
+    icon = 'fas fa-exclamation-triangle';
+    title = 'Immediate Organisational Action Required';
+    subtitle = `${elevatedPct.toFixed(1)}% of staff report elevated stress — the organisation is in danger. Intervention in the highlighted areas is critical.`;
+  } else if (elevatedPct > WARNING_THRESHOLD) {
+    state = 'warning';
+    severityLabel = '⚡ Caution — Elevated Stress Observed';
+    icon = 'fas fa-radiation';
+    title = 'Proactive Measures Recommended';
+    subtitle = `${elevatedPct.toFixed(1)}% of staff show signs of elevated stress. Monitor closely and prepare targeted interventions before stress levels escalate.`;
+  } else {
+    state = 'safe';
+    severityLabel = '✔ Organisational Health: Satisfactory';
+    icon = 'fas fa-shield-alt';
+    title = 'Organisation is Within Safe Stress Limits';
+    subtitle = `Only ${elevatedPct.toFixed(1)}% of staff report elevated stress levels. Continue current wellness initiatives and periodic monitoring.`;
+  }
+
+  // Build per-section action items (only for danger/warning)
+  const sectionMeta = {
+    'Workforce and Workload': {
+      icon: 'fas fa-users',
+      action: 'Conduct an immediate workload audit. Hire additional staff or redistribute duties to reduce overload.'
+    },
+    'Skills and Task Management': {
+      icon: 'fas fa-tasks',
+      action: 'Provide urgent training support, clarify role expectations, and assign mentors for under-supported staff.'
+    },
+    'Facilities and Infrastructure': {
+      icon: 'fas fa-building',
+      action: 'Prioritise infrastructure upgrades — fix connectivity, replace outdated equipment, and resolve power reliability issues (Unstable electricity supply).'
+    },
+    'Mental and Physical Health': {
+      icon: 'fas fa-heartbeat',
+      action: 'Immediately engage confidential counselling services and introduce stress management and wellness workshops.'
+    },
+    'Organizational Culture and Leadership': {
+      icon: 'fas fa-sitemap',
+      action: 'Launch leadership transparency initiatives, open-door feedback policies, and inclusive decision-making processes.'
     }
+  };
 
-    // Build per-section action items (only for danger/warning)
-    const sectionMeta = {
-        'Workforce and Workload': {
-            icon: 'fas fa-users',
-            action: 'Conduct an immediate workload audit. Hire additional staff or redistribute duties to reduce overload.'
-        },
-        'Skills and Task Management': {
-            icon: 'fas fa-tasks',
-            action: 'Provide urgent training support, clarify role expectations, and assign mentors for under-supported staff.'
-        },
-        'Facilities and Infrastructure': {
-            icon: 'fas fa-building',
-            action: 'Prioritise infrastructure upgrades — fix connectivity, replace outdated equipment, and resolve power reliability issues.'
-        },
-        'Mental and Physical Health': {
-            icon: 'fas fa-heartbeat',
-            action: 'Immediately engage confidential counselling services and introduce stress management and wellness workshops.'
-        },
-        'Organizational Culture and Leadership': {
-            icon: 'fas fa-sitemap',
-            action: 'Launch leadership transparency initiatives, open-door feedback policies, and inclusive decision-making processes.'
-        }
-    };
+  const sectionAverages = data.sectionAverages || {};
+  const affectedSections = Object.entries(sectionAverages)
+    .filter(([, val]) => parseFloat(val) > 5)   // above low-stress threshold
+    .sort(([, a], [, b]) => parseFloat(b) - parseFloat(a));
 
-    const sectionAverages = data.sectionAverages || {};
-    const affectedSections = Object.entries(sectionAverages)
-        .filter(([, val]) => parseFloat(val) > 5)   // above low-stress threshold
-        .sort(([, a], [, b]) => parseFloat(b) - parseFloat(a));
-
-    const actionItemsHTML = (state !== 'safe' && affectedSections.length > 0)
-        ? `
+  const actionItemsHTML = (state !== 'safe' && affectedSections.length > 0)
+    ? `
         <hr class="risk-divider">
         <p style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:12px;">
             <i class="fas fa-map-marker-alt" style="margin-right:6px;"></i>
@@ -1561,8 +1561,8 @@ function renderOrgRiskPanel(data) {
         </p>
         <div class="risk-action-list">
             ${affectedSections.map(([section]) => {
-                const meta = sectionMeta[section] || { icon: 'fas fa-exclamation-circle', action: 'Review and address conditions in this section.' };
-                return `
+      const meta = sectionMeta[section] || { icon: 'fas fa-exclamation-circle', action: 'Review and address conditions in this section.' };
+      return `
                 <div class="risk-action-item">
                     <div class="risk-action-icon"><i class="${meta.icon}"></i></div>
                     <div class="risk-action-text">
@@ -1570,11 +1570,11 @@ function renderOrgRiskPanel(data) {
                         <span>${meta.action}</span>
                     </div>
                 </div>`;
-            }).join('')}
+    }).join('')}
         </div>`
-        : '';
+    : '';
 
-    panel.innerHTML = `
+  panel.innerHTML = `
         <div class="risk-panel ${state}">
             <div class="risk-panel-header">
                 <div class="risk-icon-wrap">
@@ -1616,33 +1616,33 @@ function renderOrgRiskPanel(data) {
             </p>
         </div>`;
 
-    panel.style.display = 'block';
+  panel.style.display = 'block';
 }
 
 function generateSectionBars(sectionAverages) {
-    const container = document.getElementById('section-bars-container');
-    container.innerHTML = '';
-    
-    const sections = [
-        'Workforce and Workload',
-        'Skills and Task Management',
-        'Facilities and Infrastructure',
-        'Mental and Physical Health',
-        'Organizational Culture and Leadership'
-    ];
-    
-    // Calculate max value for scaling
-    const values = Object.values(sectionAverages);
-    const maxValue = Math.max(...values.map(v => parseFloat(v)), 20);
-    
-    sections.forEach(section => {
-        const value = parseFloat(sectionAverages[section]) || 0;
-        const percentage = (value / maxValue) * 100;
-        const level = getStressLevel(value);
-        
-        const barItem = document.createElement('div');
-        barItem.className = 'section-bar-item';
-        barItem.innerHTML = `
+  const container = document.getElementById('section-bars-container');
+  container.innerHTML = '';
+
+  const sections = [
+    'Workforce and Workload',
+    'Skills and Task Management',
+    'Facilities and Infrastructure',
+    'Mental and Physical Health',
+    'Organizational Culture and Leadership'
+  ];
+
+  // Calculate max value for scaling
+  const values = Object.values(sectionAverages);
+  const maxValue = Math.max(...values.map(v => parseFloat(v)), 20);
+
+  sections.forEach(section => {
+    const value = parseFloat(sectionAverages[section]) || 0;
+    const percentage = (value / maxValue) * 100;
+    const level = getStressLevel(value);
+
+    const barItem = document.createElement('div');
+    barItem.className = 'section-bar-item';
+    barItem.innerHTML = `
             <div class="section-label">${getShortSectionName(section)}</div>
             <div class="section-bar-track">
                 <div class="section-bar-fill ${level}" style="width: 0%" data-width="${percentage}%">
@@ -1651,15 +1651,15 @@ function generateSectionBars(sectionAverages) {
             </div>
             <div class="section-value">${value.toFixed(1)}/20</div>
         `;
-        
-        container.appendChild(barItem);
-        
-        // Animate bar fill after a slight delay
-        setTimeout(() => {
-            const fill = barItem.querySelector('.section-bar-fill');
-            fill.style.width = fill.dataset.width;
-        }, 200);
-    });
+
+    container.appendChild(barItem);
+
+    // Animate bar fill after a slight delay
+    setTimeout(() => {
+      const fill = barItem.querySelector('.section-bar-fill');
+      fill.style.width = fill.dataset.width;
+    }, 200);
+  });
 }
 // Global chart instances to manage cleanup
 let aggregateBarChart = null;
@@ -1667,484 +1667,484 @@ let aggregatePieChart = null;
 let aggregateScatterChart = null;
 
 function renderAggregateCharts(data) {
-    const chartsContainer = document.getElementById('charts-container');
-    if (chartsContainer) {
-        chartsContainer.style.display = 'block';
-    }
-    
-    renderBarChart(data.sectionAverages);
-    renderPieChart(data.stressLevelDistribution, data.totalAssessments);
-    renderScatterChart(data.rawScores || []);
+  const chartsContainer = document.getElementById('charts-container');
+  if (chartsContainer) {
+    chartsContainer.style.display = 'block';
+  }
+
+  renderBarChart(data.sectionAverages);
+  renderPieChart(data.stressLevelDistribution, data.totalAssessments);
+  renderScatterChart(data.rawScores || []);
 }
 
 function renderBarChart(sectionAverages) {
-    const ctx = document.getElementById('aggregateBarChart');
-    if (!ctx) return;
-    
-    // Destroy existing chart instance
-    if (aggregateBarChart) {
-        aggregateBarChart.destroy();
-    }
-    
-    const sections = [
-        'Workforce and Workload',
-        'Skills and Task Management',
-        'Facilities and Infrastructure',
-        'Mental and Physical Health',
-        'Organizational Culture and Leadership'
-    ];
-    
-    const shortNames = {
-        'Workforce and Workload': 'Workforce',
-        'Skills and Task Management': 'Skills',
-        'Facilities and Infrastructure': 'Facilities',
-        'Mental and Physical Health': 'Health',
-        'Organizational Culture and Leadership': 'Culture'
-    };
-    
-    const labels = sections.map(s => shortNames[s] || s);
-    const values = sections.map(s => parseFloat(sectionAverages[s]) || 0);
-    const colors = values.map(v => {
-        if (v <= 4) return 'rgba(16, 185, 129, 0.8)';
-        if (v <= 9) return 'rgba(245, 158, 11, 0.8)';
-        if (v <= 12) return 'rgba(139, 92, 246, 0.8)';
-        if (v <= 15) return 'rgba(239, 68, 68, 0.8)';
-        return 'rgba(120, 20, 20, 0.8)';
-    });
-    
-    aggregateBarChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Average Stress Score',
-                data: values,
-                backgroundColor: colors,
-                borderColor: colors.map(c => c.replace('0.8', '1')),
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return `Score: ${context.parsed.y.toFixed(1)}/20`;
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 20,
-                    title: {
-                        display: true,
-                        text: 'Stress Score'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Section'
-                    }
-                }
+  const ctx = document.getElementById('aggregateBarChart');
+  if (!ctx) return;
+
+  // Destroy existing chart instance
+  if (aggregateBarChart) {
+    aggregateBarChart.destroy();
+  }
+
+  const sections = [
+    'Workforce and Workload',
+    'Skills and Task Management',
+    'Facilities and Infrastructure',
+    'Mental and Physical Health',
+    'Organizational Culture and Leadership'
+  ];
+
+  const shortNames = {
+    'Workforce and Workload': 'Workforce',
+    'Skills and Task Management': 'Skills',
+    'Facilities and Infrastructure': 'Facilities',
+    'Mental and Physical Health': 'Health',
+    'Organizational Culture and Leadership': 'Culture'
+  };
+
+  const labels = sections.map(s => shortNames[s] || s);
+  const values = sections.map(s => parseFloat(sectionAverages[s]) || 0);
+  const colors = values.map(v => {
+    if (v <= 4) return 'rgba(16, 185, 129, 0.8)';
+    if (v <= 9) return 'rgba(245, 158, 11, 0.8)';
+    if (v <= 12) return 'rgba(139, 92, 246, 0.8)';
+    if (v <= 15) return 'rgba(239, 68, 68, 0.8)';
+    return 'rgba(120, 20, 20, 0.8)';
+  });
+
+  aggregateBarChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Average Stress Score',
+        data: values,
+        backgroundColor: colors,
+        borderColor: colors.map(c => c.replace('0.8', '1')),
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              return `Score: ${context.parsed.y.toFixed(1)}/20`;
             }
+          }
         }
-    });
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 20,
+          title: {
+            display: true,
+            text: 'Stress Score'
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: 'Section'
+          }
+        }
+      }
+    }
+  });
 }
 
 function renderPieChart(distribution, total) {
-    const ctx = document.getElementById('aggregatePieChart');
-    if (!ctx) return;
-    
-    if (aggregatePieChart) {
-        aggregatePieChart.destroy();
-    }
-    
-    // Map distribution to stress levels
-    const levelData = {
-        'Low': distribution.low || 0,
-        'Moderate': distribution.moderate || 0,
-        'Abnormal': distribution.abnormal || 0,
-        'High': distribution.high || 0,
-        'High Risk': distribution['high-risk'] || 0
-    };
-    
-    const levels = Object.keys(levelData);
-    const values = levels.map(level => levelData[level]);
-    
-    // Use total parameter or calculate sum as fallback
-    const chartTotal = total > 0 ? total : values.reduce((a, b) => a + b, 0);
-    
-    aggregatePieChart = new Chart(ctx, {
-        type: 'doughnut',
-        plugins: [ChartDataLabels],
-        data: {
-            labels: levels,
-            datasets: [{
-                data: values,
-                backgroundColor: [
-                    'rgba(16, 185, 129, 0.8)',
-                    'rgba(245, 158, 11, 0.8)',
-                    'rgba(139, 92, 246, 0.8)',
-                    'rgba(239, 68, 68, 0.8)',
-                    'rgba(120, 20, 20, 0.8)'
-                ],
-                borderColor: [
-                    'rgb(16, 185, 129)',
-                    'rgb(245, 158, 11)',
-                    'rgb(139, 92, 246)',
-                    'rgb(239, 68, 68)',
-                    'rgb(120, 20, 20)'
-                ],
-                borderWidth: 2
-            }]
+  const ctx = document.getElementById('aggregatePieChart');
+  if (!ctx) return;
+
+  if (aggregatePieChart) {
+    aggregatePieChart.destroy();
+  }
+
+  // Map distribution to stress levels
+  const levelData = {
+    'Low': distribution.low || 0,
+    'Moderate': distribution.moderate || 0,
+    'Abnormal': distribution.abnormal || 0,
+    'High': distribution.high || 0,
+    'High Risk': distribution['high-risk'] || 0
+  };
+
+  const levels = Object.keys(levelData);
+  const values = levels.map(level => levelData[level]);
+
+  // Use total parameter or calculate sum as fallback
+  const chartTotal = total > 0 ? total : values.reduce((a, b) => a + b, 0);
+
+  aggregatePieChart = new Chart(ctx, {
+    type: 'doughnut',
+    plugins: [ChartDataLabels],
+    data: {
+      labels: levels,
+      datasets: [{
+        data: values,
+        backgroundColor: [
+          'rgba(16, 185, 129, 0.8)',
+          'rgba(245, 158, 11, 0.8)',
+          'rgba(139, 92, 246, 0.8)',
+          'rgba(239, 68, 68, 0.8)',
+          'rgba(120, 20, 20, 0.8)'
+        ],
+        borderColor: [
+          'rgb(16, 185, 129)',
+          'rgb(245, 158, 11)',
+          'rgb(139, 92, 246)',
+          'rgb(239, 68, 68)',
+          'rgb(120, 20, 20)'
+        ],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 15,
+            usePointStyle: true
+          }
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 15,
-                        usePointStyle: true
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.parsed || 0;
-                            const percentage = chartTotal > 0 ? ((value / chartTotal) * 100).toFixed(1) : 0;
-                            return `${label}: ${value} (${percentage}%)`;
-                        }
-                    }
-                },
-                datalabels: {
-                    color: '#fff',
-                    font: {
-                        weight: 'bold',
-                        size: 14
-                    },
-                    formatter: (value, context) => {
-                        if (value === 0) return '';
-                        return chartTotal > 0 ? ((value / chartTotal) * 100).toFixed(1) + '%' : '';
-                    }
-                }
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              const label = context.label || '';
+              const value = context.parsed || 0;
+              const percentage = chartTotal > 0 ? ((value / chartTotal) * 100).toFixed(1) : 0;
+              return `${label}: ${value} (${percentage}%)`;
             }
+          }
+        },
+        datalabels: {
+          color: '#fff',
+          font: {
+            weight: 'bold',
+            size: 14
+          },
+          formatter: (value, context) => {
+            if (value === 0) return '';
+            return chartTotal > 0 ? ((value / chartTotal) * 100).toFixed(1) + '%' : '';
+          }
         }
-    });
+      }
+    }
+  });
 }
 
 function renderScatterChart(rawScores) {
-    const ctx = document.getElementById('aggregateScatterChart');
-    if (!ctx) return;
-    
-    if (aggregateScatterChart) {
-        aggregateScatterChart.destroy();
-    }
-    
-    // Generate sample data if rawScores not provided
-    // In production, fetch actual score distribution from backend
-    let dataPoints = [];
+  const ctx = document.getElementById('aggregateScatterChart');
+  if (!ctx) return;
 
-if (rawScores && rawScores.length > 0) {
+  if (aggregateScatterChart) {
+    aggregateScatterChart.destroy();
+  }
+
+  // Generate sample data if rawScores not provided
+  // In production, fetch actual score distribution from backend
+  let dataPoints = [];
+
+  if (rawScores && rawScores.length > 0) {
     dataPoints = rawScores.map((score, index) => ({
-        x: index + 1,
-        y: score
+      x: index + 1,
+      y: score
     }));
-} else {
+  } else {
     dataPoints = generateSampleScatterData();
-}
-    
-    aggregateScatterChart = new Chart(ctx, {
-        type: 'scatter',
-        data: {
-            datasets: [{
-                label: 'Assessment Scores',
-                data: dataPoints,
-                backgroundColor: 'rgba(59, 130, 246, 0.6)',
-                borderColor: 'rgba(59, 130, 246, 1)',
-                pointRadius: 4,
-                pointHoverRadius: 6
-            }]
-        },
-        options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
+  }
+
+  aggregateScatterChart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'Assessment Scores',
+        data: dataPoints,
+        backgroundColor: 'rgba(59, 130, 246, 0.6)',
+        borderColor: 'rgba(59, 130, 246, 1)',
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
         legend: { display: false },
         tooltip: {
-            enabled: true,
-            callbacks: {
-                title: function(context) {
-                    const point = context[0].raw;
-                    return `Assessment ${point.x}`;
-                },
-                label: function(context) {
-                    const point = context.raw;
-                    return `Stress Score: ${point.y}`;
-                }
+          enabled: true,
+          callbacks: {
+            title: function (context) {
+              const point = context[0].raw;
+              return `Assessment ${point.x}`;
+            },
+            label: function (context) {
+              const point = context.raw;
+              return `Stress Score: ${point.y}`;
             }
+          }
         }
-    },
-            scales: {
-                x: {
-                    type: 'linear',
-                    position: 'bottom',
-                    title: {
-                        display: true,
-                        text: 'Assessment Index'
-                    },
-                    min: 0
-                },
-                y: {
-                    beginAtZero: true,
-                    max: 100,
-                    title: {
-                        display: true,
-                        text: 'Total Stress Score'
-                    }
-                }
-            }
+      },
+      scales: {
+        x: {
+          type: 'linear',
+          position: 'bottom',
+          title: {
+            display: true,
+            text: 'Assessment Index'
+          },
+          min: 0
+        },
+        y: {
+          beginAtZero: true,
+          max: 100,
+          title: {
+            display: true,
+            text: 'Total Stress Score'
+          }
         }
-    });
+      }
+    }
+  });
 }
 
 function generateSampleScatterData() {
-    // Generate sample data for demonstration
-    // Replace with actual data from backend
-    const data = [];
-    const count = Math.min(50, Math.floor(Math.random() * 30) + 20);
-    for (let i = 0; i < count; i++) {
-        data.push({
-            x: i + 1,
-            y: Math.floor(Math.random() * 60) + 20
-        });
-    }
-    return data;
+  // Generate sample data for demonstration
+  // Replace with actual data from backend
+  const data = [];
+  const count = Math.min(50, Math.floor(Math.random() * 30) + 20);
+  for (let i = 0; i < count; i++) {
+    data.push({
+      x: i + 1,
+      y: Math.floor(Math.random() * 60) + 20
+    });
+  }
+  return data;
 }
 
 function cleanupAggregateCharts() {
-    if (aggregateBarChart) {
-        aggregateBarChart.destroy();
-        aggregateBarChart = null;
-    }
-    if (aggregatePieChart) {
-        aggregatePieChart.destroy();
-        aggregatePieChart = null;
-    }
-    if (aggregateScatterChart) {
-        aggregateScatterChart.destroy();
-        aggregateScatterChart = null;
-    }
+  if (aggregateBarChart) {
+    aggregateBarChart.destroy();
+    aggregateBarChart = null;
+  }
+  if (aggregatePieChart) {
+    aggregatePieChart.destroy();
+    aggregatePieChart = null;
+  }
+  if (aggregateScatterChart) {
+    aggregateScatterChart.destroy();
+    aggregateScatterChart = null;
+  }
 }
 
 function getShortSectionName(fullName) {
-    return fullName;
+  return fullName;
 }
 
 
 function getStressLevel(score) {
-    if (score <= 4) return 'low';
-    if (score <= 9) return 'moderate';
-    if (score <= 12) return 'abnormal';
-    if (score <= 15) return 'high';
-    return 'high-risk';
+  if (score <= 4) return 'low';
+  if (score <= 9) return 'moderate';
+  if (score <= 12) return 'abnormal';
+  if (score <= 15) return 'high';
+  return 'high-risk';
 }
 
 function hideComputationOverlay() {
-    const overlay = document.getElementById('computation-overlay');
-    const computeBtn = document.getElementById('compute-aggregate-btn');
-    overlay.style.display = 'none';
-    computeBtn.disabled = false;
+  const overlay = document.getElementById('computation-overlay');
+  const computeBtn = document.getElementById('compute-aggregate-btn');
+  overlay.style.display = 'none';
+  computeBtn.disabled = false;
 }
 
 function hideAggregateResults() {
-    const results = document.getElementById('aggregate-results');
-    results.style.display = 'none';
+  const results = document.getElementById('aggregate-results');
+  results.style.display = 'none';
 }
 
 async function exportAggregateReport() {
-    showToast('Generating Aggregate PDF...', 'info');
-    try {
-        const response = await fetch('/api/assessments/aggregate');
-        const data = await response.json();
-        if (!data.success) throw new Error('Data fetch failed');
-        
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        
-        // Header
-        doc.setFillColor(16, 185, 129); // Greenish header for aggregate
-        doc.rect(0, 0, 210, 25, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(18);
-        doc.text("Aggregate Stress Analysis Report", 105, 16, null, null, "center");
-        
-        doc.setTextColor(40, 40, 40);
-        
-        // Summary
-        doc.setFontSize(14);
-        doc.text("Executive Summary", 14, 35);
-        
-        doc.setFontSize(11);
-        doc.setFont("helvetica", "normal");
-        doc.text(`Total Assessments: ${data.totalAssessments}`, 14, 45);
-        doc.text(`Most Challenging Area: ${data.mostChallengingSection}`, 14, 52);
-        
-        // Calculate average
-        const avgValues = Object.values(data.sectionAverages).map(v => parseFloat(v));
-        const overallAvg = avgValues.length > 0 ? (avgValues.reduce((a, b) => a + b, 0) / avgValues.length).toFixed(1) : 0;
-        doc.text(`Average Section Score: ${overallAvg}/20`, 14, 59);
+  showToast('Generating Aggregate PDF...', 'info');
+  try {
+    const response = await fetch('/api/assessments/aggregate');
+    const data = await response.json();
+    if (!data.success) throw new Error('Data fetch failed');
 
-        let currentY = 70;
-        
-        // Sections Table
-        const sectionBody = [];
-        for (const [section, score] of Object.entries(data.sectionAverages)) {
-          sectionBody.push([section, `${parseFloat(score).toFixed(1)}/20`]);
-        }
-        
-        doc.autoTable({
-          startY: currentY,
-          head: [['Section', 'Average Score']],
-          body: sectionBody,
-          theme: 'grid',
-          headStyles: { fillColor: [16, 185, 129], textColor: [255, 255, 255] },
-          styles: { fontSize: 10, cellPadding: 3 }
-        });
-        
-        currentY = doc.lastAutoTable.finalY + 15;
-        
-        // Add charts if available
-        const addChart = (chart, title, yPos) => {
-            if (!chart) return yPos;
-            if (yPos > 180) { doc.addPage(); yPos = 20; }
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(12);
-            doc.text(title, 14, yPos);
-            const imgData = chart.toBase64Image();
-            doc.addImage(imgData, 'PNG', 14, yPos + 5, 180, 90);
-            return yPos + 105;
-        };
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-        if (typeof aggregateBarChart !== 'undefined' && aggregateBarChart !== null) {
-            currentY = addChart(aggregateBarChart, "Section Stress Comparison", currentY);
-        }
-        
-        if (typeof aggregatePieChart !== 'undefined' && aggregatePieChart !== null) {
-            currentY = addChart(aggregatePieChart, "Overall Stress Distribution", currentY);
-        }
-        
-        if (typeof aggregateScatterChart !== 'undefined' && aggregateScatterChart !== null) {
-            if (currentY > 150) { doc.addPage(); currentY = 20; }
-            doc.setFont("helvetica", "bold");
-            doc.text("Assessment Score Distribution", 14, currentY);
-            doc.addImage(aggregateScatterChart.toBase64Image(), 'PNG', 14, currentY + 5, 180, 90);
-        }
+    // Header
+    doc.setFillColor(16, 185, 129); // Greenish header for aggregate
+    doc.rect(0, 0, 210, 25, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("Aggregate Stress Analysis Report", 105, 16, null, null, "center");
 
-        doc.save(`Aggregate_Stress_Report_${new Date().toISOString().split('T')[0]}.pdf`);
-        showToast('Report downloaded successfully!', 'success');
-        
-    } catch (err) {
-        console.error("Aggregate Export Error:", err);
-        showToast('Failed to export aggregate report.', 'error');
+    doc.setTextColor(40, 40, 40);
+
+    // Summary
+    doc.setFontSize(14);
+    doc.text("Executive Summary", 14, 35);
+
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Total Assessments: ${data.totalAssessments}`, 14, 45);
+    doc.text(`Most Challenging Area: ${data.mostChallengingSection}`, 14, 52);
+
+    // Calculate average
+    const avgValues = Object.values(data.sectionAverages).map(v => parseFloat(v));
+    const overallAvg = avgValues.length > 0 ? (avgValues.reduce((a, b) => a + b, 0) / avgValues.length).toFixed(1) : 0;
+    doc.text(`Average Section Score: ${overallAvg}/20`, 14, 59);
+
+    let currentY = 70;
+
+    // Sections Table
+    const sectionBody = [];
+    for (const [section, score] of Object.entries(data.sectionAverages)) {
+      sectionBody.push([section, `${parseFloat(score).toFixed(1)}/20`]);
     }
+
+    doc.autoTable({
+      startY: currentY,
+      head: [['Section', 'Average Score']],
+      body: sectionBody,
+      theme: 'grid',
+      headStyles: { fillColor: [16, 185, 129], textColor: [255, 255, 255] },
+      styles: { fontSize: 10, cellPadding: 3 }
+    });
+
+    currentY = doc.lastAutoTable.finalY + 15;
+
+    // Add charts if available
+    const addChart = (chart, title, yPos) => {
+      if (!chart) return yPos;
+      if (yPos > 180) { doc.addPage(); yPos = 20; }
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(12);
+      doc.text(title, 14, yPos);
+      const imgData = chart.toBase64Image();
+      doc.addImage(imgData, 'PNG', 14, yPos + 5, 180, 90);
+      return yPos + 105;
+    };
+
+    if (typeof aggregateBarChart !== 'undefined' && aggregateBarChart !== null) {
+      currentY = addChart(aggregateBarChart, "Section Stress Comparison", currentY);
+    }
+
+    if (typeof aggregatePieChart !== 'undefined' && aggregatePieChart !== null) {
+      currentY = addChart(aggregatePieChart, "Overall Stress Distribution", currentY);
+    }
+
+    if (typeof aggregateScatterChart !== 'undefined' && aggregateScatterChart !== null) {
+      if (currentY > 150) { doc.addPage(); currentY = 20; }
+      doc.setFont("helvetica", "bold");
+      doc.text("Assessment Score Distribution", 14, currentY);
+      doc.addImage(aggregateScatterChart.toBase64Image(), 'PNG', 14, currentY + 5, 180, 90);
+    }
+
+    doc.save(`Aggregate_Stress_Report_${new Date().toISOString().split('T')[0]}.pdf`);
+    showToast('Report downloaded successfully!', 'success');
+
+  } catch (err) {
+    console.error("Aggregate Export Error:", err);
+    showToast('Failed to export aggregate report.', 'error');
+  }
 }
 
 
 // function to validate token from URL
 async function validateInvitationToken() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('token');
 
-    // If participant token exists clear admin credentials immediately
-    if (token) {
-        localStorage.removeItem('adminToken');
-        adminToken = null;
-        isAdmin = false;
-        currentUserRole = 'participant';
-        console.log('Participant token detected - admin credentials cleared');
-    }
+  // If participant token exists clear admin credentials immediately
+  if (token) {
+    localStorage.removeItem('adminToken');
+    adminToken = null;
+    isAdmin = false;
+    currentUserRole = 'participant';
+    console.log('Participant token detected - admin credentials cleared');
+  }
 
-    if (!token) {
-        currentUserRole = 'participant';
-        isTokenValidated = false;
-        tokenValidationStatus = 'missing';
-        applyRoleBasedUI();
-        blockAssessmentAccess('A valid assessment token is required to proceed.');
-        return;
-    }
+  if (!token) {
+    currentUserRole = 'participant';
+    isTokenValidated = false;
+    tokenValidationStatus = 'missing';
+    applyRoleBasedUI();
+    blockAssessmentAccess('A valid assessment token is required to proceed.');
+    return;
+  }
 
-    // If token changed, reset session to ensure fresh start and clean history
-    if (token !== currentInvitationToken) {
-        localStorage.removeItem('stressDetectSessionId');
-        currentInvitationToken = null;
-    }
+  // If token changed, reset session to ensure fresh start and clean history
+  if (token !== currentInvitationToken) {
+    localStorage.removeItem('stressDetectSessionId');
+    currentInvitationToken = null;
+  }
 
-    currentInvitationToken = token;
-    try {
-        const response = await fetch(`/api/validate-token/${token}`);
-        const data = await response.json();
-        if (data.success) {
-            currentUserRole = data.data.user_role;
-            isTokenValidated = true;
-            tokenValidationStatus = 'valid';
-            
-            if (currentUserRole === 'admin') {
-                isAdmin = true;
-                adminToken = token;
-                localStorage.setItem('adminToken', token);
-                console.log('Admin token activated from invitation');
-            }
-            
-            // Generate new sessionId for this specific token session
-            const newSessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('stressDetectSessionId', newSessionId);
-            currentUser.sessionId = newSessionId;
-            applyRoleBasedUI();
-            showToast('Assessment link validated', 'success');
-        } else {
-            isTokenValidated = false;
-            tokenValidationStatus = data.message?.includes('already been used') ? 'used' : 'invalid';
-            showTokenError(data.message);
-        }
-    } catch (err) {
-        console.error('Token validation failed:', err);
-        isTokenValidated = false;
-        tokenValidationStatus = 'error';
-        showToast('Could not validate assessment link', 'error');
-        blockAssessmentAccess('Unable to verify your assessment link. Please check your connection.');
+  currentInvitationToken = token;
+  try {
+    const response = await fetch(`/api/validate-token/${token}`);
+    const data = await response.json();
+    if (data.success) {
+      currentUserRole = data.data.user_role;
+      isTokenValidated = true;
+      tokenValidationStatus = 'valid';
+
+      if (currentUserRole === 'admin') {
+        isAdmin = true;
+        adminToken = token;
+        localStorage.setItem('adminToken', token);
+        console.log('Admin token activated from invitation');
+      }
+
+      // Generate new sessionId for this specific token session
+      const newSessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('stressDetectSessionId', newSessionId);
+      currentUser.sessionId = newSessionId;
+      applyRoleBasedUI();
+      showToast('Assessment link validated', 'success');
+    } else {
+      isTokenValidated = false;
+      tokenValidationStatus = data.message?.includes('already been used') ? 'used' : 'invalid';
+      showTokenError(data.message);
     }
+  } catch (err) {
+    console.error('Token validation failed:', err);
+    isTokenValidated = false;
+    tokenValidationStatus = 'error';
+    showToast('Could not validate assessment link', 'error');
+    blockAssessmentAccess('Unable to verify your assessment link. Please check your connection.');
+  }
 }
 
 function blockAssessmentAccess(message) {
-    // Disable assessment start buttons
-    const startBtns = document.querySelectorAll('[onclick="startAssessment()"], .btn-primary[onclick*="assessment"]');
-    startBtns.forEach(btn => {
-        btn.disabled = true;
-        btn.style.opacity = '0.6';
-        btn.style.cursor = 'not-allowed';
-        btn.title = message;
-    });
-    
-    // Hide assessment section if visible
-    const assessmentSection = document.getElementById('assessment-section');
-    if (assessmentSection) {
-        assessmentSection.style.display = 'none';
-    }
-    
-    // Show warning on dashboard if user tries to access
-    if (currentPage === 'dashboard') {
-        showToast(message, 'warning', 5000);
-    }
+  // Disable assessment start buttons
+  const startBtns = document.querySelectorAll('[onclick="startAssessment()"], .btn-primary[onclick*="assessment"]');
+  startBtns.forEach(btn => {
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+    btn.style.cursor = 'not-allowed';
+    btn.title = message;
+  });
+
+  // Hide assessment section if visible
+  const assessmentSection = document.getElementById('assessment-section');
+  if (assessmentSection) {
+    assessmentSection.style.display = 'none';
+  }
+
+  // Show warning on dashboard if user tries to access
+  if (currentPage === 'dashboard') {
+    showToast(message, 'warning', 5000);
+  }
 }
 
 function showTokenError(message) {
@@ -2171,16 +2171,16 @@ function applyRoleBasedUI() {
   const historyNav = document.querySelector('a[onclick="showPage(\'history\')"]');
   const historyPage = document.getElementById('history-page');
   const aggregateSection = document.getElementById('aggregate-section');
-  
+
   if (currentUserRole === 'participant') {
     if (historyNav) historyNav.style.display = 'none';
     if (historyPage) historyPage.style.display = 'none';
     if (aggregateSection) aggregateSection.style.display = 'none';
-    
+
     // Also hide history-related quick actions
     const historyAction = document.querySelector('.action-card[onclick="showPage(\'history\')"]');
     if (historyAction) historyAction.style.display = 'none';
-    
+
   } else if (currentUserRole === 'admin') {
     // Admin sees everything - no changes needed
     if (historyNav) historyNav.style.display = '';
@@ -2204,21 +2204,21 @@ async function hasCompletedAssessment() {
       return false;
     }
   }
-  
+
   // Primary check: Is this specific token marked as used?
   try {
     const response = await fetch(`/api/validate-token/${currentInvitationToken}`);
-    
+
     // 410 Gone means the token is already used
     if (response.status === 410) {
       return true;
     }
-    
+
     // 200 OK means the token is valid and unused
     if (response.ok) {
       return false;
     }
-    
+
     // Any other error, assume not completed to allow retry
     return false;
   } catch (err) {
@@ -2232,96 +2232,96 @@ let isAdmin = false;
 let adminToken = null;
 
 async function checkAdminAccess() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('admin_token');
-    const participantToken = urlParams.get('token');
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('admin_token');
+  const participantToken = urlParams.get('token');
 
-    // If accessing via participant link do not restore admin from storage
-    if (participantToken) {
-        localStorage.removeItem('adminToken');
-        adminToken = null;
-        isAdmin = false;
-        currentUserRole = 'participant';
-        console.log('Participant link detected - admin access skipped');
-        return;
+  // If accessing via participant link do not restore admin from storage
+  if (participantToken) {
+    localStorage.removeItem('adminToken');
+    adminToken = null;
+    isAdmin = false;
+    currentUserRole = 'participant';
+    console.log('Participant link detected - admin access skipped');
+    return;
+  }
+
+  if (token) {
+    const newToken = token.trim();
+    const storedToken = localStorage.getItem('adminToken');
+
+    // Clear storage if the URL token differs from what is saved
+    if (newToken !== storedToken) {
+      localStorage.removeItem('adminToken');
+      adminToken = null;
+      isAdmin = false;
+      currentUserRole = 'participant';
     }
 
-    if (token) {
-        const newToken = token.trim();
-        const storedToken = localStorage.getItem('adminToken');
+    // Hold token in memory only - do NOT save to localStorage yet
+    adminToken = newToken;
 
-        // Clear storage if the URL token differs from what is saved
-        if (newToken !== storedToken) {
-            localStorage.removeItem('adminToken');
-            adminToken = null;
-            isAdmin = false;
-            currentUserRole = 'participant';
-        }
-
-        // Hold token in memory only - do NOT save to localStorage yet
-        adminToken = newToken;
-
-        // Clean URL (remove token from address bar)
-        window.history.replaceState({}, document.title, window.location.pathname);
-        console.log('Admin token captured from URL, validating...');
-    } else {
-        // Only check localStorage for existing valid session
-        adminToken = localStorage.getItem('adminToken');
-        if (adminToken) {
-            adminToken = adminToken.trim();
-            console.log('Admin token retrieved from storage');
-        }
-    }
-
+    // Clean URL (remove token from address bar)
+    window.history.replaceState({}, document.title, window.location.pathname);
+    console.log('Admin token captured from URL, validating...');
+  } else {
+    // Only check localStorage for existing valid session
+    adminToken = localStorage.getItem('adminToken');
     if (adminToken) {
-        try {
-            // Test against a PROTECTED endpoint that uses validateAdminAccess
-            const response = await fetch('/api/assessments/all?limit=1', {
-                headers: { 'x-admin-token': adminToken }
-            });
+      adminToken = adminToken.trim();
+      console.log('Admin token retrieved from storage');
+    }
+  }
 
-            if (response.ok) {
-                // ONLY save to localStorage after successful validation
-                localStorage.setItem('adminToken', adminToken);
-                isAdmin = true;
-                currentUserRole = 'admin';
-                applyRoleBasedUI();
-                applyAdminUI();
-                showToast('Admin mode enabled', 'success');
-                console.log('Admin access confirmed');
-                return;
-            } else {
-                const errorData = await response.json().catch(() => ({}));
-                console.warn('Admin token rejected:', response.status, errorData.message);
-                showToast('Admin access denied - check token', 'warning');
-            }
-        } catch (err) {
-            console.error('Admin check failed:', err);
-            showToast('Admin verification failed - check connection', 'error');
-        }
+  if (adminToken) {
+    try {
+      // Test against a PROTECTED endpoint that uses validateAdminAccess
+      const response = await fetch('/api/assessments/all?limit=1', {
+        headers: { 'x-admin-token': adminToken }
+      });
 
-        // Clear invalid or unverified token from storage and memory
-        localStorage.removeItem('adminToken');
-        adminToken = null;
-        isAdmin = false;
-        currentUserRole = 'participant';
+      if (response.ok) {
+        // ONLY save to localStorage after successful validation
+        localStorage.setItem('adminToken', adminToken);
+        isAdmin = true;
+        currentUserRole = 'admin';
         applyRoleBasedUI();
+        applyAdminUI();
+        showToast('Admin mode enabled', 'success');
+        console.log('Admin access confirmed');
+        return;
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.warn('Admin token rejected:', response.status, errorData.message);
+        showToast('Admin access denied - check token', 'warning');
+      }
+    } catch (err) {
+      console.error('Admin check failed:', err);
+      showToast('Admin verification failed - check connection', 'error');
     }
 
-    // If not admin, check for participant invitation token
-    if (!isAdmin) {
-        validateInvitationToken();
-    }
+    // Clear invalid or unverified token from storage and memory
+    localStorage.removeItem('adminToken');
+    adminToken = null;
+    isAdmin = false;
+    currentUserRole = 'participant';
+    applyRoleBasedUI();
+  }
+
+  // If not admin, check for participant invitation token
+  if (!isAdmin) {
+    validateInvitationToken();
+  }
 }
 
 // Apply admin-specific UI changes
 function applyAdminUI() {
   // Sync the role variable to ensure applyRoleBasedUI works correctly
   currentUserRole = 'admin';
-  
+
   // Apply role-based UI first to show all elements
   applyRoleBasedUI();
-  
+
   // Then add admin-specific controls
   const historyHeader = document.querySelector('.history-header');
   if (historyHeader && !document.getElementById('admin-token-panel')) {
@@ -2338,7 +2338,7 @@ function applyAdminUI() {
     `;
     historyHeader.appendChild(adminPanel);
   }
-  
+
   // Ensure aggregate section is visible
   const aggregateSection = document.getElementById('aggregate-section');
   if (aggregateSection) {
@@ -2400,11 +2400,11 @@ async function generateTokens() {
   const role = document.getElementById('token-role').value;
   const count = parseInt(document.getElementById('token-count').value) || 1;
   const expires_hours = document.getElementById('token-expiry').value;
-  
+
   const btn = document.querySelector('#modal .btn-primary');
   btn.disabled = true;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-  
+
   try {
     const response = await fetch('/api/admin/generate-token', {
       method: 'POST',
@@ -2418,9 +2418,9 @@ async function generateTokens() {
         expires_hours: expires_hours ? parseInt(expires_hours) : null
       })
     });
-    
+
     const data = await response.json();
-    
+
     if (data.success) {
       const linksList = document.getElementById('links-list');
       linksList.innerHTML = data.data.map(item => `
@@ -2431,7 +2431,7 @@ async function generateTokens() {
           </button>
         </div>
       `).join('');
-      
+
       document.getElementById('generated-links').style.display = 'block';
       showToast(`${count} link(s) generated successfully`, 'success');
     } else {
@@ -2490,25 +2490,25 @@ async function showTokenList() {
     </div>
   `;
   modal.classList.add('active');
-  
+
   await loadTokenList();
 }
 
 // Load and display token list
 async function loadTokenList() {
   const container = document.getElementById('token-list-body');
-  
+
   try {
     const response = await fetch('/api/admin/tokens?include_used=false', {
       headers: { 'x-admin-token': adminToken }
     });
     const data = await response.json();
-    
+
     if (!data.success || data.data.length === 0) {
       container.innerHTML = '<p style="text-align:center;">No active tokens found. Generate a new link to get started.</p>';
       return;
     }
-    
+
     container.innerHTML = `
       <table style="width:100%; border-collapse:collapse; font-size:0.9rem;">
         <thead>
@@ -2553,14 +2553,14 @@ async function loadTokenList() {
 // Revoke a token
 async function revokeToken(token) {
   if (!confirm('Revoke this link? It will no longer work.')) return;
-  
+
   try {
     const response = await fetch(`/api/admin/tokens/${token}`, {
       method: 'DELETE',
       headers: { 'x-admin-token': adminToken }
     });
     const data = await response.json();
-    
+
     if (data.success) {
       showToast('Link revoked', 'success');
       await loadTokenList();
@@ -2579,22 +2579,22 @@ async function revokeToken(token) {
 const validateAdminAccess = async (req, res, next) => {
   const adminToken = req.headers['x-admin-token'] || req.query.admin_token;
   const masterKey = process.env.ADMIN_SECRET_KEY;
-  
+
   console.log('[AdminCheck] Path:', req.path);
   console.log('[AdminCheck] Token from header:', req.headers['x-admin-token'] ? 'present' : 'missing');
   console.log('[AdminCheck] Token from query:', req.query.admin_token ? 'present' : 'missing');
   console.log('[AdminCheck] Token value (first 10):', adminToken ? adminToken.substring(0, 10) + '...' : 'none');
-  
+
   if (!adminToken) {
     console.warn('[AdminCheck] Rejected: no token provided');
     return res.status(403).json({ success: false, message: 'Unauthorized' });
   }
-  
+
   if (masterKey && adminToken === masterKey) {
     console.log('[AdminCheck] Granted: master key match');
     return next();
   }
-  
+
   try {
     const tokenCheck = await pool.query(
       `SELECT id, token, user_role, is_used, expires_at
@@ -2602,12 +2602,12 @@ const validateAdminAccess = async (req, res, next) => {
        WHERE token = $1`,
       [adminToken]
     );
-    
+
     console.log('[AdminCheck] DB query result count:', tokenCheck.rows.length);
     if (tokenCheck.rows.length > 0) {
       const row = tokenCheck.rows[0];
       console.log('[AdminCheck] Found token - role:', row.user_role, 'is_used:', row.is_used, 'expires_at:', row.expires_at);
-      
+
       if (row.user_role !== 'admin') {
         console.warn('[AdminCheck] Rejected: role is not admin');
         return res.status(403).json({ success: false, message: 'Unauthorized' });
@@ -2620,7 +2620,7 @@ const validateAdminAccess = async (req, res, next) => {
         console.warn('[AdminCheck] Rejected: token expired');
         return res.status(403).json({ success: false, message: 'Unauthorized' });
       }
-      
+
       console.log('[AdminCheck] Granted: valid generated admin token');
       return next();
     }
@@ -2628,88 +2628,88 @@ const validateAdminAccess = async (req, res, next) => {
   } catch (err) {
     console.error('[AdminCheck] Database error:', err.message);
   }
-  
+
   return res.status(403).json({ success: false, message: 'Unauthorized' });
 };
 
 function closeApp() {
   localStorage.clear();
   sessionStorage.clear();
-    window.close()
+  window.close()
   window.location.href = "https://www.google.com";
 }
 
 // System Performance Metrics Animations
 document.addEventListener("DOMContentLoaded", () => {
-    const performanceSection = document.getElementById("performance-section");
-    if (!performanceSection) return;
+  const performanceSection = document.getElementById("performance-section");
+  if (!performanceSection) return;
 
-    const circles = performanceSection.querySelectorAll(".metric-circle");
-    
-    const animateCircle = (circle) => {
-        const target = parseFloat(circle.getAttribute("data-target"));
-        const suffix = circle.getAttribute("data-suffix") || "";
-        const valueDisplay = circle.querySelector(".metric-value");
-        const progressCircle = circle.querySelector("circle.progress");
-        
-        // Circular progress dashoffset calculation
-        const circumference = 2 * Math.PI * 45; 
-        
-        // Calculate percentage for dashoffset
-        const percentageValue = suffix === "%" ? target : target * 100;
-        const offset = circumference - (percentageValue / 100) * circumference;
-        
-        if (progressCircle) {
-            progressCircle.style.strokeDasharray = circumference;
-            progressCircle.style.strokeDashoffset = circumference;
-            // Trigger reflow
-            progressCircle.getBoundingClientRect();
-            progressCircle.style.strokeDashoffset = offset;
+  const circles = performanceSection.querySelectorAll(".metric-circle");
+
+  const animateCircle = (circle) => {
+    const target = parseFloat(circle.getAttribute("data-target"));
+    const suffix = circle.getAttribute("data-suffix") || "";
+    const valueDisplay = circle.querySelector(".metric-value");
+    const progressCircle = circle.querySelector("circle.progress");
+
+    // Circular progress dashoffset calculation
+    const circumference = 2 * Math.PI * 45;
+
+    // Calculate percentage for dashoffset
+    const percentageValue = suffix === "%" ? target : target * 100;
+    const offset = circumference - (percentageValue / 100) * circumference;
+
+    if (progressCircle) {
+      progressCircle.style.strokeDasharray = circumference;
+      progressCircle.style.strokeDashoffset = circumference;
+      // Trigger reflow
+      progressCircle.getBoundingClientRect();
+      progressCircle.style.strokeDashoffset = offset;
+    }
+
+    // Number counting animation
+    let start = 0;
+    const duration = 1500; // ms
+    const startTime = performance.now();
+
+    const updateNumber = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Easing function
+      const easeOutQuad = progress * (2 - progress);
+      const currentValue = easeOutQuad * target;
+
+      if (valueDisplay) {
+        if (suffix === "%") {
+          valueDisplay.textContent = currentValue.toFixed(1) + suffix;
+        } else {
+          valueDisplay.textContent = currentValue.toFixed(2);
         }
-        
-        // Number counting animation
-        let start = 0;
-        const duration = 1500; // ms
-        const startTime = performance.now();
-        
-        const updateNumber = (currentTime) => {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            
-            // Easing function
-            const easeOutQuad = progress * (2 - progress);
-            const currentValue = easeOutQuad * target;
-            
-            if (valueDisplay) {
-                if (suffix === "%") {
-                    valueDisplay.textContent = currentValue.toFixed(1) + suffix;
-                } else {
-                    valueDisplay.textContent = currentValue.toFixed(2);
-                }
-            }
-            
-            if (progress < 1) {
-                requestAnimationFrame(updateNumber);
-            } else {
-                if (valueDisplay) {
-                    valueDisplay.textContent = target + suffix;
-                }
-            }
-        };
-        
+      }
+
+      if (progress < 1) {
         requestAnimationFrame(updateNumber);
+      } else {
+        if (valueDisplay) {
+          valueDisplay.textContent = target + suffix;
+        }
+      }
     };
 
-    const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                circles.forEach(circle => animateCircle(circle));
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.2 });
+    requestAnimationFrame(updateNumber);
+  };
 
-    observer.observe(performanceSection);
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        circles.forEach(circle => animateCircle(circle));
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  observer.observe(performanceSection);
 });
 
 // Dedicated Performance Page Chart Instances & Initializer
@@ -2717,231 +2717,231 @@ let rocCurveChartInstance = null;
 let convergenceChartInstance = null;
 
 function initPerformancePage() {
-    // 1. Trigger the gauge animations
-    const performancePage = document.getElementById("performance-page");
-    if (performancePage) {
-        const circles = performancePage.querySelectorAll(".metric-circle");
-        circles.forEach(circle => {
-            // Reset to 0 first
-            const progressCircle = circle.querySelector("circle.progress");
-            if (progressCircle) {
-                const circumference = 2 * Math.PI * 45;
-                progressCircle.style.strokeDashoffset = circumference;
+  // 1. Trigger the gauge animations
+  const performancePage = document.getElementById("performance-page");
+  if (performancePage) {
+    const circles = performancePage.querySelectorAll(".metric-circle");
+    circles.forEach(circle => {
+      // Reset to 0 first
+      const progressCircle = circle.querySelector("circle.progress");
+      if (progressCircle) {
+        const circumference = 2 * Math.PI * 45;
+        progressCircle.style.strokeDashoffset = circumference;
+      }
+      const suffix = circle.getAttribute("data-suffix") || "";
+      circle.querySelector(".metric-value").textContent = "0" + suffix;
+    });
+
+    // Delay slightly for visual effect, then animate
+    setTimeout(() => {
+      circles.forEach(circle => {
+        const target = parseFloat(circle.getAttribute("data-target"));
+        const suffix = circle.getAttribute("data-suffix") || "";
+        const valueDisplay = circle.querySelector(".metric-value");
+        const progressCircle = circle.querySelector("circle.progress");
+        const circumference = 2 * Math.PI * 45;
+        const percentageValue = suffix === "%" ? target : target * 100;
+        const offset = circumference - (percentageValue / 100) * circumference;
+
+        if (progressCircle) {
+          progressCircle.style.strokeDasharray = circumference;
+          progressCircle.style.strokeDashoffset = circumference;
+          progressCircle.getBoundingClientRect(); // trigger reflow
+          progressCircle.style.strokeDashoffset = offset;
+        }
+
+        let start = 0;
+        const duration = 1200;
+        const startTime = performance.now();
+
+        const updateNumber = (currentTime) => {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const easeOutQuad = progress * (2 - progress);
+          const currentValue = easeOutQuad * target;
+
+          if (valueDisplay) {
+            if (suffix === "%") {
+              valueDisplay.textContent = currentValue.toFixed(1) + suffix;
+            } else {
+              valueDisplay.textContent = currentValue.toFixed(2);
             }
-            const suffix = circle.getAttribute("data-suffix") || "";
-            circle.querySelector(".metric-value").textContent = "0" + suffix;
-        });
-        
-        // Delay slightly for visual effect, then animate
-        setTimeout(() => {
-            circles.forEach(circle => {
-                const target = parseFloat(circle.getAttribute("data-target"));
-                const suffix = circle.getAttribute("data-suffix") || "";
-                const valueDisplay = circle.querySelector(".metric-value");
-                const progressCircle = circle.querySelector("circle.progress");
-                const circumference = 2 * Math.PI * 45;
-                const percentageValue = suffix === "%" ? target : target * 100;
-                const offset = circumference - (percentageValue / 100) * circumference;
+          }
 
-                if (progressCircle) {
-                    progressCircle.style.strokeDasharray = circumference;
-                    progressCircle.style.strokeDashoffset = circumference;
-                    progressCircle.getBoundingClientRect(); // trigger reflow
-                    progressCircle.style.strokeDashoffset = offset;
-                }
+          if (progress < 1) {
+            requestAnimationFrame(updateNumber);
+          } else {
+            if (valueDisplay) {
+              valueDisplay.textContent = target + suffix;
+            }
+          }
+        };
+        requestAnimationFrame(updateNumber);
+      });
+    }, 150);
+  }
 
-                let start = 0;
-                const duration = 1200;
-                const startTime = performance.now();
+  // Determine current theme colors for chart axes
+  const isDark = document.body.classList.contains("dark") || document.documentElement.getAttribute("data-theme") === "dark";
+  const gridColor = isDark ? '#334155' : '#e2e8f0';
+  const textColor = isDark ? '#f1f5f9' : '#1e293b';
+  const textSecColor = isDark ? '#94a3b8' : '#64748b';
 
-                const updateNumber = (currentTime) => {
-                    const elapsed = currentTime - startTime;
-                    const progress = Math.min(elapsed / duration, 1);
-                    const easeOutQuad = progress * (2 - progress);
-                    const currentValue = easeOutQuad * target;
+  // 2. Initialize ROC Curve Chart
+  const rocCtx = document.getElementById("rocCurveChart");
+  if (rocCtx) {
+    if (rocCurveChartInstance) rocCurveChartInstance.destroy();
 
-                    if (valueDisplay) {
-                        if (suffix === "%") {
-                            valueDisplay.textContent = currentValue.toFixed(1) + suffix;
-                        } else {
-                            valueDisplay.textContent = currentValue.toFixed(2);
-                        }
-                    }
+    const rocData = [
+      { x: 0.0, y: 0.0 },
+      { x: 0.02, y: 0.50 },
+      { x: 0.05, y: 0.85 },
+      { x: 0.10, y: 0.94 },
+      { x: 0.15, y: 0.96 },
+      { x: 0.25, y: 0.97 },
+      { x: 0.50, y: 0.985 },
+      { x: 0.75, y: 0.995 },
+      { x: 1.0, y: 1.0 }
+    ];
 
-                    if (progress < 1) {
-                        requestAnimationFrame(updateNumber);
-                    } else {
-                        if (valueDisplay) {
-                            valueDisplay.textContent = target + suffix;
-                        }
-                    }
-                };
-                requestAnimationFrame(updateNumber);
-            });
-        }, 150);
-    }
-
-    // Determine current theme colors for chart axes
-    const isDark = document.body.classList.contains("dark") || document.documentElement.getAttribute("data-theme") === "dark";
-    const gridColor = isDark ? '#334155' : '#e2e8f0';
-    const textColor = isDark ? '#f1f5f9' : '#1e293b';
-    const textSecColor = isDark ? '#94a3b8' : '#64748b';
-
-    // 2. Initialize ROC Curve Chart
-    const rocCtx = document.getElementById("rocCurveChart");
-    if (rocCtx) {
-        if (rocCurveChartInstance) rocCurveChartInstance.destroy();
-        
-        const rocData = [
-            { x: 0.0, y: 0.0 },
-            { x: 0.02, y: 0.50 },
-            { x: 0.05, y: 0.85 },
-            { x: 0.10, y: 0.94 },
-            { x: 0.15, y: 0.96 },
-            { x: 0.25, y: 0.97 },
-            { x: 0.50, y: 0.985 },
-            { x: 0.75, y: 0.995 },
-            { x: 1.0, y: 1.0 }
-        ];
-
-        rocCurveChartInstance = new Chart(rocCtx, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: 'ROC Curve (AUC = 0.98)',
-                        data: rocData,
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.15)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 4,
-                        pointBackgroundColor: '#2563eb'
-                    },
-                    {
-                        label: 'Random Classifier (AUC = 0.50)',
-                        data: [{ x: 0, y: 0 }, { x: 1, y: 1 }],
-                        borderColor: '#94a3b8',
-                        borderDash: [6, 6],
-                        borderWidth: 2,
-                        fill: false,
-                        pointRadius: 0
-                    }
-                ]
+    rocCurveChartInstance = new Chart(rocCtx, {
+      type: 'line',
+      data: {
+        datasets: [
+          {
+            label: 'ROC Curve (AUC = 0.98)',
+            data: rocData,
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59, 130, 246, 0.15)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4,
+            pointBackgroundColor: '#2563eb'
+          },
+          {
+            label: 'Random Classifier (AUC = 0.50)',
+            data: [{ x: 0, y: 0 }, { x: 1, y: 1 }],
+            borderColor: '#94a3b8',
+            borderDash: [6, 6],
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 0
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: textColor }
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                return `FPR: ${context.parsed.x.toFixed(2)}, TPR: ${context.parsed.y.toFixed(2)}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            type: 'linear',
+            min: 0,
+            max: 1,
+            title: {
+              display: true,
+              text: 'False Positive Rate (1 - Specificity)',
+              color: textColor
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { color: textColor }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `FPR: ${context.parsed.x.toFixed(2)}, TPR: ${context.parsed.y.toFixed(2)}`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        type: 'linear',
-                        min: 0,
-                        max: 1,
-                        title: {
-                            display: true,
-                            text: 'False Positive Rate (1 - Specificity)',
-                            color: textColor
-                        },
-                        grid: { color: gridColor },
-                        ticks: { color: textSecColor }
-                    },
-                    y: {
-                        type: 'linear',
-                        min: 0,
-                        max: 1,
-                        title: {
-                            display: true,
-                            text: 'True Positive Rate (Sensitivity)',
-                            color: textColor
-                        },
-                        grid: { color: gridColor },
-                        ticks: { color: textSecColor }
-                    }
-                }
-            }
-        });
-    }
-
-    // 3. Initialize Model Convergence Chart
-    const convCtx = document.getElementById("convergenceChart");
-    if (convCtx) {
-        if (convergenceChartInstance) convergenceChartInstance.destroy();
-
-        const epochs = Array.from({ length: 15 }, (_, i) => i + 1);
-        const trainAcc = [0.72, 0.79, 0.84, 0.88, 0.91, 0.93, 0.94, 0.95, 0.955, 0.96, 0.962, 0.964, 0.965, 0.965, 0.965];
-        const valAcc = [0.70, 0.77, 0.82, 0.86, 0.89, 0.91, 0.92, 0.93, 0.935, 0.94, 0.942, 0.945, 0.946, 0.946, 0.946];
-
-        convergenceChartInstance = new Chart(convCtx, {
-            type: 'line',
-            data: {
-                labels: epochs,
-                datasets: [
-                    {
-                        label: 'Training Accuracy',
-                        data: trainAcc,
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.05)',
-                        borderWidth: 2.5,
-                        tension: 0.25,
-                        pointRadius: 3
-                    },
-                    {
-                        label: 'Validation Accuracy',
-                        data: valAcc,
-                        borderColor: '#f59e0b',
-                        backgroundColor: 'transparent',
-                        borderWidth: 2.5,
-                        tension: 0.25,
-                        pointRadius: 3
-                    }
-                ]
+            grid: { color: gridColor },
+            ticks: { color: textSecColor }
+          },
+          y: {
+            type: 'linear',
+            min: 0,
+            max: 1,
+            title: {
+              display: true,
+              text: 'True Positive Rate (Sensitivity)',
+              color: textColor
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { color: textColor }
-                    }
-                },
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Epoch',
-                            color: textColor
-                        },
-                        grid: { color: gridColor },
-                        ticks: { color: textSecColor }
-                    },
-                    y: {
-                        min: 0.6,
-                        max: 1.0,
-                        title: {
-                            display: true,
-                            text: 'Accuracy Score',
-                            color: textColor
-                        },
-                        grid: { color: gridColor },
-                        ticks: { color: textSecColor }
-                    }
-                }
-            }
-        });
-    }
+            grid: { color: gridColor },
+            ticks: { color: textSecColor }
+          }
+        }
+      }
+    });
+  }
+
+  // 3. Initialize Model Convergence Chart
+  const convCtx = document.getElementById("convergenceChart");
+  if (convCtx) {
+    if (convergenceChartInstance) convergenceChartInstance.destroy();
+
+    const epochs = Array.from({ length: 15 }, (_, i) => i + 1);
+    const trainAcc = [0.72, 0.79, 0.84, 0.88, 0.91, 0.93, 0.94, 0.95, 0.955, 0.96, 0.962, 0.964, 0.965, 0.965, 0.965];
+    const valAcc = [0.70, 0.77, 0.82, 0.86, 0.89, 0.91, 0.92, 0.93, 0.935, 0.94, 0.942, 0.945, 0.946, 0.946, 0.946];
+
+    convergenceChartInstance = new Chart(convCtx, {
+      type: 'line',
+      data: {
+        labels: epochs,
+        datasets: [
+          {
+            label: 'Training Accuracy',
+            data: trainAcc,
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.05)',
+            borderWidth: 2.5,
+            tension: 0.25,
+            pointRadius: 3
+          },
+          {
+            label: 'Validation Accuracy',
+            data: valAcc,
+            borderColor: '#f59e0b',
+            backgroundColor: 'transparent',
+            borderWidth: 2.5,
+            tension: 0.25,
+            pointRadius: 3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: textColor }
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Epoch',
+              color: textColor
+            },
+            grid: { color: gridColor },
+            ticks: { color: textSecColor }
+          },
+          y: {
+            min: 0.6,
+            max: 1.0,
+            title: {
+              display: true,
+              text: 'Accuracy Score',
+              color: textColor
+            },
+            grid: { color: gridColor },
+            ticks: { color: textSecColor }
+          }
+        }
+      }
+    });
+  }
 }
