@@ -89,7 +89,8 @@
         <div class="performance-section" id="performance-section">
             <div class="container">
                 <h2>System Performance & Metrics</h2>
-                <p class="section-subtitle">Our machine learning models deliver state-of-the-art predictive capabilities for reliable stress detection.</p>
+                <p class="section-subtitle">Our machine learning models deliver state-of-the-art predictive capabilities
+                    for reliable stress detection.</p>
                 <div class="performance-grid" id="performance-grid">
                     <div class="metric-card">
                         <div class="metric-icon"><i class="fas fa-bullseye"></i></div>
@@ -510,9 +511,10 @@
         <div class="container">
             <div class="performance-hero">
                 <h2><i class="fas fa-chart-line"></i> System Performance & Model Evaluation</h2>
-                <p>Detailed evaluation metrics, training history, and predictive performance curves of the StressDetect machine learning engine.</p>
+                <p>Detailed evaluation metrics, training history, and predictive performance curves of the StressDetect
+                    machine learning engine.</p>
             </div>
-            
+
             <!-- Metric Cards Row -->
             <div class="performance-grid">
                 <div class="metric-card premium-card">
@@ -582,7 +584,8 @@
                 <!-- ROC Curve Chart -->
                 <div class="plot-card">
                     <h3>ROC Curve (Receiver Operating Characteristic)</h3>
-                    <p class="plot-description">Demonstrates the tradeoff between Sensitivity and 1-Specificity. Area under Curve is 0.98.</p>
+                    <p class="plot-description">Demonstrates the tradeoff between Sensitivity and 1-Specificity. Area
+                        under Curve is 0.98.</p>
                     <div class="chart-wrapper">
                         <canvas id="rocCurveChart"></canvas>
                     </div>
@@ -591,7 +594,8 @@
                 <!-- Training Progress (Epoch Loss/Accuracy) -->
                 <div class="plot-card">
                     <h3>Model Convergence Trend</h3>
-                    <p class="plot-description">Training and Validation accuracy over training epochs showing high generalization.</p>
+                    <p class="plot-description">Training and Validation accuracy over training epochs showing high
+                        generalization.</p>
                     <div class="chart-wrapper">
                         <canvas id="convergenceChart"></canvas>
                     </div>
@@ -603,7 +607,8 @@
                 <!-- Confusion Matrix -->
                 <div class="plot-card confusion-matrix-card">
                     <h3>Confusion Matrix</h3>
-                    <p class="plot-description">Performance summary of predictions vs actual target labels (Test set: N=886).</p>
+                    <p class="plot-description">Performance summary of predictions vs actual target labels (Test set:
+                        N=886).</p>
                     <div class="confusion-matrix-wrapper">
                         <div class="cm-label-y">Actual Class</div>
                         <div class="cm-grid-container">
@@ -640,15 +645,20 @@
                 <!-- Technical Specs Card -->
                 <div class="plot-card specs-card">
                     <h3>Model Specifications</h3>
-                    <p class="plot-description">Core parameters and pipeline properties of the deployed StressDetect engine.</p>
+                    <p class="plot-description">Core parameters and pipeline properties of the deployed StressDetect
+                        engine.</p>
                     <div class="specs-list">
                         <div class="spec-item">
                             <span class="spec-label">Model Type</span>
                             <span class="spec-value highlight-badge">Ensemble Classifier (XGBoost + SVM)</span>
                         </div>
                         <div class="spec-item">
-                            <span class="spec-label">Feature Input</span>
-                            <span class="spec-value">50 survey indices (5 Categories)</span>
+                            <span class="spec-label">Model Input Features</span>
+                            <span class="spec-value">survey indices (5 Categories)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Training Dataset Size</span>
+                            <span class="spec-value">2,954 Total Samples</span>
                         </div>
                         <div class="spec-item">
                             <span class="spec-label">Optimization Method</span>
