@@ -1624,9 +1624,9 @@ function renderPieChart(distribution, total) {
     const levels = Object.keys(levelData);
     const values = levels.map(level => levelData[level]);
     
-    Chart.register(ChartDataLabels);
     aggregatePieChart = new Chart(ctx, {
         type: 'doughnut',
+        plugins: [ChartDataLabels],
         data: {
             labels: levels,
             datasets: [{
