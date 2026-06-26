@@ -1459,11 +1459,164 @@ function displayAggregateResults(data) {
     
     // Render interactive charts
     renderAggregateCharts(data);
+
+    // Render organisational risk recommendation panel
+    renderOrgRiskPanel(data);
     
     // Auto-scroll to results section after a brief delay for rendering
     setTimeout(() => {
         results.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 150);
+}
+
+/**
+ * Renders the Organisational Risk Recommendation panel.
+ * Triggers a DANGER state when the combined percentage of Abnormal + High + High-Risk
+ * participants exceeds the 5% threshold.
+ */
+function renderOrgRiskPanel(data) {
+    const panel = document.getElementById('org-risk-panel');
+    if (!panel) return;
+
+    const dist = data.stressLevelDistribution || {};
+    const total = data.totalAssessments || 0;
+
+    const counts = {
+        low:       dist.low         || 0,
+        moderate:  dist.moderate    || 0,
+        abnormal:  dist.abnormal    || 0,
+        high:      dist.high        || 0,
+        highRisk:  dist['high-risk'] || 0
+    };
+
+    // Percentages
+    const pct = key => total > 0 ? ((counts[key] / total) * 100) : 0;
+    const pctAbnormal  = pct('abnormal');
+    const pctHigh      = pct('high');
+    const pctHighRisk  = pct('highRisk');
+    const elevatedPct  = pctAbnormal + pctHigh + pctHighRisk;   // combined elevated
+    const safePct      = pct('low') + pct('moderate');
+
+    // Threshold rules
+    const DANGER_THRESHOLD  = 5;   // > 5% elevated → DANGER
+    const WARNING_THRESHOLD = 2;   // > 2% elevated → WARNING
+
+    let state, severityLabel, icon, title, subtitle;
+
+    if (elevatedPct > DANGER_THRESHOLD) {
+        state         = 'danger';
+        severityLabel = '⚠ Organisational Risk Detected';
+        icon          = 'fas fa-exclamation-triangle';
+        title         = 'Immediate Organisational Action Required';
+        subtitle      = `${elevatedPct.toFixed(1)}% of staff report elevated stress — the organisation is in danger. Intervention in the highlighted areas is critical.`;
+    } else if (elevatedPct > WARNING_THRESHOLD) {
+        state         = 'warning';
+        severityLabel = '⚡ Caution — Elevated Stress Observed';
+        icon          = 'fas fa-radiation';
+        title         = 'Proactive Measures Recommended';
+        subtitle      = `${elevatedPct.toFixed(1)}% of staff show signs of elevated stress. Monitor closely and prepare targeted interventions before stress levels escalate.`;
+    } else {
+        state         = 'safe';
+        severityLabel = '✔ Organisational Health: Satisfactory';
+        icon          = 'fas fa-shield-alt';
+        title         = 'Organisation is Within Safe Stress Limits';
+        subtitle      = `Only ${elevatedPct.toFixed(1)}% of staff report elevated stress levels. Continue current wellness initiatives and periodic monitoring.`;
+    }
+
+    // Build per-section action items (only for danger/warning)
+    const sectionMeta = {
+        'Workforce and Workload': {
+            icon: 'fas fa-users',
+            action: 'Conduct an immediate workload audit. Hire additional staff or redistribute duties to reduce overload.'
+        },
+        'Skills and Task Management': {
+            icon: 'fas fa-tasks',
+            action: 'Provide urgent training support, clarify role expectations, and assign mentors for under-supported staff.'
+        },
+        'Facilities and Infrastructure': {
+            icon: 'fas fa-building',
+            action: 'Prioritise infrastructure upgrades — fix connectivity, replace outdated equipment, and resolve power reliability issues.'
+        },
+        'Mental and Physical Health': {
+            icon: 'fas fa-heartbeat',
+            action: 'Immediately engage confidential counselling services and introduce stress management and wellness workshops.'
+        },
+        'Organizational Culture and Leadership': {
+            icon: 'fas fa-sitemap',
+            action: 'Launch leadership transparency initiatives, open-door feedback policies, and inclusive decision-making processes.'
+        }
+    };
+
+    const sectionAverages = data.sectionAverages || {};
+    const affectedSections = Object.entries(sectionAverages)
+        .filter(([, val]) => parseFloat(val) > 5)   // above low-stress threshold
+        .sort(([, a], [, b]) => parseFloat(b) - parseFloat(a));
+
+    const actionItemsHTML = (state !== 'safe' && affectedSections.length > 0)
+        ? `
+        <hr class="risk-divider">
+        <p style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:12px;">
+            <i class="fas fa-map-marker-alt" style="margin-right:6px;"></i>
+            Affected Areas — Priority Actions:
+        </p>
+        <div class="risk-action-list">
+            ${affectedSections.map(([section]) => {
+                const meta = sectionMeta[section] || { icon: 'fas fa-exclamation-circle', action: 'Review and address conditions in this section.' };
+                return `
+                <div class="risk-action-item">
+                    <div class="risk-action-icon"><i class="${meta.icon}"></i></div>
+                    <div class="risk-action-text">
+                        <strong>${section}</strong>
+                        <span>${meta.action}</span>
+                    </div>
+                </div>`;
+            }).join('')}
+        </div>`
+        : '';
+
+    panel.innerHTML = `
+        <div class="risk-panel ${state}">
+            <div class="risk-panel-header">
+                <div class="risk-icon-wrap">
+                    <div class="ring"></div>
+                    <i class="${icon}"></i>
+                </div>
+                <div class="risk-headline-block">
+                    <div class="risk-severity-badge">${severityLabel}</div>
+                    <p class="risk-panel-title">${title}</p>
+                    <p class="risk-panel-subtitle">${subtitle}</p>
+                </div>
+            </div>
+
+            <div class="risk-stat-row">
+                <div class="risk-stat">
+                    <div class="risk-stat-value">${elevatedPct.toFixed(1)}%</div>
+                    <div class="risk-stat-label">Elevated Stress Rate</div>
+                </div>
+                <div class="risk-stat">
+                    <div class="risk-stat-value">${pctHighRisk.toFixed(1)}%</div>
+                    <div class="risk-stat-label">High-Risk Staff</div>
+                </div>
+                <div class="risk-stat">
+                    <div class="risk-stat-value">${pctHigh.toFixed(1)}%</div>
+                    <div class="risk-stat-label">High Stress</div>
+                </div>
+                <div class="risk-stat">
+                    <div class="risk-stat-value">${safePct.toFixed(1)}%</div>
+                    <div class="risk-stat-label">Within Safe Range</div>
+                </div>
+            </div>
+
+            ${actionItemsHTML}
+
+            <hr class="risk-divider">
+            <p class="risk-footer-note">
+                <i class="fas fa-info-circle" style="margin-right:4px;"></i>
+                Threshold: Elevated stress (Abnormal + High + High-Risk) &gt; 5% triggers an organisational risk alert. Based on ${total} submitted assessments.
+            </p>
+        </div>`;
+
+    panel.style.display = 'block';
 }
 
 function generateSectionBars(sectionAverages) {
