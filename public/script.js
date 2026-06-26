@@ -1611,18 +1611,18 @@ function renderPieChart(distribution, total) {
     
     // Map distribution to stress levels
     const levelData = {
-    'Low': distribution.low || 0,
-    'Moderate': distribution.moderate || 0,
-    'Abnormal': distribution.abnormal || 0,
-    'High': distribution.high || 0,
-    'High Risk': distribution['high-risk'] || 0
-};
+        'Low': distribution.low || 0,
+        'Moderate': distribution.moderate || 0,
+        'Abnormal': distribution.abnormal || 0,
+        'High': distribution.high || 0,
+        'High Risk': distribution['high-risk'] || 0
+    };
     
-    // If distribution is by section, convert to level distribution
-    // This assumes your backend can provide level distribution
-    // Fallback: calculate from section averages if needed
     const levels = Object.keys(levelData);
     const values = levels.map(level => levelData[level]);
+    
+    // Use total parameter or calculate sum as fallback
+    const chartTotal = total > 0 ? total : values.reduce((a, b) => a + b, 0);
     
     aggregatePieChart = new Chart(ctx, {
         type: 'doughnut',
@@ -1664,7 +1664,7 @@ function renderPieChart(distribution, total) {
                         label: function(context) {
                             const label = context.label || '';
                             const value = context.parsed || 0;
-                            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                            const percentage = chartTotal > 0 ? ((value / chartTotal) * 100).toFixed(1) : 0;
                             return `${label}: ${value} (${percentage}%)`;
                         }
                     }
@@ -1677,7 +1677,7 @@ function renderPieChart(distribution, total) {
                     },
                     formatter: (value, context) => {
                         if (value === 0) return '';
-                        return total > 0 ? ((value / total) * 100).toFixed(1) + '%' : '';
+                        return chartTotal > 0 ? ((value / chartTotal) * 100).toFixed(1) + '%' : '';
                     }
                 }
             }
@@ -2482,3 +2482,76 @@ function closeApp() {
     window.close()
   window.location.href = "https://www.google.com";
 }
+
+// System Performance Metrics Animations
+document.addEventListener("DOMContentLoaded", () => {
+    const performanceSection = document.getElementById("performance-section");
+    if (!performanceSection) return;
+
+    const circles = performanceSection.querySelectorAll(".metric-circle");
+    
+    const animateCircle = (circle) => {
+        const target = parseFloat(circle.getAttribute("data-target"));
+        const suffix = circle.getAttribute("data-suffix") || "";
+        const valueDisplay = circle.querySelector(".metric-value");
+        const progressCircle = circle.querySelector("circle.progress");
+        
+        // Circular progress dashoffset calculation
+        const circumference = 2 * Math.PI * 45; 
+        
+        // Calculate percentage for dashoffset
+        const percentageValue = suffix === "%" ? target : target * 100;
+        const offset = circumference - (percentageValue / 100) * circumference;
+        
+        if (progressCircle) {
+            progressCircle.style.strokeDasharray = circumference;
+            progressCircle.style.strokeDashoffset = circumference;
+            // Trigger reflow
+            progressCircle.getBoundingClientRect();
+            progressCircle.style.strokeDashoffset = offset;
+        }
+        
+        // Number counting animation
+        let start = 0;
+        const duration = 1500; // ms
+        const startTime = performance.now();
+        
+        const updateNumber = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Easing function
+            const easeOutQuad = progress * (2 - progress);
+            const currentValue = easeOutQuad * target;
+            
+            if (valueDisplay) {
+                if (suffix === "%") {
+                    valueDisplay.textContent = currentValue.toFixed(1) + suffix;
+                } else {
+                    valueDisplay.textContent = currentValue.toFixed(2);
+                }
+            }
+            
+            if (progress < 1) {
+                requestAnimationFrame(updateNumber);
+            } else {
+                if (valueDisplay) {
+                    valueDisplay.textContent = target + suffix;
+                }
+            }
+        };
+        
+        requestAnimationFrame(updateNumber);
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                circles.forEach(circle => animateCircle(circle));
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
+
+    observer.observe(performanceSection);
+});
