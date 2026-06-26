@@ -1594,14 +1594,6 @@ function renderOrgRiskPanel(data) {
                     <div class="risk-stat-label">Elevated Stress Rate</div>
                 </div>
                 <div class="risk-stat">
-                    <div class="risk-stat-value">${pctHighRisk.toFixed(1)}%</div>
-                    <div class="risk-stat-label">High-Risk Staff</div>
-                </div>
-                <div class="risk-stat">
-                    <div class="risk-stat-value">${pctHigh.toFixed(1)}%</div>
-                    <div class="risk-stat-label">High Stress</div>
-                </div>
-                <div class="risk-stat">
                     <div class="risk-stat-value">${safePct.toFixed(1)}%</div>
                     <div class="risk-stat-label">Within Safe Range</div>
                 </div>
